@@ -61,6 +61,8 @@
               <li class="skill-badge">ETL Pipelines</li>
               <li class="skill-badge">PostgreSQL</li>
               <li class="skill-badge">SQL</li>
+              <li class="skill-badge">Pandas</li>
+              <li class="skill-badge">NumPy</li>
               <li class="skill-badge">VBA Excel</li>
               <li class="skill-badge">GitHub</li>
             </ul>
@@ -70,10 +72,13 @@
             <h3 class="skill-category">Analytics &amp; Visualisation</h3>
             <ul class="skill-tags">
               <li class="skill-badge">Streamlit</li>
+              <li class="skill-badge">Tableau</li>
+              <li class="skill-badge">Power BI</li>
               <li class="skill-badge">Looker Studio</li>
+              <li class="skill-badge">matplotlib</li>
+              <li class="skill-badge">seaborn</li>
               <li class="skill-badge">GA4</li>
               <li class="skill-badge">Google Search Console</li>
-              <li class="skill-badge">Power BI</li>
             </ul>
           </div>
 
@@ -82,6 +87,7 @@
             <ul class="skill-tags">
               <li class="skill-badge">Google Ads</li>
               <li class="skill-badge">LinkedIn Ads</li>
+              <li class="skill-badge">LinkedIn Marketing API</li>
               <li class="skill-badge">GA4</li>
               <li class="skill-badge">GTM</li>
               <li class="skill-badge">Claude AI API</li>
@@ -114,8 +120,21 @@
           </div>
 
           <div class="skill-group">
-            <h3 class="skill-category">Automation</h3>
+            <h3 class="skill-category">Web Frameworks</h3>
             <ul class="skill-tags">
+              <li class="skill-badge">Streamlit</li>
+              <li class="skill-badge">FastAPI</li>
+              <li class="skill-badge">HTML / CSS</li>
+              <li class="skill-badge">JavaScript</li>
+            </ul>
+          </div>
+
+          <div class="skill-group">
+            <h3 class="skill-category">Automation &amp; DevOps</h3>
+            <ul class="skill-tags">
+              <li class="skill-badge">Docker</li>
+              <li class="skill-badge">AWS EC2</li>
+              <li class="skill-badge">APScheduler</li>
               <li class="skill-badge">Windows Task Scheduler</li>
               <li class="skill-badge">Microsoft Graph API</li>
               <li class="skill-badge">Outlook 365 Automation</li>
@@ -131,21 +150,24 @@
     <section id="projects" class="projects">
       <div class="container">
         <h2 class="section-title">Featured Projects</h2>
+
+        <!-- ===== FEATURED PROJECTS (full detail) ===== -->
         <div class="projects-list">
 
-          <!-- Project 1 -->
+          <!-- Featured 1: Digital Marketing Analytics Platform -->
           <article class="project-card">
             <div class="project-card-body">
-              <h3 class="project-title">Self-Built Marketing Analytics App</h3>
-              <p class="project-problem"><strong>Problem:</strong> Marketing and sales data sat in disconnected systems — LinkedIn Ads, Search Console, and website leads had no unified view, and Odoo CRM was missing historical data.</p>
-              <p class="project-solution">Built a complete data pipeline from scratch — LinkedIn Ads API and Google Search Console API pulling into a local PostgreSQL database on Windows Server, with a self-built Streamlit analytics application as the front end. The app provides cross-source campaign attribution, lead conversion analysis, and SEO keyword performance tracking in one place.</p>
+              <h3 class="project-title">Digital Marketing Analytics Platform</h3>
+              <p class="project-problem"><strong>Problem:</strong> Marketing data was scattered across SEO, LinkedIn Ads, LinkedIn Lead Forms, and GA4 with no unified analytics view or AI-powered insights.</p>
+              <p class="project-solution">Built a unified digital marketing analytics hub with 4 core modules: SEO keyword tracking (Brand vs. Paid segments with MoM/YoY comparisons), LinkedIn Lead Gen Form sync via API, LinkedIn Agency report ingestion from Excel uploads, and Digital Marketing campaign drill-down from Odoo CRM. Integrated Claude AI API for automated executive summary generation and insight buttons throughout.</p>
               <ul class="project-tech">
                 <li class="tech-badge">Python</li>
-                <li class="tech-badge">PostgreSQL</li>
                 <li class="tech-badge">Streamlit</li>
-                <li class="tech-badge">LinkedIn Ads API</li>
+                <li class="tech-badge">PostgreSQL</li>
                 <li class="tech-badge">Search Console API</li>
-                <li class="tech-badge">Windows Task Scheduler</li>
+                <li class="tech-badge">LinkedIn Marketing API</li>
+                <li class="tech-badge">GA4 Data API</li>
+                <li class="tech-badge">Claude AI API</li>
                 <li class="tech-badge">Pandas</li>
               </ul>
               <div class="project-links">
@@ -161,59 +183,22 @@
             </div>
           </article>
 
-          <!-- Project 2 -->
+          <!-- Featured 2: CRM Reporting Dashboard -->
           <article class="project-card">
             <div class="project-card-body">
-              <h3 class="project-title">Claude AI Executive Reporting System</h3>
-              <p class="project-problem"><strong>Problem:</strong> Monthly SEO performance reporting required hours of manual analysis and formatting before it could be sent to senior management.</p>
-              <p class="project-solution">Integrated Claude AI API with Google Apps Script and Search Console API to automatically generate HTML executive summaries with MoM and YoY keyword analysis across Brand and Focus keyword segments. Reports are distributed automatically to 9 stakeholders via Microsoft Azure Graph API on a scheduled basis — zero manual intervention.</p>
-              <ul class="project-tech">
-                <li class="tech-badge">Claude AI API</li>
-                <li class="tech-badge">Google Apps Script</li>
-                <li class="tech-badge">Search Console API</li>
-                <li class="tech-badge">Azure Graph API</li>
-                <li class="tech-badge">HTML</li>
-                <li class="tech-badge">JavaScript</li>
-              </ul>
-              <div class="project-links">
-                <a href="#" class="btn btn-sm btn-primary" data-placeholder="true">GitHub</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Project 3 -->
-          <article class="project-card">
-            <div class="project-card-body">
-              <h3 class="project-title">Automated Job Application Tracker</h3>
-              <p class="project-problem"><strong>Problem:</strong> Manually tracking dozens of concurrent job applications across JobsDB was time-consuming and error-prone.</p>
-              <p class="project-solution">Python automation that reads Outlook 365 emails from JobsDB via Microsoft Graph API, parses application status updates (confirmations, rejections, employer views), and updates an Excel tracking file on OneDrive automatically. Runs hourly via Windows Task Scheduler.</p>
-              <ul class="project-tech">
-                <li class="tech-badge">Python</li>
-                <li class="tech-badge">Microsoft Graph API</li>
-                <li class="tech-badge">Azure AD</li>
-                <li class="tech-badge">openpyxl</li>
-                <li class="tech-badge">BeautifulSoup</li>
-                <li class="tech-badge">Windows Task Scheduler</li>
-                <li class="tech-badge">OneDrive</li>
-              </ul>
-              <div class="project-links">
-                <a href="#" class="btn btn-sm btn-primary" data-placeholder="true">GitHub</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Project 4 -->
-          <article class="project-card">
-            <div class="project-card-body">
-              <h3 class="project-title">Streamlit Lead Assignment App</h3>
-              <p class="project-problem"><strong>Problem:</strong> Sales team was manually assigning inbound leads with no consistent logic, causing uneven workload distribution and delayed follow-up.</p>
-              <p class="project-solution">Self-built Streamlit web application with weighted lead distribution logic deployed to the sales team. Built independently when the CRM system could not support the required assignment rules and dev team capacity was unavailable.</p>
+              <h3 class="project-title">CRM Reporting &amp; Analytics Dashboard</h3>
+              <p class="project-problem"><strong>Problem:</strong> A financial services company had no internal BI tool — sales pipeline, pension AUM, and marketing data lived in disconnected CRM tables with no interactive reporting.</p>
+              <p class="project-solution">Built a multi-page Streamlit BI dashboard serving 8+ interactive pages: EBCAS sales pipeline analytics by product team with fiscal year filtering, PIES pension AUM analysis with multi-scheme classification and MPF provider breakdown, and marketing campaign performance reporting. Includes automated email report generation via Microsoft Graph API.</p>
               <ul class="project-tech">
                 <li class="tech-badge">Python</li>
                 <li class="tech-badge">Streamlit</li>
-                <li class="tech-badge">Weighted Distribution Algorithm</li>
+                <li class="tech-badge">PostgreSQL</li>
+                <li class="tech-badge">Pandas</li>
+                <li class="tech-badge">Docker</li>
+                <li class="tech-badge">Microsoft Graph API</li>
               </ul>
               <div class="project-links">
+                <a href="#" class="btn btn-sm btn-primary" data-placeholder="true">GitHub</a>
                 <a href="#" class="btn btn-sm btn-outline" data-placeholder="true">Watch Demo</a>
               </div>
             </div>
@@ -225,22 +210,192 @@
             </div>
           </article>
 
-          <!-- Project 5 -->
+          <!-- Featured 3: Data Warehouse & ETL Pipeline -->
           <article class="project-card">
             <div class="project-card-body">
-              <h3 class="project-title">CRM Migration Planning — Social Enterprise Research Academy</h3>
-              <p class="project-problem"><strong>Problem:</strong> Client needed to migrate from legacy system to Zoho CRM with no internal technical resource to manage the process.</p>
-              <p class="project-solution">Led the full migration planning engagement as sole consultant — conducted stakeholder requirements interviews, evaluated Zoho CRM modules against business needs, and produced complete data mapping documentation for the migration.</p>
+              <h3 class="project-title">Data Warehouse &amp; ETL Pipeline</h3>
+              <p class="project-problem"><strong>Problem:</strong> Marketing and sales data from Google Search Console, GA4, and LinkedIn APIs had no centralised storage, making cross-source analysis impossible.</p>
+              <p class="project-solution">Designed and built a local PostgreSQL data warehouse with normalised tables for SEO reports, keyword data, LinkedIn leads, agency data, and GA4 leads. Created Tableau-ready SQL views (unified monthly summary, agency targeting breakdown, audience demographics). Built 4 automated ETL scripts pulling from Search Console API, GA4 Data API, LinkedIn Lead Gen API, and LinkedIn Ads Reporting API into PostgreSQL on a scheduled basis.</p>
               <ul class="project-tech">
-                <li class="tech-badge">Zoho CRM</li>
-                <li class="tech-badge">Data Mapping</li>
-                <li class="tech-badge">Requirements Gathering</li>
-                <li class="tech-badge">Stakeholder Management</li>
+                <li class="tech-badge">PostgreSQL</li>
+                <li class="tech-badge">Python</li>
+                <li class="tech-badge">Search Console API</li>
+                <li class="tech-badge">GA4 API</li>
+                <li class="tech-badge">LinkedIn Marketing API</li>
+                <li class="tech-badge">Google Sheets API</li>
+                <li class="tech-badge">Tableau</li>
+                <li class="tech-badge">psycopg2</li>
               </ul>
               <div class="project-links">
-                <a href="#" class="btn btn-sm btn-outline" data-placeholder="true">View Documentation</a>
+                <a href="#" class="btn btn-sm btn-primary" data-placeholder="true">GitHub</a>
               </div>
             </div>
+          </article>
+
+          <!-- Featured 4: Automated Email Report System -->
+          <article class="project-card">
+            <div class="project-card-body">
+              <h3 class="project-title">Automated Email Report System</h3>
+              <p class="project-problem"><strong>Problem:</strong> 10+ recurring business reports (sales insights, pension reports, campaign summaries) were being compiled and sent manually, consuming hours of analyst time.</p>
+              <p class="project-solution">Built a comprehensive automated email reporting engine with HTML-formatted reports, styled data tables with conditional formatting, and Excel attachments — all sent via Microsoft Graph API. Powered by APScheduler with configurable cron schedules via JSON, replacing Windows Task Scheduler. Report types include Combined Sales Insight, Individual Sales, EBCAS, Pension, Marketing Campaign, and provider-specific reports.</p>
+              <ul class="project-tech">
+                <li class="tech-badge">Python</li>
+                <li class="tech-badge">APScheduler</li>
+                <li class="tech-badge">Microsoft Graph API</li>
+                <li class="tech-badge">MSAL</li>
+                <li class="tech-badge">Pandas</li>
+                <li class="tech-badge">HTML/CSS Email</li>
+              </ul>
+              <div class="project-links">
+                <a href="#" class="btn btn-sm btn-primary" data-placeholder="true">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Featured 5: Google Apps Script SEO Reporting -->
+          <article class="project-card">
+            <div class="project-card-body">
+              <h3 class="project-title">AI-Powered SEO Reporting Pipeline</h3>
+              <p class="project-problem"><strong>Problem:</strong> Monthly SEO performance reporting required hours of manual analysis and formatting before it could be sent to senior management.</p>
+              <p class="project-solution">Built a Google Apps Script pipeline that connects to Search Console API, tracks 3 keyword segments (Brand, Paid Maintain, Paid New), generates MoM/YoY performance comparisons, and sends HTML email reports with monthly trend tables. Integrated Claude AI API for automated executive summary narratives. Reports distributed to 9 stakeholders via Microsoft Azure Graph API — zero manual intervention.</p>
+              <ul class="project-tech">
+                <li class="tech-badge">Google Apps Script</li>
+                <li class="tech-badge">Claude AI API</li>
+                <li class="tech-badge">Search Console API</li>
+                <li class="tech-badge">Azure Graph API</li>
+                <li class="tech-badge">HTML</li>
+                <li class="tech-badge">JavaScript</li>
+              </ul>
+              <div class="project-links">
+                <a href="#" class="btn btn-sm btn-primary" data-placeholder="true">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- ===== MORE PROJECTS (compact grid) ===== -->
+        <h3 class="subsection-title">More Projects</h3>
+        <div class="projects-grid-compact">
+
+          <!-- Lead Management & CRM Automation -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Lead Management &amp; CRM Automation</h4>
+            <p class="project-desc">Built lead assignment (10 preset workflows), lead release, and contact analysis tools that automate CRM operations and generate Odoo-importable files. Includes 7-stage filter pipeline for data quality monitoring.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Streamlit</li>
+              <li class="tech-badge">PostgreSQL</li>
+              <li class="tech-badge">Pandas</li>
+            </ul>
+          </article>
+
+          <!-- Sales Data Processing Engine -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Sales Data Processing &amp; Reporting Engine</h4>
+            <p class="project-desc">Comprehensive sales data pipeline processing CRM exports across 6 report modules: opportunity pipeline, activity tracking, customer lead conversion, target vs. actual performance, and executive Combined Sales Insight dashboard.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Pandas</li>
+              <li class="tech-badge">Odoo CRM</li>
+              <li class="tech-badge">openpyxl</li>
+            </ul>
+          </article>
+
+          <!-- Data Comparison & Quality Tools -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Data Comparison &amp; Quality Tools</h4>
+            <p class="project-desc">FastAPI web portal for internal data comparison tools. Lead vs. Sales Rep comparison engine with 4 exclusion rules, live schedule viewer for automated tasks, and card-based navigation. Dockerised deployment.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">FastAPI</li>
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Docker</li>
+              <li class="tech-badge">Bootstrap 5</li>
+            </ul>
+          </article>
+
+          <!-- Company Name Matching -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Company Name Matching Algorithm</h4>
+            <p class="project-desc">Fuzzy company name matching tool using sequence matching and Unicode normalisation for CRM data deduplication. Handles bilingual names (English/Chinese) and cross-platform path handling.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">difflib</li>
+              <li class="tech-badge">Pandas</li>
+              <li class="tech-badge">Unicode</li>
+            </ul>
+          </article>
+
+          <!-- Odoo CRM Data Export Suite -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Odoo CRM Data Export Suite</h4>
+            <p class="project-desc">6 automated data export scripts pulling from Odoo CRM's PostgreSQL database — activities (59 columns with auto header mapping), contacts, leads, opportunities, sales rep logs, and AUM detail.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">psycopg2</li>
+              <li class="tech-badge">PostgreSQL</li>
+              <li class="tech-badge">Odoo ERP</li>
+            </ul>
+          </article>
+
+          <!-- GUMbees TV & Won Case Reports -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Monthly GUMbees TV &amp; Won Case Reports</h4>
+            <p class="project-desc">Automated monthly internal reports with data visualisation charts embedded directly in emails. Won Case quarterly report generates 3 heatmaps + 1 stacked bar chart as inline CID images in HTML emails.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">matplotlib</li>
+              <li class="tech-badge">seaborn</li>
+              <li class="tech-badge">Graph API</li>
+            </ul>
+          </article>
+
+          <!-- Weekly Data Quality Monitoring -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Weekly Data Quality Monitoring</h4>
+            <p class="project-desc">Automated weekly monitoring that detects dissolved companies and parent-subsidiary mismatches in CRM data. Sends alert emails with 4 filter categories and automated correction of parent/subsidiary files.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Pandas</li>
+              <li class="tech-badge">Graph API</li>
+              <li class="tech-badge">PostgreSQL</li>
+            </ul>
+          </article>
+
+          <!-- Docker & Infrastructure -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Docker Containerisation &amp; Infrastructure</h4>
+            <p class="project-desc">Containerised the entire reporting platform with Docker for AWS EC2 deployment. Multi-service Docker Compose with Streamlit + FastAPI, health checks, volume mounts, and environment-based configuration.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Docker</li>
+              <li class="tech-badge">Docker Compose</li>
+              <li class="tech-badge">AWS EC2</li>
+              <li class="tech-badge">Linux</li>
+            </ul>
+          </article>
+
+          <!-- Automated Job Application Tracker -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Automated Job Application Tracker</h4>
+            <p class="project-desc">Python automation that reads Outlook 365 emails from JobsDB via Microsoft Graph API, parses application status updates, and updates an Excel tracking file on OneDrive automatically. Runs hourly.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Graph API</li>
+              <li class="tech-badge">Azure AD</li>
+              <li class="tech-badge">BeautifulSoup</li>
+            </ul>
+          </article>
+
+          <!-- CRM Migration Planning -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">CRM Migration Planning (Freelance)</h4>
+            <p class="project-desc">Led full Zoho CRM migration planning for a social enterprise as sole consultant — stakeholder interviews, module evaluation, and complete data mapping documentation.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Zoho CRM</li>
+              <li class="tech-badge">Data Mapping</li>
+              <li class="tech-badge">Requirements</li>
+              <li class="tech-badge">Consulting</li>
+            </ul>
           </article>
 
         </div>
