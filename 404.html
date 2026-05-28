@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page not found · kendi-ng.com</title>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f6f8fa; color: #111; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
+    .frame { max-width: 620px; width: 100%; background: white; border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 32px; text-align: center; }
+    h1 { margin-bottom: 12px; font-size: 36px; }
+    p { margin-bottom: 18px; color: #555; line-height: 1.65; }
+    a { color: #1a5276; text-decoration: none; font-weight: 600; }
+  </style>
+  <script>
+    const path = location.pathname.replace(/\/+$/, '');
+    if (path === '/zoe-school' || path === '/zoe-school/index.html' || path === '/zoe-school/') {
+      location.replace('/zoe-school.html');
+    }
+  </script>
+</head>
+<body>
+  <div class="frame">
+    <h1>Page not found</h1>
+    <p>It looks like this page is not available yet. <br>Try <a href="/">home</a> or <a href="/zoe-school.html">go to Zoe School tracker</a>.</p>
+  </div>
+</body>
+</html>
