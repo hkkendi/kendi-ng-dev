@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoe's K1 School Tracker 2027/28 | kendi-ng.com</title>
+  <style>
+    :root {
+      --hki: #1A5276;
+      --kln: #1E8449;
+      --sha: #B7770D;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --muted: #6c757d;
+      --border: #dee2e6;
+      --confirmed: #0f6e56;
+      --pending: #856404;
+      --warning: #c0392b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+
+    .page-header { background: #2C3E50; color: white; padding: 32px 24px 24px; }
+    .page-header h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .page-header .sub { font-size: 13px; opacity: 0.75; }
+    .page-header .zoe-badge { display: inline-block; margin-top: 10px; background: rgba(255,255,255,0.15); border-radius: 20px; padding: 4px 14px; font-size: 12px; }
+
+    .tabs { display: flex; background: white; border-bottom: 1px solid var(--border); padding: 0 16px; overflow-x: auto; }
+    .tab { padding: 12px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; color: var(--muted); transition: all 0.2s; }
+    .tab.active { border-bottom-color: #2C3E50; color: var(--text); }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .district-header { padding: 10px 14px; border-radius: 8px 8px 0 0; color: white; font-weight: 600; font-size: 13px; margin-top: 24px; }
+    .district-hki { background: var(--hki); }
+    .district-kln { background: var(--kln); }
+    .district-sha { background: var(--sha); }
+
+    .school-table { width: 100%; border-collapse: collapse; background: white; border-radius: 0 0 8px 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 4px; }
+    .school-table th { font-size: 11px; font-weight: 600; text-align: left; padding: 8px 12px; background: #f1f3f4; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .school-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 12px; vertical-align: top; }
+    .school-table tr:last-child td { border-bottom: none; }
+    .school-table tr:hover td { background: #fafbfc; }
+
+    .school-name-zh { font-weight: 600; font-size: 13px; }
+    .school-name-en { color: var(--muted); font-size: 11px; margin-top: 1px; }
+    .school-address { color: var(--muted); font-size: 11px; margin-top: 2px; }
+
+    .badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 500; }
+    .badge-full { background: #d5f5e3; color: #1e8449; }
+    .badge-half { background: #e8f4fc; color: #1a5276; }
+    .badge-confirmed { background: #d5f5e3; color: var(--confirmed); }
+    .badge-pending { background: #fff3cd; color: var(--pending); }
+    .badge-tbc { background: #f1f3f4; color: var(--muted); }
+
+    .rank-main { font-size: 12px; font-weight: 500; }
+    .rank-source { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+    .tracker-date { font-weight: 500; color: var(--confirmed); }
+    .tracker-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .tracker-tbc { color: var(--pending); font-style: italic; font-size: 11px; }
+
+    .timeline { position: relative; padding-left: 24px; }
+    .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+    .tl-item { position: relative; margin-bottom: 20px; }
+    .tl-item::before { content: ''; position: absolute; left: -21px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: #2C3E50; border: 2px solid white; box-shadow: 0 0 0 2px #2C3E50; }
+    .tl-date { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+    .tl-body { background: white; border-radius: 8px; padding: 10px 14px; border: 1px solid var(--border); font-size: 12px; line-height: 1.6; }
+    .tl-zh { margin-bottom: 4px; }
+    .tl-en { color: var(--muted); }
+
+    .notes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+    .note-card { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+    .note-card h3 { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .note-card p { font-size: 13px; line-height: 1.6; }
+
+    .last-updated { font-size: 11px; color: var(--muted); text-align: right; margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+    @media (max-width: 700px) {
+      .school-table thead { display: none; }
+      .school-table tr { display: block; padding: 12px; border-bottom: 1px solid var(--border); }
+      .school-table td { display: block; padding: 2px 0; border: none; }
+      .school-table td::before { content: attr(data-label); font-weight: 600; font-size: 10px; color: var(--muted); display: block; margin-bottom: 2px; text-transform: uppercase; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>🏫 Zoe's K1 Dragon School Tracker</h1>
+  <div class="sub">各幼稚園 2027/28年度 K1 申請追蹤</div>
+  <div class="zoe-badge">👶 Zoe · Born 21 Feb 2024 · ✅ Age-eligible for 2027/28 K1</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('schools')">🏫 Schools 學校 (16)</div>
+  <div class="tab" onclick="showTab('tracker')">📅 Open Day & Application Tracker</div>
+  <div class="tab" onclick="showTab('timeline')">🗓 Timeline 時間線</div>
+  <div class="tab" onclick="showTab('notes')">📋 Notes 備註</div>
+</div>
+
+<div class="container">
+
+  <div id="tab-schools" class="section active">
+    <div id="school-list"></div>
+  </div>
+
+  <div id="tab-tracker" class="section">
+    <p style="color:var(--muted);font-size:12px;margin-bottom:16px;">Open days are typically on Saturdays in Jul–Aug 2026. Check back here — dates will be updated as schools announce them. 開放日通常在2026年7-8月的星期六舉行，確認後將更新。</p>
+    <table class="school-table" style="border-radius:8px;">
+      <thead>
+        <tr>
+          <th>School 學校</th>
+          <th>District 地區</th>
+          <th>Open Day 開放日</th>
+          <th>Application Date 申請日期</th>
+          <th>Status 狀態</th>
+          <th>Website 網址</th>
+        </tr>
+      </thead>
+      <tbody id="tracker-list"></tbody>
+    </table>
+  </div>
+
+  <div id="tab-timeline" class="section">
+    <div class="timeline" id="timeline-list"></div>
+  </div>
+
+  <div id="tab-notes" class="section">
+    <div class="notes-grid" id="notes-list"></div>
+  </div>
+
+  <div class="last-updated" id="last-updated"></div>
+</div>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', ['schools','tracker','timeline','notes'][i] === name);
+  });
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function districtColor(d) {
+  return d === 'hki' ? 'district-hki' : d === 'kln' ? 'district-kln' : 'district-sha';
+}
+function districtLabel(d, schools) {
+  return schools.find(s => s.district === d)?.districtLabel || d;
+}
+function statusBadge(s) {
+  if (!s || s === 'pending') return '<span class="badge badge-pending">Pending 待確認</span>';
+  if (s === 'confirmed') return '<span class="badge badge-confirmed">✅ Confirmed 已確認</span>';
+  return '<span class="badge badge-tbc">TBC</span>';
+}
+
+function init(data) {
+  document.getElementById('last-updated').textContent = 'Last updated: ' + data.lastUpdated + ' | Data source: school websites, EDB, HappySeeds, Toby, NoteSity (2025-26)';
+
+  const districts = [...new Set(data.schools.map(s => s.district))];
+  let schoolHTML = '';
+  districts.forEach(d => {
+    const group = data.schools.filter(s => s.district === d);
+    schoolHTML += `<div class="district-header ${districtColor(d)}">${districtLabel(d, data.schools)} — ${group.length} schools</div>`;
+    schoolHTML += `<table class="school-table"><thead><tr>
+      <th>Kindergarten 幼稚園</th>
+      <th>Feeder Primary 關連小學</th>
+      <th>Primary Ranking 小學排名</th>
+      <th>Session 上課時段</th>
+      <th>Est. Application 預計申請</th>
+      <th>Method 方式</th>
+      <th>Website</th>
+    </tr></thead><tbody>`;
+    group.forEach(s => {
+      schoolHTML += `<tr>
+        <td data-label="Kindergarten">
+          <div class="school-name-zh">${s.nameZh}</div>
+          <div class="school-name-en">${s.nameEn}</div>
+          <div class="school-address">${s.address}</div>
+        </td>
+        <td data-label="Feeder Primary">
+          <div>${s.feederZh}</div>
+          <div style="color:var(--muted);font-size:11px">${s.feederEn}</div>
+        </td>
+        <td data-label="Ranking">
+          <div class="rank-main">${s.rankingZh}</div>
+          <div class="rank-source">${s.rankingEn}</div>
+          <div class="rank-source">Src: ${s.rankingSource}</div>
+        </td>
+        <td data-label="Session">
+          <span class="badge ${s.session === 'Full Day' ? 'badge-full' : 'badge-half'}">${s.sessionZh}</span>
+        </td>
+        <td data-label="Est. Application" style="font-size:11px">${s.estAppPeriod}</td>
+        <td data-label="Method" style="font-size:11px">${s.appMethod}</td>
+        <td data-label="Website"><a href="${s.website}" target="_blank" style="font-size:11px;color:#1a5276">${s.website.replace('https://','')}</a></td>
+      </tr>`;
+    });
+    schoolHTML += '</tbody></table>';
+  });
+  document.getElementById('school-list').innerHTML = schoolHTML;
+
+  let trackerHTML = '';
+  data.schools.forEach(s => {
+    trackerHTML += `<tr>
+      <td data-label="School">
+        <div style="font-weight:600;font-size:12px">${s.nameZh}</div>
+        <div style="color:var(--muted);font-size:11px">${s.nameEn}</div>
+      </td>
+      <td data-label="District"><span style="font-size:11px">${s.districtLabel}</span></td>
+      <td data-label="Open Day">
+        ${s.openDay
+          ? `<div class="tracker-date">📅 ${s.openDay}</div>`
+          : `<div class="tracker-tbc">TBC</div>`}
+        <div class="tracker-note">${s.openDayNote}</div>
+      </td>
+      <td data-label="Application Date">
+        ${s.appDateConfirmed
+          ? `<div class="tracker-date">📝 ${s.appDateConfirmed}</div>`
+          : `<div class="tracker-tbc">TBC</div>`}
+        <div class="tracker-note">${s.appDateNote}</div>
+      </td>
+      <td data-label="Status">${statusBadge(s.status)}</td>
+      <td data-label="Website"><a href="${s.website}" target="_blank" style="font-size:11px;color:#1a5276">🔗 Visit</a></td>
+    </tr>`;
+  });
+  document.getElementById('tracker-list').innerHTML = trackerHTML;
+
+  let tlHTML = '';
+  data.timeline.forEach(t => {
+    tlHTML += `<div class="tl-item">
+      <div class="tl-date">${t.date}</div>
+      <div class="tl-body">
+        <div class="tl-zh">${t.zh}</div>
+        <div class="tl-en">${t.en}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('timeline-list').innerHTML = tlHTML;
+
+  const notes = [
+    { title: "Zoe's Date of Birth", body: "21 Feb 2024 (2024年2月21日)<br>✅ Eligible for 2027/28 K1 (born on/before 31 Dec 2024)" },
+    { title: "What is a Dragon School 龍校?", body: "A through-train school (龍校) links KG → Primary → Secondary, eliminating competitive entry at each transition. Zoe would stay in the same school network from age 3 to 18." },
+    { title: "EDB Registration Certificate 入學註冊證", body: "Apply to EDB Sep–Nov 2026. Takes 6–8 weeks. Required for subsidised KG registration." },
+    { title: "Unified Registration Date 統一註冊日期", body: "8–10 Jan 2027. Only ONE kindergarten can be chosen for final registration." },
+    { title: "Documents Required 所需文件", body: "• Birth certificate 出生證明書<br>• Parents' HKID 父母身份證<br>• Vaccination records 防疫注射記錄<br>• Stamped return envelope 回郵信封<br>• Recent photos 近照<br>• Baptism certificate (some schools) 領洗紙" },
+    { title: "Ranking Sources 排名來源", body: "Rankings reference: HappySeeds, LeadingEducationCentre, ParentingHeadline, Toby, NoteSity, HKeTIME (2025-26). Rankings change yearly — for reference only." }
+  ];
+  document.getElementById('notes-list').innerHTML = notes.map(n =>
+    `<div class="note-card"><h3>${n.title}</h3><p>${n.body}</p></div>`
+  ).join('');
+}
+
+fetch('/zoe-school/data/schools.json')
+  .then(r => r.json())
+  .then(data => init(data))
+  .catch(() => {
+    document.getElementById('school-list').innerHTML = '<p style="color:var(--muted);padding:16px;background:#fff;border:1px solid var(--border);border-radius:8px;">Unable to load school data. Please make sure /zoe-school/data/schools.json is available.</p>';
+    document.getElementById('tracker-list').innerHTML = '';
+    document.getElementById('timeline-list').innerHTML = '';
+    document.getElementById('notes-list').innerHTML = '';
+  });
+</script>
+
+</body>
+</html>
