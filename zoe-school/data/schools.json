@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-28",
+  "lastUpdated": "2026-06-01",
   "child": {
     "name": "Zoe",
     "dob": "2024-02-21",
@@ -197,29 +197,6 @@
       "openDayNote": "Usually Saturday, Jul–Aug 2026",
       "appDateConfirmed": null,
       "appDateNote": "TBC",
-      "status": "pending"
-    },
-    {
-      "id": "lasalle",
-      "district": "kln",
-      "districtLabel": "Kowloon 九龍區",
-      "nameZh": "喇沙幼稚園",
-      "nameEn": "La Salle KG",
-      "address": "九龍城喇沙利道 La Salle Rd, Kowloon City",
-      "feederZh": "喇沙小學",
-      "feederEn": "La Salle Primary School",
-      "rankingZh": "全港小學排名 #2男校 / 約#4-5全港",
-      "rankingEn": "Primary Rank #2 (Boys) / ~#4-5 HK-wide",
-      "rankingSource": "HappySeeds/LeadingEd 2025-26",
-      "session": "Full Day",
-      "sessionZh": "全日班",
-      "appMethod": "Online / In-person 網上/親身",
-      "website": "https://www.lasallek.edu.hk",
-      "estAppPeriod": "Late Sep–Oct 2026 / 預計2026年9月下旬至10月",
-      "openDay": null,
-      "openDayNote": "Usually Saturday, Jul–Aug 2026",
-      "appDateConfirmed": null,
-      "appDateNote": "Est. late Sep–Oct 2026",
       "status": "pending"
     },
     {
