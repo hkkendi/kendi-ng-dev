@@ -92,6 +92,8 @@
               <li class="skill-badge">Claude AI API</li>
               <li class="skill-badge">Azure Graph API</li>
               <li class="skill-badge">Google Apps Script</li>
+              <li class="skill-badge">Moz Links API</li>
+              <li class="skill-badge">SEO / GEO</li>
             </ul>
           </div>
 
@@ -133,6 +135,7 @@
             <ul class="skill-tags">
               <li class="skill-badge">Docker</li>
               <li class="skill-badge">AWS EC2</li>
+              <li class="skill-badge">n8n</li>
               <li class="skill-badge">APScheduler</li>
               <li class="skill-badge">Windows Task Scheduler</li>
               <li class="skill-badge">Microsoft Graph API</li>
@@ -182,7 +185,48 @@
             </div>
           </article>
 
-          <!-- Featured 2: CRM Reporting Dashboard -->
+          <!-- Featured 2: LinkedIn Lead Auto-Matching Pipeline (added 2026-06) -->
+          <article class="project-card">
+            <div class="project-card-body">
+              <h3 class="project-title">LinkedIn Lead Generation &amp; CRM Auto-Matching Pipeline</h3>
+              <p class="project-problem"><strong>Problem:</strong> LinkedIn lead form submissions arrived as raw API payloads with no CRM linkage — every lead needed manual company lookup, dedup and assignment, and ad spend had no closed-loop ROI view.</p>
+              <p class="project-solution">Built an end-to-end pipeline: hourly sync from the LinkedIn Lead Gen API, 4-strategy auto-matching against Odoo CRM (exact email → email domain → company name → phone), and a self-hosted HK Companies Registry proxy on AWS EC2 to enrich unmatched companies past HK-only geo-restrictions. Matched leads flow to Google Sheets, generate Odoo-ready ToDo import files daily, and trigger per-campaign notification emails. Full-funnel UTM attribution (ad → CRM activity → meetings) cut cost-per-lead by ~50% within five months while scaling to 190+ qualified CRM leads.</p>
+              <ul class="project-tech">
+                <li class="tech-badge">Python</li>
+                <li class="tech-badge">LinkedIn Marketing API</li>
+                <li class="tech-badge">PostgreSQL</li>
+                <li class="tech-badge">AWS EC2</li>
+                <li class="tech-badge">n8n</li>
+                <li class="tech-badge">Google Sheets API</li>
+                <li class="tech-badge">Odoo CRM</li>
+              </ul>
+              <div class="project-links">
+                <a href="https://github.com/hkkendi/work-app-copy" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Featured 3: SEO Forensic Audit & In-House Engine (added 2026-06) -->
+          <article class="project-card">
+            <div class="project-card-body">
+              <h3 class="project-title">SEO Forensic Audit &amp; In-House SEO / GEO Engine</h3>
+              <p class="project-problem"><strong>Problem:</strong> An external SEO agency reported strong keyword rankings, yet site CTR sat at an abnormal 0.3% and organic leads didn't follow — nobody could explain the gap.</p>
+              <p class="project-solution">Ran a forensic audit combining Search Console, GA4 and backlink data and uncovered black-hat link farming — a 66%-toxic backlink profile inflating impressions with bot traffic rather than real buyers. The findings led to contract termination (~HK$120K/yr saved) with zero ranking loss and a +27% authority-score recovery during natural detox. Replaced the agency with an in-house engine: GSC + GA4 blended keyword scoring, Moz backlink-health tracking via API, a 13-month trend warehouse, and a monthly AI-narrated SEO report to management — now extending into GEO (AI-search visibility on ChatGPT / Perplexity / AI Overviews).</p>
+              <ul class="project-tech">
+                <li class="tech-badge">Python</li>
+                <li class="tech-badge">Search Console API</li>
+                <li class="tech-badge">GA4 Data API</li>
+                <li class="tech-badge">Moz Links API</li>
+                <li class="tech-badge">PostgreSQL</li>
+                <li class="tech-badge">Claude AI API</li>
+              </ul>
+              <div class="project-links">
+                <a href="https://github.com/hkkendi/work-app-copy" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Featured 4: CRM Reporting Dashboard -->
           <article class="project-card">
             <div class="project-card-body">
               <h3 class="project-title">CRM Reporting &amp; Analytics Dashboard</h3>
@@ -208,7 +252,7 @@
             </div>
           </article>
 
-          <!-- Featured 3: Data Warehouse & ETL Pipeline -->
+          <!-- Featured 5: Data Warehouse & ETL Pipeline -->
           <article class="project-card">
             <div class="project-card-body">
               <h3 class="project-title">Data Warehouse &amp; ETL Pipeline</h3>
@@ -230,7 +274,7 @@
             </div>
           </article>
 
-          <!-- Featured 4: Automated Email Report System -->
+          <!-- Featured 6: Automated Email Report System -->
           <article class="project-card">
             <div class="project-card-body">
               <h3 class="project-title">Automated Email Report System</h3>
@@ -250,7 +294,7 @@
             </div>
           </article>
 
-          <!-- Featured 5: Google Apps Script SEO Reporting -->
+          <!-- Featured 7: Google Apps Script SEO Reporting -->
           <article class="project-card">
             <div class="project-card-body">
               <h3 class="project-title">AI-Powered SEO Reporting Pipeline</h3>
