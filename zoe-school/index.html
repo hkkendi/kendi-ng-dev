@@ -62,6 +62,9 @@
     .tracker-date { font-weight: 500; color: var(--confirmed); }
     .tracker-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
     .tracker-tbc { color: var(--pending); font-style: italic; font-size: 11px; }
+    .tracker-hint { margin-top: 5px; font-size: 10px; color: var(--warning); background: #fdf2f0; border: 1px solid #f5c6cb; border-radius: 4px; padding: 4px 6px; line-height: 1.45; }
+    .tracker-hint b { color: var(--warning); }
+    .tracker-hint .hint-line { color: #7a4b46; margin-top: 1px; }
 
     .timeline { position: relative; padding-left: 24px; }
     .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
@@ -157,8 +160,27 @@ function statusBadge(s) {
   return '<span class="badge badge-tbc">TBC</span>';
 }
 
+// Escape arbitrary crawled site text before injecting as HTML (XSS-safe).
+function esc(t) {
+  return String(t == null ? '' : t).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+// Render the crawler's auto-detected (unverified) findings for a school.
+function renderHint(h) {
+  if (!h) return '';
+  const dates = (h.dates || []).map(esc).join(', ');
+  const lines = (h.lines || []).map(l => `<div class="hint-line">• ${esc(l)}</div>`).join('');
+  if (!dates && !lines) return '';
+  const when = h.detectedAt ? ` (${esc(h.detectedAt)})` : '';
+  return `<div class="tracker-hint">🔍 Auto-detected on site${when} — please verify:`
+       + (dates ? `<div><b>${dates}</b></div>` : '')
+       + lines
+       + `</div>`;
+}
+
 function init(data) {
-  document.getElementById('last-updated').textContent = 'Last updated: ' + data.lastUpdated + ' | Data source: school websites, EDB, HappySeeds, Toby, NoteSity (2025-26)';
+  document.getElementById('last-updated').textContent = 'Last updated: ' + data.lastUpdated + (data.lastCrawl ? ' · 🔍 Last auto-crawl: ' + data.lastCrawl : '') + ' | Data source: school websites, EDB, HappySeeds, Toby, NoteSity (2025-26)';
 
   const districts = [...new Set(data.schools.map(s => s.district))];
   let schoolHTML = '';
@@ -215,6 +237,7 @@ function init(data) {
           ? `<div class="tracker-date">📅 ${s.openDay}</div>`
           : `<div class="tracker-tbc">TBC</div>`}
         <div class="tracker-note">${s.openDayNote}</div>
+        ${renderHint(s.crawlerHint)}
       </td>
       <td data-label="Application Date">
         ${s.appDateConfirmed

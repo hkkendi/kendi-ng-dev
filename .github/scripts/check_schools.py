@@ -211,6 +211,33 @@ def main():
     # Human-readable log.
     write_log(stamp, schools, changed, errors, new_state)
 
+    # Safe-hints mode: surface crawler findings on the public page via a
+    # per-school `crawlerHint` plus a top-level `lastCrawl`. We NEVER
+    # overwrite the human-curated openDay / appDateConfirmed / status
+    # fields; a human confirms a date and clears the hint manually.
+    data["lastCrawl"] = now.strftime("%Y-%m-%d")
+    changed_by_id = {c["id"]: c for c in changed}
+    hints = 0
+    for school in data["schools"]:
+        c = changed_by_id.get(school["id"])
+        if not c:
+            continue  # leave any existing hint untouched
+        new_dates = c.get("new_dates", [])
+        new_lines = c.get("new_snippets", [])[:2]
+        if not new_dates and not new_lines:
+            continue
+        school["crawlerHint"] = {
+            "detectedAt": now.strftime("%Y-%m-%d"),
+            "dates": new_dates,
+            "lines": new_lines,
+        }
+        hints += 1
+    with open(SCHOOLS_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+        f.write(chr(10))
+    if hints:
+        print(f"Wrote {hints} crawler hint(s) into schools.json")
+
     print(f"\n{'='*64}")
     print(f"Summary: {len(changed)} school(s) changed, {len(errors)} error(s)")
     print(f"{'='*64}\n")
