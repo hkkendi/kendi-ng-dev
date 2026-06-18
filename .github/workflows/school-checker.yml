@@ -1,0 +1,53 @@
+name: Zoe School Website Checker
+
+on:
+  schedule:
+    # 01:00 UTC every Monday = 09:00 HKT every Monday.
+    - cron: '0 1 * * 1'
+  workflow_dispatch: {}   # allow manual "Run workflow" from the Actions tab
+
+permissions:
+  contents: write   # commit updated crawl-state.json / crawl-log.md
+  issues: write     # open an issue when a change is detected
+
+concurrency:
+  group: zoe-school-checker
+  cancel-in-progress: false
+
+jobs:
+  check-schools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Run school checker
+        id: check
+        run: python .github/scripts/check_schools.py
+
+      - name: Commit updated crawl state & log
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add zoe-school/data/crawl-state.json zoe-school/data/crawl-log.md
+          if git diff --cached --quiet; then
+            echo "No state changes to commit."
+          else
+            git commit -m "chore(zoe-school): weekly crawl $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      - name: Open issue if changes detected
+        if: steps.check.outputs.changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="Zoe school update detected — $(date -u +%Y-%m-%d)"
+          gh issue create --title "$TITLE" --body-file issue-body.md --label "zoe-school" \
+            || gh issue create --title "$TITLE" --body-file issue-body.md
