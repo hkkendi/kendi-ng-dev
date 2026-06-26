@@ -313,29 +313,6 @@
       "appDateConfirmed": null,
       "appDateNote": "TBC — check website from Jul 2026",
       "status": "pending"
-    },
-    {
-      "id": "puiching_st",
-      "district": "sha",
-      "districtLabel": "Shatin 沙田區",
-      "nameZh": "沙田培正幼稚園",
-      "nameEn": "ST Pui Ching KG",
-      "address": "沙田源禾路 Yuen Wo Rd, Shatin",
-      "feederZh": "沙田培正小學",
-      "feederEn": "ST Pui Ching Primary School",
-      "rankingZh": "全港小學排名 約#15-20",
-      "rankingEn": "Primary Rank ~#15-20 HK-wide",
-      "rankingSource": "Toby/NoteSity 2026",
-      "session": "Half Day",
-      "sessionZh": "半日班（上午及下午班）",
-      "appMethod": "Online 網上",
-      "website": "https://www.stpcps.edu.hk",
-      "estAppPeriod": "Sep 2026, TBC / 預計2026年9月，待公佈",
-      "openDay": null,
-      "openDayNote": "Usually Saturday, Jul–Aug 2026",
-      "appDateConfirmed": null,
-      "appDateNote": "TBC",
-      "status": "pending"
     }
   ],
   "lastCrawl": "2026-06-26"
