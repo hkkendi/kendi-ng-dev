@@ -70,6 +70,19 @@
     .cal-btn { font-size: 11px; padding: 3px 8px; margin: 1px 2px 1px 0; border: 1px solid var(--border); background: #fff; border-radius: 5px; cursor: pointer; color: var(--hki); white-space: nowrap; }
     .cal-btn:hover { background: #eef4f9; border-color: var(--hki); }
     .cal-none { color: var(--muted); font-size: 11px; }
+    .prog-summary { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 12px; margin-bottom: 14px; display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+    .prog-summary b { color: var(--text); font-size: 13px; }
+    .prog-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+    .prog-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .prog-site { text-decoration: none; font-size: 15px; }
+    .prog-rows { display: flex; flex-direction: column; gap: 7px; }
+    .prog-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .prog-label { font-size: 12px; font-weight: 600; min-width: 96px; }
+    .prog-date { font-size: 11px; color: var(--muted); min-width: 56px; }
+    .prog-toggle, .prog-result { font-size: 11px; padding: 4px 11px; border: 1px solid var(--border); background: #fff; border-radius: 14px; cursor: pointer; color: var(--muted); }
+    .prog-toggle.on { background: #d5f5e3; border-color: #1e8449; color: #1e8449; font-weight: 600; }
+    .prog-result.on[data-val="offer"] { background: #d5f5e3; border-color: #1e8449; color: #1e8449; font-weight: 600; }
+    .prog-result.on[data-val="rejected"] { background: #fdecea; border-color: #c0392b; color: #c0392b; font-weight: 600; }
     .timeline { position: relative; padding-left: 24px; }
     .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
     .tl-item { position: relative; margin-bottom: 20px; }
@@ -105,7 +118,7 @@
 <div class="tabs">
   <div class="tab active" onclick="showTab('kg')">🎓 Kindergarten 幼稚園 <span id="kg-count"></span></div>
   <div class="tab" onclick="showTab('primary')">🎒 Primary Schools 小學 <span id="primary-count"></span></div>
-  <div class="tab" onclick="showTab('tracker')">📅 Open Day & Application Tracker</div>
+  <div class="tab" onclick="showTab('tracker')">✅ Progress 進度追蹤</div>
   <div class="tab" onclick="showTab('timeline')">🗓 Timeline 時間線</div>
   <div class="tab" onclick="showTab('notes')">📋 Notes 備註</div>
 </div>
@@ -122,7 +135,7 @@
   </div>
 
   <div id="tab-tracker" class="section">
-    <p style="color:var(--muted);font-size:12px;margin-bottom:16px;">Open days are typically on Saturdays in Jul–Aug 2026. Check back here — dates will be updated as schools announce them. 開放日通常在2026年7-8月的星期六舉行，確認後將更新。</p>
+    <p style="color:var(--muted);font-size:12px;margin-bottom:16px;">Track Zoe’s journey at each school — tap to mark ✅ Visited (open day), 📝 Applied, and the 🎓 Result. Saved in this browser. 追蹤每間學校進度：已參觀開放日、已遞交申請、取錄/落選。儲存於此瀏覽器。</p>
     <div id="tracker-list"></div>
   </div>
 
@@ -270,7 +283,7 @@ function init(data) {
           <td data-label="Session">
             <span class="badge ${s.session === 'Full Day' ? 'badge-full' : 'badge-half'}">${s.sessionZh}</span>
           </td>
-          <td data-label="Est. Application" style="font-size:11px">${s.estAppPeriod}</td>
+          <td data-label="Est. Application" style="font-size:11px">${s.estAppPeriod}${renderHint(s.crawlerHint)}</td>
           <td data-label="Method" style="font-size:11px">${s.appMethod}</td>
           <td data-label="Website"><a href="${s.website}" target="_blank" style="font-size:11px;color:#1a5276">${s.website.replace('https://','')}</a></td>
         </tr>`;
@@ -282,46 +295,69 @@ function init(data) {
   document.getElementById('kg-list').innerHTML = buildSchoolList(kgSchools, 'kg');
   document.getElementById('primary-list').innerHTML = buildSchoolList(primarySchools, 'primary');
 
-  // Open Day & Application tracker, grouped by category.
-  function buildTracker(schools) {
-    let rows = '';
-    schools.forEach(s => {
-      rows += `<tr>
-        <td data-label="School">
-          <div style="font-weight:600;font-size:12px">${s.nameZh}</div>
-          <div style="color:var(--muted);font-size:11px">${s.nameEn}</div>
-        </td>
-        <td data-label="District"><span style="font-size:11px">${s.districtLabel}</span></td>
-        <td data-label="Open Day">
-          ${s.openDay
-            ? `<div class="tracker-date">📅 ${s.openDay}</div>`
-            : `<div class="tracker-tbc">TBC</div>`}
-          <div class="tracker-note">${s.openDayNote}</div>
-          ${renderHint(s.crawlerHint)}
-        </td>
-        <td data-label="Application Date">
-          ${s.appDateConfirmed
-            ? `<div class="tracker-date">📝 ${s.appDateConfirmed}</div>`
-            : `<div class="tracker-tbc">TBC</div>`}
-          <div class="tracker-note">${s.appDateNote}</div>
-        </td>
-        <td data-label="Add to Calendar">${calButtons(s)}</td>
-        <td data-label="Status">${statusBadge(s.status)}</td>
-        <td data-label="Website"><a href="${s.website}" target="_blank" style="font-size:11px;color:#1a5276">🔗 Visit</a></td>
-      </tr>`;
-    });
-    return `<table class="school-table" style="border-radius:8px;margin-bottom:8px;"><thead><tr>
-      <th>School 學校</th><th>District 地區</th><th>Open Day 開放日</th>
-      <th>Application Date 申請日期</th><th>\uD83D\uDCC5 Add to Calendar 加入日曆</th><th>Status 狀態</th><th>Website 網址</th>
-    </tr></thead><tbody>${rows}</tbody></table>`;
+  // Personal progress tracker (Visited / Applied / Result) per school,
+  // saved in this browser's localStorage. Crawl-detected dates surface on the
+  // Kindergarten / Primary tabs; this tab is Zoe's action journey.
+  const PROG_KEY = 'zoeProgress-v1';
+  function loadProgress() { try { return JSON.parse(localStorage.getItem(PROG_KEY)) || {}; } catch (e) { return {}; } }
+  function getP(id) { return loadProgress()[id] || {}; }
+  function setP(id, field, value) {
+    const all = loadProgress(); const cur = all[id] || {}; cur[field] = value; all[id] = cur;
+    try { localStorage.setItem(PROG_KEY, JSON.stringify(all)); } catch (e) {}
   }
-  let trackerHTML = '';
-  if (kgSchools.length) trackerHTML += `<div class="track-group-head">🎓 Kindergarten 幼稚園</div>` + buildTracker(kgSchools);
-  if (primarySchools.length) trackerHTML += `<div class="track-group-head" style="margin-top:24px">🎒 Primary Schools 小學</div>` + buildTracker(primarySchools);
-  document.getElementById('tracker-list').innerHTML = trackerHTML;
+  function progLine(s, icon, label, val, field, on) {
+    const iso = toISO(val);
+    const shown = val ? esc(val) : '<span style="color:var(--muted)">TBC</span>';
+    const cal = iso ? `<button type="button" class="cal-btn" data-school="${esc(s.nameEn || s.nameZh)}" data-event="${esc(label)}" data-date="${iso}" data-url="${esc(s.website)}">📅</button>` : '';
+    const txt = field === 'visited' ? 'Visited 已參觀' : 'Applied 已申請';
+    return `<div class="prog-line">
+      <span class="prog-label">${icon} ${label}</span>
+      <span class="prog-date">${shown}</span>${cal}
+      <button type="button" class="prog-toggle${on ? ' on' : ''}" data-id="${s.id}" data-field="${field}">${on ? '✅' : '○'} ${txt}</button>
+    </div>`;
+  }
+  function progCard(s, st) {
+    const result = st.result || null;
+    return `<div class="prog-card">
+      <div class="prog-head">
+        <div><div class="school-name-zh">${s.nameZh}</div><div class="school-name-en">${s.nameEn} · ${esc(s.districtLabel)}</div></div>
+        <a class="prog-site" href="${s.website}" target="_blank" title="School site">🔗</a>
+      </div>
+      <div class="prog-rows">
+        ${progLine(s, '📅', 'Open Day', s.openDay, 'visited', !!st.visited)}
+        ${progLine(s, '📝', 'Apply', s.appDateConfirmed, 'applied', !!st.applied)}
+        <div class="prog-line">
+          <span class="prog-label">🎓 Result</span>
+          <button type="button" class="prog-result${result === 'offer' ? ' on' : ''}" data-id="${s.id}" data-field="result" data-val="offer">🎉 Offer 取錄</button>
+          <button type="button" class="prog-result${result === 'rejected' ? ' on' : ''}" data-id="${s.id}" data-field="result" data-val="rejected">❌ Rejected 落選</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  function progSummary() {
+    const all = loadProgress(); let v = 0, a = 0, o = 0, r = 0;
+    data.schools.forEach(s => { const p = all[s.id] || {}; if (p.visited) v++; if (p.applied) a++; if (p.result === 'offer') o++; if (p.result === 'rejected') r++; });
+    return `<div class="prog-summary"><span>✅ Visited <b>${v}</b></span><span>📝 Applied <b>${a}</b></span><span>🎉 Offers <b>${o}</b></span><span>❌ Rejected <b>${r}</b></span><span style="color:var(--muted)">Saved in this browser 儲存於此瀏覽器</span></div>`;
+  }
+  function renderProgress() {
+    const prog = loadProgress();
+    const section = (title, schools) => {
+      if (!schools.length) return '';
+      let h = `<div class="track-group-head">${title}</div>`;
+      schools.forEach(s => { h += progCard(s, prog[s.id] || {}); });
+      return h;
+    };
+    document.getElementById('tracker-list').innerHTML =
+      progSummary() + section('🎓 Kindergarten 幼稚園', kgSchools) + section('🎒 Primary Schools 小學', primarySchools);
+  }
+  renderProgress();
   document.getElementById('tracker-list').addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('.cal-btn');
-    if (b) addToCalendar(b.dataset.school, b.dataset.event, b.dataset.date, b.dataset.url);
+    const cal = e.target.closest && e.target.closest('.cal-btn');
+    if (cal) { addToCalendar(cal.dataset.school, cal.dataset.event, cal.dataset.date, cal.dataset.url); return; }
+    const tog = e.target.closest && e.target.closest('.prog-toggle');
+    if (tog) { setP(tog.dataset.id, tog.dataset.field, !getP(tog.dataset.id)[tog.dataset.field]); renderProgress(); return; }
+    const res = e.target.closest && e.target.closest('.prog-result');
+    if (res) { const cur = getP(res.dataset.id).result || null; setP(res.dataset.id, 'result', cur === res.dataset.val ? null : res.dataset.val); renderProgress(); return; }
   });
 
   let tlHTML = '';
