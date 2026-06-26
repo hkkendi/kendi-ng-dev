@@ -1,0 +1,84 @@
+name: Zoe School AI Checker
+
+on:
+  schedule:
+    # 02:00 UTC every Monday = 10:00 HKT (after the regex checker at 09:00).
+    - cron: '0 2 * * 1'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: zoe-school-ai-checker
+  cancel-in-progress: false
+
+jobs:
+  ai-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: pip install claude-agent-sdk requests beautifulsoup4
+
+      - name: Connect HK VPN (Surfshark WireGuard) — optional
+        continue-on-error: true
+        env:
+          WG_CONF: ${{ secrets.SURFSHARK_WG_CONF }}
+        run: |
+          if [ -z "$WG_CONF" ]; then
+            echo "SURFSHARK_WG_CONF secret not set — crawling from the runner's own IP."
+            exit 0
+          fi
+          sudo apt-get update -qq
+          sudo apt-get install -y wireguard-tools openresolv
+          umask 077
+          echo "$WG_CONF" | sudo tee /etc/wireguard/hk.conf >/dev/null
+          if sudo wg-quick up hk; then
+            echo "VPN up. Exit country: $(curl -s --max-time 15 https://ipinfo.io/country || echo '?')"
+          else
+            echo "wg-quick failed — continuing on the runner's own IP."
+            sudo wg-quick down hk 2>/dev/null || true
+          fi
+
+      - name: Run AI checker
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          MS_TENANT_ID: ${{ secrets.MS_TENANT_ID }}
+          MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
+          MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          BCC_EMAIL: ${{ secrets.BCC_EMAIL }}
+          ZOE_AI_EMAIL: '1'
+          ZOE_AI_MODEL: claude-sonnet-4-6
+          PYTHONUTF8: '1'
+          PYTHONIOENCODING: utf-8
+        run: python .github/scripts/ai_check.py
+
+      - name: Disconnect HK VPN
+        if: always()
+        run: sudo wg-quick down hk 2>/dev/null || true
+
+      - name: Commit updated schools.json & AI state
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add zoe-school/data/schools.json zoe-school/data/ai-state.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(zoe-school): weekly AI crawl $(date -u +%Y-%m-%d)"
+            git push
+          fi
