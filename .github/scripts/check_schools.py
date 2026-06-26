@@ -27,7 +27,10 @@ import sys
 from datetime import datetime, timezone, timedelta
 
 import requests
+import urllib3
 from bs4 import BeautifulSoup
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Ensure emoji/CJK output works regardless of console encoding (Windows cp1252).
 try:
@@ -119,7 +122,12 @@ def check_school(school):
     if not url:
         return {"id": sid, "name": name, "status": "skip", "reason": "no website"}
     try:
-        r = requests.get(url, headers=HEADERS, timeout=20, allow_redirects=True)
+        try:
+            r = requests.get(url, headers=HEADERS, timeout=20, allow_redirects=True)
+        except requests.exceptions.SSLError:
+            # Some school sites ship an incomplete/expired cert chain. Retry once
+            # without verification so we can still track their content.
+            r = requests.get(url, headers=HEADERS, timeout=20, allow_redirects=True, verify=False)
         r.raise_for_status()
         r.encoding = r.apparent_encoding or r.encoding
         snippets, dates = extract_relevant(r.text)
