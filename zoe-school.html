@@ -66,6 +66,7 @@
     .tracker-hint b { color: var(--warning); }
     .tracker-hint .hint-line { color: #7a4b46; margin-top: 1px; }
 
+    .track-group-head { font-size: 14px; font-weight: 600; margin: 8px 0 10px; color: var(--text); }
     .timeline { position: relative; padding-left: 24px; }
     .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
     .tl-item { position: relative; margin-bottom: 20px; }
@@ -99,7 +100,8 @@
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="showTab('schools')">🏫 Schools 學校 (13)</div>
+  <div class="tab active" onclick="showTab('kg')">🎓 Kindergarten 幼稚園 <span id="kg-count"></span></div>
+  <div class="tab" onclick="showTab('primary')">🎒 Primary Schools 小學 <span id="primary-count"></span></div>
   <div class="tab" onclick="showTab('tracker')">📅 Open Day & Application Tracker</div>
   <div class="tab" onclick="showTab('timeline')">🗓 Timeline 時間線</div>
   <div class="tab" onclick="showTab('notes')">📋 Notes 備註</div>
@@ -107,25 +109,18 @@
 
 <div class="container">
 
-  <div id="tab-schools" class="section active">
-    <div id="school-list"></div>
+  <div id="tab-kg" class="section active">
+    <div id="kg-list"></div>
+  </div>
+
+  <div id="tab-primary" class="section">
+    <p style="color:var(--muted);font-size:12px;margin-bottom:16px;">直屬／聯繫「龍校」小學 — 部分名校（如拔萃女小學）沒有自設幼稚園，於小一階段入學。Primary &quot;dragon&quot; schools (e.g. DGS Junior) have no kindergarten; entry is at Primary 1.</p>
+    <div id="primary-list"></div>
   </div>
 
   <div id="tab-tracker" class="section">
     <p style="color:var(--muted);font-size:12px;margin-bottom:16px;">Open days are typically on Saturdays in Jul–Aug 2026. Check back here — dates will be updated as schools announce them. 開放日通常在2026年7-8月的星期六舉行，確認後將更新。</p>
-    <table class="school-table" style="border-radius:8px;">
-      <thead>
-        <tr>
-          <th>School 學校</th>
-          <th>District 地區</th>
-          <th>Open Day 開放日</th>
-          <th>Application Date 申請日期</th>
-          <th>Status 狀態</th>
-          <th>Website 網址</th>
-        </tr>
-      </thead>
-      <tbody id="tracker-list"></tbody>
-    </table>
+    <div id="tracker-list"></div>
   </div>
 
   <div id="tab-timeline" class="section">
@@ -142,7 +137,7 @@
 <script>
 function showTab(name) {
   document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', ['schools','tracker','timeline','notes'][i] === name);
+    t.classList.toggle('active', ['kg','primary','tracker','timeline','notes'][i] === name);
   });
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
@@ -170,7 +165,7 @@ function esc(t) {
 function renderHint(h) {
   if (!h) return '';
   const dates = (h.dates || []).map(esc).join(', ');
-  const lines = (h.lines || []).map(l => `<div class="hint-line">• ${esc(l)}</div>`).join("");
+  const lines = (h.lines || []).map(l => `<div class="hint-line">• ${esc(l)}</div>`).join('');
   if (!dates && !lines) return '';
   const when = h.detectedAt ? ` (${esc(h.detectedAt)})` : '';
   return `<div class="tracker-hint">🔍 Auto-detected on site${when} — please verify:`
@@ -182,73 +177,100 @@ function renderHint(h) {
 function init(data) {
   document.getElementById('last-updated').textContent = 'Last updated: ' + data.lastUpdated + (data.lastCrawl ? ' · 🔍 Last auto-crawl: ' + data.lastCrawl : '') + ' | Data source: school websites, EDB, HappySeeds, Toby, NoteSity (2025-26)';
 
-  const districts = [...new Set(data.schools.map(s => s.district))];
-  let schoolHTML = '';
-  districts.forEach(d => {
-    const group = data.schools.filter(s => s.district === d);
-    schoolHTML += `<div class="district-header ${districtColor(d)}">${districtLabel(d, data.schools)} — ${group.length} schools</div>`;
-    schoolHTML += `<table class="school-table"><thead><tr>
-      <th>Kindergarten 幼稚園</th>
-      <th>Feeder Primary 關連小學</th>
-      <th>Primary Ranking 小學排名</th>
-      <th>Session 上課時段</th>
-      <th>Est. Application 預計申請</th>
-      <th>Method 方式</th>
-      <th>Website</th>
-    </tr></thead><tbody>`;
-    group.forEach(s => {
-      schoolHTML += `<tr>
-        <td data-label="Kindergarten">
-          <div class="school-name-zh">${s.nameZh}</div>
-          <div class="school-name-en">${s.nameEn}</div>
-          <div class="school-address">${s.address}</div>
+  const kgSchools = data.schools.filter(s => s.category !== 'primary');
+  const primarySchools = data.schools.filter(s => s.category === 'primary');
+  const setCount = (id, n) => { const e = document.getElementById(id); if (e) e.textContent = '(' + n + ')'; };
+  setCount('kg-count', kgSchools.length);
+  setCount('primary-count', primarySchools.length);
+
+  // District-grouped school table. `mode` ('kg'|'primary') only changes column labels.
+  function buildSchoolList(schools, mode) {
+    if (!schools.length) {
+      return '<p style="color:var(--muted);padding:16px;background:#fff;border:1px solid var(--border);border-radius:8px;">None yet</p>';
+    }
+    const nameHead   = mode === 'primary' ? 'Primary School 小學' : 'Kindergarten 幼稚園';
+    const feederHead = mode === 'primary' ? 'Through-train Secondary 直屬中學' : 'Feeder Primary 關連小學';
+    const rankHead   = mode === 'primary' ? 'Ranking 排名' : 'Primary Ranking 小學排名';
+    const districts = [...new Set(schools.map(s => s.district))];
+    let html = '';
+    districts.forEach(d => {
+      const group = schools.filter(s => s.district === d);
+      html += `<div class="district-header ${districtColor(d)}">${districtLabel(d, schools)} — ${group.length} schools</div>`;
+      html += `<table class="school-table"><thead><tr>
+        <th>${nameHead}</th>
+        <th>${feederHead}</th>
+        <th>${rankHead}</th>
+        <th>Session 上課時段</th>
+        <th>Est. Application 預計申請</th>
+        <th>Method 方式</th>
+        <th>Website</th>
+      </tr></thead><tbody>`;
+      group.forEach(s => {
+        html += `<tr>
+          <td data-label="School">
+            <div class="school-name-zh">${s.nameZh}</div>
+            <div class="school-name-en">${s.nameEn}</div>
+            <div class="school-address">${s.address}</div>
+          </td>
+          <td data-label="Feeder">
+            <div>${s.feederZh}</div>
+            <div style="color:var(--muted);font-size:11px">${s.feederEn}</div>
+          </td>
+          <td data-label="Ranking">
+            <div class="rank-main">${s.rankingZh}</div>
+            <div class="rank-source">${s.rankingEn}</div>
+            <div class="rank-source">Src: ${s.rankingSource}</div>
+          </td>
+          <td data-label="Session">
+            <span class="badge ${s.session === 'Full Day' ? 'badge-full' : 'badge-half'}">${s.sessionZh}</span>
+          </td>
+          <td data-label="Est. Application" style="font-size:11px">${s.estAppPeriod}</td>
+          <td data-label="Method" style="font-size:11px">${s.appMethod}</td>
+          <td data-label="Website"><a href="${s.website}" target="_blank" style="font-size:11px;color:#1a5276">${s.website.replace('https://','')}</a></td>
+        </tr>`;
+      });
+      html += '</tbody></table>';
+    });
+    return html;
+  }
+  document.getElementById('kg-list').innerHTML = buildSchoolList(kgSchools, 'kg');
+  document.getElementById('primary-list').innerHTML = buildSchoolList(primarySchools, 'primary');
+
+  // Open Day & Application tracker, grouped by category.
+  function buildTracker(schools) {
+    let rows = '';
+    schools.forEach(s => {
+      rows += `<tr>
+        <td data-label="School">
+          <div style="font-weight:600;font-size:12px">${s.nameZh}</div>
+          <div style="color:var(--muted);font-size:11px">${s.nameEn}</div>
         </td>
-        <td data-label="Feeder Primary">
-          <div>${s.feederZh}</div>
-          <div style="color:var(--muted);font-size:11px">${s.feederEn}</div>
+        <td data-label="District"><span style="font-size:11px">${s.districtLabel}</span></td>
+        <td data-label="Open Day">
+          ${s.openDay
+            ? `<div class="tracker-date">📅 ${s.openDay}</div>`
+            : `<div class="tracker-tbc">TBC</div>`}
+          <div class="tracker-note">${s.openDayNote}</div>
+          ${renderHint(s.crawlerHint)}
         </td>
-        <td data-label="Ranking">
-          <div class="rank-main">${s.rankingZh}</div>
-          <div class="rank-source">${s.rankingEn}</div>
-          <div class="rank-source">Src: ${s.rankingSource}</div>
+        <td data-label="Application Date">
+          ${s.appDateConfirmed
+            ? `<div class="tracker-date">📝 ${s.appDateConfirmed}</div>`
+            : `<div class="tracker-tbc">TBC</div>`}
+          <div class="tracker-note">${s.appDateNote}</div>
         </td>
-        <td data-label="Session">
-          <span class="badge ${s.session === 'Full Day' ? 'badge-full' : 'badge-half'}">${s.sessionZh}</span>
-        </td>
-        <td data-label="Est. Application" style="font-size:11px">${s.estAppPeriod}</td>
-        <td data-label="Method" style="font-size:11px">${s.appMethod}</td>
-        <td data-label="Website"><a href="${s.website}" target="_blank" style="font-size:11px;color:#1a5276">${s.website.replace('https://','')}</a></td>
+        <td data-label="Status">${statusBadge(s.status)}</td>
+        <td data-label="Website"><a href="${s.website}" target="_blank" style="font-size:11px;color:#1a5276">🔗 Visit</a></td>
       </tr>`;
     });
-    schoolHTML += '</tbody></table>';
-  });
-  document.getElementById('school-list').innerHTML = schoolHTML;
-
+    return `<table class="school-table" style="border-radius:8px;margin-bottom:8px;"><thead><tr>
+      <th>School 學校</th><th>District 地區</th><th>Open Day 開放日</th>
+      <th>Application Date 申請日期</th><th>Status 狀態</th><th>Website 網址</th>
+    </tr></thead><tbody>${rows}</tbody></table>`;
+  }
   let trackerHTML = '';
-  data.schools.forEach(s => {
-    trackerHTML += `<tr>
-      <td data-label="School">
-        <div style="font-weight:600;font-size:12px">${s.nameZh}</div>
-        <div style="color:var(--muted);font-size:11px">${s.nameEn}</div>
-      </td>
-      <td data-label="District"><span style="font-size:11px">${s.districtLabel}</span></td>
-      <td data-label="Open Day">
-        ${s.openDay
-          ? `<div class="tracker-date">📅 ${s.openDay}</div>`
-          : `<div class="tracker-tbc">TBC</div>`}
-        <div class="tracker-note">${s.openDayNote}</div>
-        ${renderHint(s.crawlerHint)}
-      </td>
-      <td data-label="Application Date">
-        ${s.appDateConfirmed
-          ? `<div class="tracker-date">📝 ${s.appDateConfirmed}</div>`
-          : `<div class="tracker-tbc">TBC</div>`}
-        <div class="tracker-note">${s.appDateNote}</div>
-      </td>
-      <td data-label="Status">${statusBadge(s.status)}</td>
-      <td data-label="Website"><a href="${s.website}" target="_blank" style="font-size:11px;color:#1a5276">🔗 Visit</a></td>
-    </tr>`;
-  });
+  if (kgSchools.length) trackerHTML += `<div class="track-group-head">🎓 Kindergarten 幼稚園</div>` + buildTracker(kgSchools);
+  if (primarySchools.length) trackerHTML += `<div class="track-group-head" style="margin-top:24px">🎒 Primary Schools 小學</div>` + buildTracker(primarySchools);
   document.getElementById('tracker-list').innerHTML = trackerHTML;
 
   let tlHTML = '';
@@ -280,7 +302,7 @@ fetch('/zoe-school/data/schools.json')
   .then(r => r.json())
   .then(data => init(data))
   .catch(() => {
-    document.getElementById('school-list').innerHTML = '<p style="color:var(--muted);padding:16px;background:#fff;border:1px solid var(--border);border-radius:8px;">Unable to load school data. Please make sure /zoe-school/data/schools.json is available.</p>';
+    document.getElementById('kg-list').innerHTML = '<p style="color:var(--muted);padding:16px;background:#fff;border:1px solid var(--border);border-radius:8px;">Unable to load school data. Please make sure /zoe-school/data/schools.json is available.</p>';
     document.getElementById('tracker-list').innerHTML = '';
     document.getElementById('timeline-list').innerHTML = '';
     document.getElementById('notes-list').innerHTML = '';

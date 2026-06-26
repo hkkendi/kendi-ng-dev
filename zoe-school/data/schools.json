@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-04",
+  "lastUpdated": "2026-06-26",
   "child": {
     "name": "Zoe",
     "dob": "2024-02-21",
@@ -40,6 +40,7 @@
   "schools": [
     {
       "id": "spk",
+      "category": "kindergarten",
       "district": "hki",
       "districtLabel": "Hong Kong Island 香港島",
       "nameZh": "聖保祿幼稚園 SPK",
@@ -63,6 +64,7 @@
     },
     {
       "id": "ssgs",
+      "category": "kindergarten",
       "district": "hki",
       "districtLabel": "Hong Kong Island 香港島",
       "nameZh": "聖士提反女子中學附屬幼稚園",
@@ -86,6 +88,7 @@
     },
     {
       "id": "shck",
+      "category": "kindergarten",
       "district": "hki",
       "districtLabel": "Hong Kong Island 香港島",
       "nameZh": "嘉諾撒聖心幼稚園 SHCK",
@@ -109,6 +112,7 @@
     },
     {
       "id": "truelight_caine",
+      "category": "kindergarten",
       "district": "hki",
       "districtLabel": "Hong Kong Island 香港島",
       "nameZh": "香港真光幼稚園（堅道）",
@@ -132,6 +136,7 @@
     },
     {
       "id": "truelight_taihang",
+      "category": "kindergarten",
       "district": "hki",
       "districtLabel": "Hong Kong Island 香港島",
       "nameZh": "大坑真光幼稚園",
@@ -155,6 +160,7 @@
     },
     {
       "id": "sfx",
+      "category": "kindergarten",
       "district": "hki",
       "districtLabel": "Hong Kong Island 香港島",
       "nameZh": "嘉諾撒聖方濟各學校幼稚園",
@@ -178,6 +184,7 @@
     },
     {
       "id": "puiching_kln",
+      "category": "kindergarten",
       "district": "kln",
       "districtLabel": "Kowloon 九龍區",
       "nameZh": "培正幼稚園",
@@ -201,13 +208,14 @@
     },
     {
       "id": "dgs",
+      "category": "primary",
       "district": "kln",
       "districtLabel": "Kowloon 九龍區",
-      "nameZh": "拔萃女幼稚園",
-      "nameEn": "DGS KG",
+      "nameZh": "拔萃女小學",
+      "nameEn": "Diocesan Girls' Junior School (DGJS)",
       "address": "九龍塘牛津道 Oxford Rd, Kowloon Tong",
-      "feederZh": "拔萃女小學",
-      "feederEn": "Diocesan Girls' Junior School",
+      "feederZh": "直屬中學：拔萃女書院",
+      "feederEn": "Through-train: Diocesan Girls' School (DGS)",
       "rankingZh": "全港小學排名 #1女校 / 全港第一",
       "rankingEn": "Primary Rank #1 (Girls) / #1 HK-wide",
       "rankingSource": "HappySeeds/ParentingHeadline 2025-26",
@@ -215,15 +223,16 @@
       "sessionZh": "全日班",
       "appMethod": "Online 網上",
       "website": "https://www.dgjs.edu.hk",
-      "estAppPeriod": "Oct 2026, TBC / 預計2026年10月，待公佈",
+      "estAppPeriod": "Private P1 admission, applications ~Aug–Sep / 私立小一，約8-9月接受申請",
       "openDay": null,
-      "openDayNote": "Usually Saturday, Jul–Aug 2026. Register early — fills within hours.",
+      "openDayNote": "Open day usually autumn; register early — fills within hours.",
       "appDateConfirmed": null,
-      "appDateNote": "Est. Oct 2026",
+      "appDateNote": "Private P1 (小一) — check DGJS website",
       "status": "pending"
     },
     {
       "id": "truelight_kln",
+      "category": "kindergarten",
       "district": "kln",
       "districtLabel": "Kowloon 九龍區",
       "nameZh": "九龍真光幼稚園",
@@ -247,6 +256,7 @@
     },
     {
       "id": "gskd",
+      "category": "kindergarten",
       "district": "kln",
       "districtLabel": "Kowloon 九龍區",
       "nameZh": "德望幼稚園",
@@ -270,6 +280,7 @@
     },
     {
       "id": "maryknoll",
+      "category": "kindergarten",
       "district": "kln",
       "districtLabel": "Kowloon 九龍區",
       "nameZh": "瑪利諾修院學校幼稚園",
@@ -293,6 +304,7 @@
     },
     {
       "id": "heepyunn",
+      "category": "kindergarten",
       "district": "kln",
       "districtLabel": "Kowloon 九龍區",
       "nameZh": "協恩中學附屬幼稚園",
