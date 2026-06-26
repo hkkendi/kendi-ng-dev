@@ -67,6 +67,9 @@
     .tracker-hint .hint-line { color: #7a4b46; margin-top: 1px; }
 
     .track-group-head { font-size: 14px; font-weight: 600; margin: 8px 0 10px; color: var(--text); }
+    .cal-btn { font-size: 11px; padding: 3px 8px; margin: 1px 2px 1px 0; border: 1px solid var(--border); background: #fff; border-radius: 5px; cursor: pointer; color: var(--hki); white-space: nowrap; }
+    .cal-btn:hover { background: #eef4f9; border-color: var(--hki); }
+    .cal-none { color: var(--muted); font-size: 11px; }
     .timeline { position: relative; padding-left: 24px; }
     .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
     .tl-item { position: relative; margin-bottom: 20px; }
@@ -174,6 +177,49 @@ function renderHint(h) {
        + `</div>`;
 }
 
+// --- Add-to-Calendar (.ics) helpers -------------------------------------
+// Pull an ISO date (YYYY-MM-DD) out of a field even if wrapped in other text.
+function toISO(v) {
+  if (typeof v !== 'string') return null;
+  const m = v.match(/\b(\d{4})-(\d{2})-(\d{2})\b/);
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : null;
+}
+function calPad(n) { return String(n).padStart(2, '0'); }
+function icsDate(iso) { const d = new Date(iso + 'T00:00:00'); return `${d.getFullYear()}${calPad(d.getMonth() + 1)}${calPad(d.getDate())}`; }
+// Build the per-row calendar button(s); only for fields holding a real ISO date.
+function calButtons(s) {
+  const out = [];
+  const add = (label, val) => {
+    const iso = toISO(val);
+    if (iso) out.push(`<button type="button" class="cal-btn" data-school="${esc(s.nameEn || s.nameZh)}" data-event="${esc(label)}" data-date="${iso}" data-url="${esc(s.website)}">\uD83D\uDCC5 ${esc(label)}</button>`);
+  };
+  add('Open Day', s.openDay);
+  add('Application', s.appDateConfirmed);
+  return out.length ? out.join('') : '<span class="cal-none">\u2014</span>';
+}
+// Generate + download an all-day .ics for one event (opens in Google/Outlook/Apple).
+function addToCalendar(school, event, isoDate, url) {
+  const start = icsDate(isoDate);
+  const endD = new Date(isoDate + 'T00:00:00'); endD.setDate(endD.getDate() + 1);
+  const end = `${endD.getFullYear()}${calPad(endD.getMonth() + 1)}${calPad(endD.getDate())}`;
+  const ics = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//kendi-ng//zoe-school//EN',
+    'BEGIN:VEVENT',
+    `UID:${`${school}-${event}-${start}`.replace(/[^\w-]+/g, '-')}@kendi-ng.com`,
+    `DTSTART;VALUE=DATE:${start}`,
+    `DTEND;VALUE=DATE:${end}`,
+    `SUMMARY:${school} \u2014 ${event} (Zoe)`,
+    `DESCRIPTION:Zoe school tracker. Confirm on the school site: ${url}`,
+    `URL:${url}`,
+    'END:VEVENT', 'END:VCALENDAR'
+  ].join('\r\n');
+  const blob = new Blob([ics], { type: 'text/calendar' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${school}-${event}.ics`.replace(/[^\w.-]+/g, '_');
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(a.href);
+}
+
 function init(data) {
   document.getElementById('last-updated').textContent = 'Last updated: ' + data.lastUpdated + (data.lastCrawl ? ' · 🔍 Last auto-crawl: ' + data.lastCrawl : '') + ' | Data source: school websites, EDB, HappySeeds, Toby, NoteSity (2025-26)';
 
@@ -259,19 +305,24 @@ function init(data) {
             : `<div class="tracker-tbc">TBC</div>`}
           <div class="tracker-note">${s.appDateNote}</div>
         </td>
+        <td data-label="Add to Calendar">${calButtons(s)}</td>
         <td data-label="Status">${statusBadge(s.status)}</td>
         <td data-label="Website"><a href="${s.website}" target="_blank" style="font-size:11px;color:#1a5276">🔗 Visit</a></td>
       </tr>`;
     });
     return `<table class="school-table" style="border-radius:8px;margin-bottom:8px;"><thead><tr>
       <th>School 學校</th><th>District 地區</th><th>Open Day 開放日</th>
-      <th>Application Date 申請日期</th><th>Status 狀態</th><th>Website 網址</th>
+      <th>Application Date 申請日期</th><th>\uD83D\uDCC5 Add to Calendar 加入日曆</th><th>Status 狀態</th><th>Website 網址</th>
     </tr></thead><tbody>${rows}</tbody></table>`;
   }
   let trackerHTML = '';
   if (kgSchools.length) trackerHTML += `<div class="track-group-head">🎓 Kindergarten 幼稚園</div>` + buildTracker(kgSchools);
   if (primarySchools.length) trackerHTML += `<div class="track-group-head" style="margin-top:24px">🎒 Primary Schools 小學</div>` + buildTracker(primarySchools);
   document.getElementById('tracker-list').innerHTML = trackerHTML;
+  document.getElementById('tracker-list').addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('.cal-btn');
+    if (b) addToCalendar(b.dataset.school, b.dataset.event, b.dataset.date, b.dataset.url);
+  });
 
   let tlHTML = '';
   data.timeline.forEach(t => {
