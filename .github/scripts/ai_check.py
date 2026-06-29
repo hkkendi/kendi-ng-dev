@@ -185,7 +185,7 @@ _captured = {}
 async def _extract(text):
     """Run the Agent SDK record_findings tool and return its validated args."""
     from claude_agent_sdk import (
-        AssistantMessage, ClaudeAgentOptions, ToolUseBlock,
+        AssistantMessage, ClaudeAgentOptions, ResultMessage, ToolUseBlock,
         create_sdk_mcp_server, query, tool,
     )
 
@@ -207,11 +207,26 @@ async def _extract(text):
         max_turns=3,
     )
     prompt = "Extract K1 admission dates from this page text:\n\n" + text[:6000]
-    async for msg in query(prompt=prompt, options=options):
-        if isinstance(msg, AssistantMessage):
-            for block in msg.content:
-                if isinstance(block, ToolUseBlock) and block.name.endswith("record_findings"):
-                    pass
+    last_result = None
+    try:
+        async for msg in query(prompt=prompt, options=options):
+            if isinstance(msg, ResultMessage):
+                last_result = msg
+            elif isinstance(msg, AssistantMessage):
+                for block in msg.content:
+                    if isinstance(block, ToolUseBlock) and block.name.endswith("record_findings"):
+                        pass
+    except Exception as e:
+        # The CLI emits a result with is_error=True then exits non-zero on an
+        # API error (401/429/5xx); the raised error only carries the subtype.
+        # Surface the real HTTP status the CLI reported so failures are diagnosable.
+        status = getattr(last_result, "api_error_status", None)
+        errs = getattr(last_result, "errors", None)
+        if status or errs:
+            raise RuntimeError(
+                f"API error (HTTP {status or '?'}) from Claude CLI: {errs or e}"
+            ) from e
+        raise
     return dict(_captured)
 
 
