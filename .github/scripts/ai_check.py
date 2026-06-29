@@ -316,11 +316,57 @@ def load_json(path, default):
         return default
 
 
+def cache_path(school):
+    d = os.environ.get("ZOE_CACHE_DIR")
+    return os.path.join(d, f"{school['id']}.txt") if d else None
+
+
+def page_text(school):
+    """Read page text from the cache dir if present, else fetch live.
+
+    The cache lets us split the run in two: fetch pages while the HK VPN is
+    up (some HK school sites geo-block non-HK IPs), then run the Claude API
+    with the VPN down (Anthropic does not serve Hong Kong — a HK exit IP
+    gets every API call 403'd). Local runs with no cache just fetch live.
+    """
+    cp = cache_path(school)
+    if cp and os.path.exists(cp):
+        with open(cp, "r", encoding="utf-8") as f:
+            return f.read()
+    return fetch_text(school["website"])
+
+
+def fetch_phase(data):
+    """Download every school page to the cache dir; no extraction. Run with VPN up."""
+    cache_dir = os.environ.get("ZOE_CACHE_DIR")
+    os.makedirs(cache_dir, exist_ok=True)
+    n = 0
+    for school in data["schools"]:
+        url = school.get("website")
+        name = school.get("nameEn") or school.get("nameZh") or school["id"]
+        if not url:
+            continue
+        print(f"- {name} ({school['id']})")
+        text = fetch_text(url)
+        if text and len(text) >= 50:
+            with open(cache_path(school), "w", encoding="utf-8") as f:
+                f.write(text)
+            n += 1
+        else:
+            print("   (no usable text — skipped)")
+    print(f"\nFetched {n}/{len(data['schools'])} page(s) to {cache_dir}")
+    return 0
+
+
 def main():
     data = load_json(SCHOOLS_FILE, None)
     if not data or "schools" not in data:
         print(f"Could not read {SCHOOLS_FILE}")
         return 1
+
+    if "--fetch-only" in sys.argv:
+        return fetch_phase(data)
+
     state = load_json(AI_STATE_FILE, {"seen": []})
     prev_seen = {tuple(x) for x in state.get("seen", [])}
     now = datetime.now(HKT)
@@ -334,7 +380,7 @@ def main():
         if not url:
             continue
         print(f"- {name} ({school['id']})")
-        text = fetch_text(url)
+        text = page_text(school)
         if not text or len(text) < 50:
             continue
         try:
