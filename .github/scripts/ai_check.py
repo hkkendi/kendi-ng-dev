@@ -179,6 +179,31 @@ def fetch_text(url):
         return None
 
 
+def urls_for(school):
+    """Homepage plus any extra admission/news sub-pages to crawl for this school.
+
+    Many HK school sites keep the actual open-day/application dates on an
+    admissions or news sub-page (or behind a JS redirect), not the homepage —
+    so `crawlUrls` lets a school point the crawler straight at them.
+    """
+    out = []
+    for u in [school.get("website")] + list(school.get("crawlUrls", [])):
+        if u and u not in out:
+            out.append(u)
+    return out
+
+
+def fetch_combined(school):
+    """Fetch every URL for a school and join the page text (sub-pages first,
+    as they carry the dates; homepage last)."""
+    parts = []
+    for u in urls_for(school):
+        t = fetch_text(u)
+        if t and len(t) >= 30:
+            parts.append(t)
+    return "\n\n----\n\n".join(parts) if parts else None
+
+
 _captured = {}
 
 
@@ -206,7 +231,7 @@ async def _extract(text):
         permission_mode="bypassPermissions",
         max_turns=3,
     )
-    prompt = "Extract K1 admission dates from this page text:\n\n" + text[:6000]
+    prompt = "Extract K1 admission dates from this page text:\n\n" + text[:12000]
     last_result = None
     try:
         async for msg in query(prompt=prompt, options=options):
@@ -333,7 +358,7 @@ def page_text(school):
     if cp and os.path.exists(cp):
         with open(cp, "r", encoding="utf-8") as f:
             return f.read()
-    return fetch_text(school["website"])
+    return fetch_combined(school)
 
 
 def fetch_phase(data):
@@ -347,7 +372,7 @@ def fetch_phase(data):
         if not url:
             continue
         print(f"- {name} ({school['id']})")
-        text = fetch_text(url)
+        text = fetch_combined(school)
         if text and len(text) >= 50:
             with open(cache_path(school), "w", encoding="utf-8") as f:
                 f.write(text)
