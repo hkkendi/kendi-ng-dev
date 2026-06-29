@@ -43,7 +43,8 @@ jobs:
             exit 0
           fi
           sudo apt-get update -qq
-          sudo apt-get install -y wireguard-tools openresolv
+          # ubuntu-24.04 ships resolvconf (not openresolv); wg-quick needs it for the conf's DNS line.
+          sudo apt-get install -y wireguard-tools resolvconf || sudo apt-get install -y wireguard-tools
           umask 077
           echo "$WG_CONF" | sudo tee /etc/wireguard/hk.conf >/dev/null
           if sudo wg-quick up hk; then
