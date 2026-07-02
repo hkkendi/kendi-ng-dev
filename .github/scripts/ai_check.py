@@ -113,7 +113,9 @@ def map_event(event):
         return "openDay"
     if any(k in e for k in ("application", "報名", "申請", "enrol", "register", "招生")):
         return "appDateConfirmed"
-    # interview / results / 公佈 / 放榜 — informative, but not a primary date field
+    if any(k in e for k in ("result", "放榜", "公佈", "公布", "取錄", "announce", "notification")):
+        return "resultDate"
+    # interview etc. — informative, but not a primary date field
     return "note"
 
 
@@ -143,6 +145,9 @@ def apply_findings(school, items, prev_seen, now):
                 school["appDateConfirmed"] = iso
                 school["appDateNote"] = f"\U0001F916 AI-detected {iso} — verify ({ev})"
                 school["status"] = "confirmed"
+            elif field == "resultDate" and school.get("resultDate") != iso:
+                school["resultDate"] = iso
+                school["resultDateNote"] = f"\U0001F916 AI-detected {iso} — verify ({ev})"
             elif field == "note":
                 notes.append(f"{ev}: {iso}")
             if (school["id"], ev, iso) not in prev_seen:

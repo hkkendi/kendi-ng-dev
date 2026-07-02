@@ -208,6 +208,7 @@ function calButtons(s) {
   };
   add('Open Day', s.openDay);
   add('Application', s.appDateConfirmed);
+  add('Results', s.resultDate);
   return out.length ? out.join('') : '<span class="cal-none">\u2014</span>';
 }
 // Generate + download an all-day .ics for one event (opens in Google/Outlook/Apple).
@@ -328,6 +329,7 @@ function init(data) {
         ${progLine(s, '📝', 'Apply', s.appDateConfirmed, 'applied', !!st.applied)}
         <div class="prog-line">
           <span class="prog-label">🎓 Result</span>
+          <span class="prog-date">${s.resultDate ? esc(s.resultDate) : '<span style="color:var(--muted)">TBC</span>'}</span>${toISO(s.resultDate) ? `<button type="button" class="cal-btn" data-school="${esc(s.nameEn || s.nameZh)}" data-event="Results" data-date="${toISO(s.resultDate)}" data-url="${esc(s.website)}">📅</button>` : ''}
           <button type="button" class="prog-result${result === 'offer' ? ' on' : ''}" data-id="${s.id}" data-field="result" data-val="offer">🎉 Offer 取錄</button>
           <button type="button" class="prog-result${result === 'rejected' ? ' on' : ''}" data-id="${s.id}" data-field="result" data-val="rejected">❌ Rejected 落選</button>
         </div>
