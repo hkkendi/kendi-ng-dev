@@ -211,7 +211,14 @@
       "openDayNote": "Usually Saturday, Jul–Aug 2026",
       "appDateConfirmed": null,
       "appDateNote": "TBC",
-      "status": "pending"
+      "status": "pending",
+      "crawlerHint": {
+        "detectedAt": "2026-07-06",
+        "dates": [
+          "03/07/2026"
+        ],
+        "lines": []
+      }
     },
     {
       "id": "dgs",
@@ -262,7 +269,22 @@
       "status": "pending",
       "crawlUrls": [
         "https://www.ktlks.edu.hk/news-tc/"
-      ]
+      ],
+      "crawlerHint": {
+        "detectedAt": "2026-07-06",
+        "dates": [
+          "2026年9月",
+          "9月1日",
+          "12月31日",
+          "9月13日",
+          "11月1日",
+          "11月12日"
+        ],
+        "lines": [
+          "26-27入學簡介會直播重溫",
+          "26-27入學申請"
+        ]
+      }
     },
     {
       "id": "gskd",
@@ -358,7 +380,16 @@
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
       "appDateNote": "Private/DSS P1 application — check website",
-      "status": "pending"
+      "status": "pending",
+      "crawlerHint": {
+        "detectedAt": "2026-07-06",
+        "dates": [
+          "2026年6月23日",
+          "2026年6月17日",
+          "2026年6月9日"
+        ],
+        "lines": []
+      }
     },
     {
       "id": "hkuga_p",
@@ -382,7 +413,21 @@
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
       "appDateNote": "Private/DSS P1 application — check website",
-      "status": "pending"
+      "status": "pending",
+      "crawlerHint": {
+        "detectedAt": "2026-07-06",
+        "dates": [
+          "2026年01月19日",
+          "2026年03月30日",
+          "2026年07月05日",
+          "2026年06月25日",
+          "2026年01月",
+          "2026年07月",
+          "01月19日",
+          "03月30日"
+        ],
+        "lines": []
+      }
     },
     {
       "id": "honwah_p",
@@ -406,7 +451,15 @@
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
       "appDateNote": "Private/DSS P1 application — check website",
-      "status": "pending"
+      "status": "pending",
+      "crawlerHint": {
+        "detectedAt": "2026-07-06",
+        "dates": [],
+        "lines": [
+          "中一新生註冊須知",
+          "中一候補生申請及面試須知"
+        ]
+      }
     },
     {
       "id": "shcs",
@@ -529,7 +582,14 @@
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
       "appDateNote": "Private/DSS P1 application — check website",
-      "status": "pending"
+      "status": "pending",
+      "crawlerHint": {
+        "detectedAt": "2026-07-06",
+        "dates": [],
+        "lines": [
+          "Admissions Update"
+        ]
+      }
     },
     {
       "id": "heepyunn_p",
@@ -601,8 +661,20 @@
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
       "appDateNote": "Private/DSS P1 application — check website",
-      "status": "pending"
+      "status": "pending",
+      "crawlerHint": {
+        "detectedAt": "2026-07-06",
+        "dates": [
+          "2026年7月7日",
+          "2026年7月",
+          "7月7日"
+        ],
+        "lines": [
+          "Limited places in Grade 7 (2026-2027) are now open for application. Details are as follows:",
+          "Time: From 9:00 a.m. (The school will stop accepting applications once the G7 places are filled.)"
+        ]
+      }
     }
   ],
-  "lastCrawl": "2026-06-29"
+  "lastCrawl": "2026-07-06"
 }
