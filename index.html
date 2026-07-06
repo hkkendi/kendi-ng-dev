@@ -24,6 +24,7 @@
         <li><a href="#skills">Skills</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#timeline">Career</a></li>
+        <li><a href="project-list.html">Project List</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
@@ -321,6 +322,19 @@
         <!-- ===== MORE PROJECTS (compact grid) ===== -->
         <h3 class="subsection-title">More Projects</h3>
         <div class="projects-grid-compact">
+
+          <!-- Automated Schedule Monitoring & Alerting (added 2026-07) -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Automated Schedule Monitoring &amp; Alerting</h4>
+            <p class="project-desc">Built a live monitoring dashboard and alert system that continuously reconciles every scheduled report/automation run (Windows Task Scheduler jobs + n8n workflows) against an expected-schedule manifest, flagging any missed or failed run before it causes a silent reporting gap. Shipped after a real incident where an automation change silently dropped a step and a report went out late — the same detection logic now backs both a live status page and a proactive alert email, closing the gap for good.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">n8n</li>
+              <li class="tech-badge">Windows Task Scheduler</li>
+              <li class="tech-badge">Streamlit</li>
+            </ul>
+            <div class="project-links"><a href="https://github.com/hkkendi/work-app-copy/tree/main/streamlit_apps" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a></div>
+          </article>
 
           <!-- Portable Reporting Logic Layer (added 2026-07) -->
           <article class="project-card-compact">
