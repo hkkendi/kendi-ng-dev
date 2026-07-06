@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Custom Claude Code skills Kendi Ng builds to automate her own recurring work — a practical look at AI-agent tooling beyond the demo.">
+  <title>Claude Agents Skill — Kendi Ng</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .page-hero { padding: 3.5rem 0 3rem; }
+    .skill-invoke {
+      display: inline-block;
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-accent-dark);
+      background: rgba(0, 180, 166, 0.08);
+      border: 1px solid rgba(0, 180, 166, 0.25);
+      border-radius: 6px;
+      padding: 0.15rem 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+    .anatomy-box {
+      background: var(--color-bg);
+      border: 1px solid rgba(26, 39, 68, 0.1);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+      color: var(--color-primary);
+    }
+    .anatomy-box .fm { color: var(--color-accent-dark); }
+    .anatomy-box .cm { color: var(--color-muted); font-style: italic; }
+    .note-callout {
+      background: rgba(0, 180, 166, 0.06);
+      border-left: 3px solid var(--color-accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1rem 1.25rem;
+      font-size: 0.9rem;
+      color: var(--color-text);
+      margin-top: 2rem;
+    }
+    .profile-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 2rem 0 2.5rem;
+    }
+    .profile-stat {
+      flex: 1;
+      min-width: 160px;
+      background: var(--color-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      padding: 1.25rem 1.5rem;
+      text-align: center;
+    }
+    .profile-stat .count {
+      display: block;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+    .profile-stat .label {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      font-weight: 600;
+    }
+    .profile-block { margin-bottom: 3rem; }
+    .profile-block h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.35rem;
+    }
+    .profile-block .profile-blurb {
+      font-size: 0.9rem;
+      color: var(--color-muted);
+      margin-bottom: 1rem;
+    }
+    .skill-table-wrap {
+      overflow-x: auto;
+      background: var(--color-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+    }
+    .skill-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .skill-table th, .skill-table td {
+      text-align: left;
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid rgba(26, 39, 68, 0.08);
+      vertical-align: top;
+    }
+    .skill-table th {
+      color: var(--color-primary);
+      font-weight: 600;
+      background: rgba(26, 39, 68, 0.03);
+    }
+    .skill-table tr:last-child td { border-bottom: none; }
+    .skill-table td:first-child {
+      font-family: var(--font-code);
+      color: var(--color-accent-dark);
+      white-space: nowrap;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header / Navigation -->
+  <header class="site-header">
+    <nav class="nav-container container">
+      <a href="../index.html" class="nav-logo">Kendi Ng</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../index.html#skills">Skills</a></li>
+        <li><a href="../index.html#projects">Projects</a></li>
+        <li><a href="../index.html#timeline">Career</a></li>
+        <li><a href="../project-list.html">Project List</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Page Hero -->
+    <section class="hero page-hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Claude Agents Skill</h1>
+          <p class="hero-subtitle">Custom Claude Code skills I've built to automate my own recurring work.</p>
+          <p class="hero-bio">Beyond using AI in the products I build for employers, I use Claude Code's <strong>Skills</strong> system to package my own repetitive workflows — receipt reconciliation, portfolio upkeep — into reusable, invokable automations. Each skill is a version-controlled <code style="font-family: var(--font-code); background: rgba(255,255,255,0.1); padding: 0.1rem 0.4rem; border-radius: 4px;">SKILL.md</code> file with instructions an AI agent follows every time it runs, so the process stays consistent without me re-explaining it. Day to day I track all of these across my Claude Code profiles on a private internal dashboard; this page is a public snapshot of the ones built for personal use.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Skills -->
+    <section class="projects">
+      <div class="container">
+        <h2 class="section-title">Skills in Active Use</h2>
+        <p class="section-subtitle">Each one runs as a single slash command and follows the same process every time.</p>
+
+        <div class="projects-list">
+
+          <!-- /update-portfolio -->
+          <article class="project-card">
+            <div class="project-card-body">
+              <span class="skill-invoke">/update-portfolio</span>
+              <h3 class="project-title">Recurring Portfolio Updater</h3>
+              <p class="project-problem"><strong>Problem:</strong> Keeping a portfolio site in sync with ongoing work means remembering to write it up — in practice that never happens consistently, and manually re-reading a large codebase every time to find what's new is slow and expensive.</p>
+              <p class="project-solution">A skill that diffs a work project against the last commit it processed, delegates the "what changed and is it interesting" judgment to a sub-agent so only relevant context enters the main analysis, and — only for genuinely new capabilities, not refactors or fixes — drafts an update to the matching project card on this site, in the site's existing voice and HTML structure. It advances its own progress marker after each run and never publishes automatically; edits are left for review. Pinned to a specific model in its own frontmatter, so it always runs at a deliberately chosen cost/quality point regardless of which model the session is using.</p>
+              <ul class="project-tech">
+                <li class="tech-badge">Claude Code Skill (SKILL.md)</li>
+                <li class="tech-badge">Git diffing</li>
+                <li class="tech-badge">Sub-agent delegation</li>
+                <li class="tech-badge">HTML generation</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- /maid -->
+          <article class="project-card">
+            <div class="project-card-body">
+              <span class="skill-invoke">/maid</span>
+              <h3 class="project-title">Monthly Receipt Reconciliation</h3>
+              <p class="project-problem"><strong>Problem:</strong> Reconciling a month of household receipts against actual card and e-payment statements — matching each purchase to the right charge and payment method — is exactly the kind of repetitive, rule-based, error-prone task that eats an evening every month.</p>
+              <p class="project-solution">A skill that OCRs a folder of receipt scans, classifies each one by payment method, and cross-checks it against the corresponding statement and app transaction history, producing a per-receipt match status and a running reconciliation summary. Same process, same output structure, every month — the skill carries the rules so they don't have to be re-derived by hand each time.</p>
+              <ul class="project-tech">
+                <li class="tech-badge">Claude Code Skill (SKILL.md)</li>
+                <li class="tech-badge">OCR</li>
+                <li class="tech-badge">Excel automation</li>
+                <li class="tech-badge">Reconciliation logic</li>
+              </ul>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- How a skill is built -->
+    <section class="skills">
+      <div class="container">
+        <h2 class="section-title">Anatomy of a Skill</h2>
+        <p class="section-subtitle">A skill is a Markdown file with a small YAML header and a set of instructions — no separate app or infrastructure required.</p>
+
+        <div class="anatomy-box">---
+<span class="fm">name</span>: update-portfolio
+<span class="fm">description</span>: <span class="cm"># when the agent should reach for this skill</span>
+<span class="fm">model</span>: sonnet          <span class="cm"># pin cost/quality independent of the active session</span>
+<span class="fm">effort</span>: medium
+---
+
+<span class="cm"># the instructions the agent follows, step by step, every run</span></div>
+
+        <div class="note-callout">
+          The <code style="font-family: var(--font-code);">model</code> field is what makes this worth mentioning in an "AI Integration" context rather than just automation: it lets a recurring task run on a deliberately chosen model — tuned for the cost/quality trade-off that task actually needs — independent of whatever model the interactive session happens to be using.
+        </div>
+      </div>
+    </section>
+
+    <!-- Full Skill Catalogue -->
+    <section class="projects">
+      <div class="container">
+        <h2 class="section-title">Full Skill Catalogue</h2>
+        <p class="section-subtitle">Every custom skill installed across my three Claude Code environments, grouped by profile — a static snapshot of what a private internal dashboard tracks live.</p>
+
+        <div class="profile-stats">
+          <div class="profile-stat"><span class="count">49</span><span class="label">💼 Work</span></div>
+          <div class="profile-stat"><span class="count">7</span><span class="label">🟣 Personal</span></div>
+          <div class="profile-stat"><span class="count">1</span><span class="label">🟢 FreeModel</span></div>
+        </div>
+
+        <!-- Work profile -->
+        <div class="profile-block">
+          <h3>💼 Work</h3>
+          <p class="profile-blurb">Full-power Claude Code account for day-to-day engineering, CRM process automation, and report tooling.</p>
+          <div class="skill-table-wrap">
+            <table class="skill-table">
+              <thead><tr><th>Skill</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>/add_cs</td><td>Add a new Crop Sales handler to the CRM reporting config (handler groups + team email routing + SharePoint URL)</td></tr>
+                <tr><td>/add_grad_rmt</td><td>Mark an RMT handler as graduated — they get the Crop Sales force-release warning instead of the RMT variant</td></tr>
+                <tr><td>/add_no_send</td><td>Mark a handler as no-individual-report (resigned, cross-team-only, etc.) in the reporting config</td></tr>
+                <tr><td>/add_rmt</td><td>Add a new RMT solo handler to the CRM reporting config (handler groups + email + SharePoint URL)</td></tr>
+                <tr><td>/add_rmt_w_team</td><td>Add a new RMT handler with team members to the CRM reporting config (handler groups + email + SharePoint URL)</td></tr>
+                <tr><td>/c-update_crm_doc</td><td>Apply drafted documentation updates into the real CRM reporting HTML/page files</td></tr>
+                <tr><td>/inbox</td><td>Look up an email in the work inbox by subject keyword and load its content for the current conversation</td></tr>
+                <tr><td>/move_to_EB</td><td>Mark a sales handler as moved to Employee Benefits — finds them across handler groups and adds them to the no-report list with a labelled note</td></tr>
+                <tr><td>/no_test</td><td>Run an email/report ad-hoc with real configured recipients (no test override) — mirror of /test for production sends</td></tr>
+                <tr><td>/preview</td><td>Deploy the current pending code changes into the live checkout and restart the matching app service so the change is visible locally (preview before /push)</td></tr>
+                <tr><td>/push</td><td>Update the session continuation notes, commit all changes, push to main — then reflect any portfolio-worthy new work on kendi-ng.com</td></tr>
+                <tr><td>/test</td><td>Run the test for the most-recently-edited email/report code, with mandatory safety overrides (drafts only, or a single safe test recipient)</td></tr>
+                <tr><td>/watch-reset</td><td>Choose which Claude sessions the auto-resume watcher babysits (resumes after a usage-limit reset). Interactive allowlist.</td></tr>
+                <tr><td>/ask-matt</td><td>Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.</td></tr>
+                <tr><td>/codebase-design</td><td>Shared vocabulary for designing deep modules — module interfaces, deepening opportunities, seams, testability</td></tr>
+                <tr><td>/decision-mapping</td><td>Turn a loose idea into a sequenced map of investigation tickets, then drive them to resolution one at a time</td></tr>
+                <tr><td>/design-an-interface</td><td>Generate multiple radically different interface designs for a module using parallel sub-agents</td></tr>
+                <tr><td>/diagnosing-bugs</td><td>Diagnosis loop for hard bugs and performance regressions</td></tr>
+                <tr><td>/domain-modeling</td><td>Build and sharpen a project's domain model — terminology, ubiquitous language, architectural decisions</td></tr>
+                <tr><td>/edit-article</td><td>Edit and improve articles by restructuring sections, improving clarity, and tightening prose</td></tr>
+                <tr><td>/git-guardrails-claude-code</td><td>Set up Claude Code hooks to block dangerous git commands (push, reset --hard, clean, branch -D, etc.) before they execute</td></tr>
+                <tr><td>/grill-me</td><td>A relentless interview to sharpen a plan or design</td></tr>
+                <tr><td>/grill-with-docs</td><td>A relentless interview to sharpen a plan or design, which also creates docs (ADRs and glossary) as it goes</td></tr>
+                <tr><td>/grilling</td><td>Interview the user relentlessly about a plan or design — stress-test a plan before building</td></tr>
+                <tr><td>/handoff</td><td>Compact the current conversation into a handoff document for another agent to pick up</td></tr>
+                <tr><td>/implement</td><td>Implement a piece of work based on a PRD or set of issues</td></tr>
+                <tr><td>/improve-codebase-architecture</td><td>Scan a codebase for deepening opportunities, present them as a visual HTML report, then work through whichever one you pick</td></tr>
+                <tr><td>/loop-me</td><td>Grill through specs for the workflows to build, within the current workspace</td></tr>
+                <tr><td>/migrate-to-shoehorn</td><td>Migrate test files from `as` type assertions to a partial-test-data helper library</td></tr>
+                <tr><td>/obsidian-vault</td><td>Search, create, and manage notes in an Obsidian vault with wikilinks and index notes</td></tr>
+                <tr><td>/prototype</td><td>Build a throwaway prototype to answer a design question before committing to an approach</td></tr>
+                <tr><td>/qa</td><td>Interactive QA session where bugs are reported conversationally and filed as GitHub issues, with background codebase exploration for context</td></tr>
+                <tr><td>/request-refactor-plan</td><td>Create a detailed refactor plan with tiny commits via interview, then file it as a GitHub issue</td></tr>
+                <tr><td>/resolving-merge-conflicts</td><td>Resolve an in-progress git merge/rebase conflict</td></tr>
+                <tr><td>/review</td><td>Review changes since a fixed point along two axes — coding standards and spec match — via parallel sub-agents reporting side by side</td></tr>
+                <tr><td>/scaffold-exercises</td><td>Create exercise directory structures with sections, problems, solutions, and explainers that pass linting</td></tr>
+                <tr><td>/setup-matt-pocock-skills</td><td>Configure a repo for a set of engineering skills — issue tracker, triage label vocabulary, domain doc layout</td></tr>
+                <tr><td>/setup-pre-commit</td><td>Set up pre-commit hooks with lint-staged formatting, type checking, and tests in the current repo</td></tr>
+                <tr><td>/tdd</td><td>Test-driven development — build features or fix bugs test-first, red-green-refactor</td></tr>
+                <tr><td>/teach</td><td>Teach a new skill or concept, within the current workspace</td></tr>
+                <tr><td>/to-issues</td><td>Break a plan, spec, or PRD into independently-grabbable issues using tracer-bullet vertical slices</td></tr>
+                <tr><td>/to-prd</td><td>Turn the current conversation into a PRD and publish it to the project issue tracker — synthesis, no interview</td></tr>
+                <tr><td>/triage</td><td>Move issues and external PRs through a state machine of triage roles — categorise, verify, escalate, write agent-ready briefs</td></tr>
+                <tr><td>/ubiquitous-language</td><td>Extract a DDD-style ubiquitous language glossary from the current conversation, flagging ambiguities and proposing canonical terms</td></tr>
+                <tr><td>/wizard</td><td>Generate an interactive bash wizard that walks a human through a manual procedure, opening URLs, capturing values, confirming each step</td></tr>
+                <tr><td>/writing-beats</td><td>Assemble raw material into a journey of beats, grounding each term before a beat leans on it</td></tr>
+                <tr><td>/writing-fragments</td><td>Mine raw fragments before any structure exists</td></tr>
+                <tr><td>/writing-great-skills</td><td>Reference for writing and editing skills well — the vocabulary and principles that make a skill predictable</td></tr>
+                <tr><td>/writing-shape</td><td>Shape raw material into an article, paragraph by paragraph</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Personal profile -->
+        <div class="profile-block">
+          <h3>🟣 Personal</h3>
+          <p class="profile-blurb">Personal Claude Code account for my own repos, tools, and household automations — kept isolated from work.</p>
+          <div class="skill-table-wrap">
+            <table class="skill-table">
+              <thead><tr><th>Skill</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>/inbox</td><td>Look up an email in a personal or business inbox by subject keyword and load its content for the current conversation</td></tr>
+                <tr><td>/watch-reset</td><td>Choose which personal Claude sessions the auto-resume watcher babysits (resumes after a usage-limit reset). Interactive allowlist.</td></tr>
+                <tr><td>/grill-me</td><td>A relentless interview to sharpen a plan or design</td></tr>
+                <tr><td>/grill-with-docs</td><td>A relentless interview to sharpen a plan or design, which also creates docs (ADRs and glossary) as it goes</td></tr>
+                <tr><td>/grilling</td><td>Interview the user relentlessly about a plan or design — stress-test a plan before building</td></tr>
+                <tr><td>/maid</td><td>Monthly receipt reconciliation. OCRs receipt scans into a working spreadsheet, classifies each receipt by payment method (Octopus / credit card / Cash), then reconciles against the card statement and Octopus app screenshots, producing per-receipt match-status columns and two statement-side matching sheets.</td></tr>
+                <tr><td>/update-portfolio</td><td>Analyze recent changes in a work project and update this portfolio site's content accordingly</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- FreeModel profile -->
+        <div class="profile-block">
+          <h3>🟢 FreeModel</h3>
+          <p class="profile-blurb">Claude Code pointed at free/low-cost community models, for cheap read-heavy drafting work — not for precise file edits.</p>
+          <div class="skill-table-wrap">
+            <table class="skill-table">
+              <thead><tr><th>Skill</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>/update_crm_docs</td><td>Read a CRM reporting app's code/state and draft documentation updates for its reference pages — text only, no code edits</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <p class="section-subtitle" style="margin-top: -1rem;">Live scan of each profile's skill and command files, 30-second cache, on the internal dashboard this page mirrors. Add a skill by dropping a new skill folder into the matching profile; it appears there on next refresh.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer / Contact -->
+  <footer id="contact" class="footer">
+    <div class="container">
+      <h2 class="section-title">Get in Touch</h2>
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="mailto:kendi@leary.hk">kendi@leary.hk</a>
+          <a href="https://www.linkedin.com/in/kendi-ng/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/hkkendi" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <p class="footer-location">Hong Kong</p>
+        <p class="footer-copyright">&copy; 2026 Kendi Ng</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

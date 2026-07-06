@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Full list of Kendi Ng's personal apps, automations and custom Claude Code skills — with explanations of what each one does.">
+  <title>Project List — Kendi Ng</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .status-badge {
+      display: inline-block;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+    }
+    .status-live {
+      color: var(--color-accent-dark);
+      background: rgba(0, 180, 166, 0.1);
+      border: 1px solid rgba(0, 180, 166, 0.3);
+    }
+    .status-private {
+      color: var(--color-muted);
+      background: rgba(113, 128, 150, 0.08);
+      border: 1px solid rgba(113, 128, 150, 0.25);
+    }
+    .status-design {
+      color: #b7791f;
+      background: rgba(214, 158, 46, 0.08);
+      border: 1px solid rgba(214, 158, 46, 0.3);
+    }
+    .page-hero {
+      padding: 3.5rem 0 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header / Navigation -->
+  <header class="site-header">
+    <nav class="nav-container container">
+      <a href="index.html" class="nav-logo">Kendi Ng</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html#skills">Skills</a></li>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="index.html#timeline">Career</a></li>
+        <li><a href="project-list.html" class="active">Project List</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Page Hero -->
+    <section class="hero page-hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Personal Project List</h1>
+          <p class="hero-subtitle">Every app, automation and custom AI skill in my personal GitHub — and what each one actually does.</p>
+          <p class="hero-bio">Beyond the work-focused analytics platform on the <a href="index.html#projects" style="color: var(--color-accent); font-weight: 600;">main projects page</a>, I build tools that solve real problems in my own life — from invoice automation for a family business, to a crawler that watches kindergarten application dates, to custom Claude Code skills that reconcile household receipts. This page lists all of them.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Apps & Automations -->
+    <section class="projects">
+      <div class="container">
+        <h2 class="section-title">Apps &amp; Automations</h2>
+        <p class="section-subtitle">Standalone applications and scheduled automations. Public repos link to <a href="https://github.com/hkkendi" target="_blank" rel="noopener">GitHub</a>; the rest run privately.</p>
+
+        <div class="projects-grid-compact">
+
+          <!-- streamlit-auto-invoice -->
+          <article class="project-card-compact">
+            <span class="status-badge status-private">Private · In production</span>
+            <h4 class="project-title-sm">Auto-Invoice System <span style="font-weight:400; color: var(--color-muted);">(streamlit-auto-invoice)</span></h4>
+            <p class="project-desc">A full invoice-management web app for a small agency: customers, invoices, expenses and freelance time-tracking on a Supabase cloud database. A GitHub Actions cron job sends invoices and unpaid-payment reminders by email every morning via the Microsoft Graph API, and an "Import by Image" feature uses the Claude vision API to OCR receipt photos straight into pre-filled expense forms.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Streamlit</li>
+              <li class="tech-badge">Supabase</li>
+              <li class="tech-badge">Claude Vision API</li>
+              <li class="tech-badge">Microsoft Graph API</li>
+              <li class="tech-badge">reportlab PDF</li>
+              <li class="tech-badge">GitHub Actions</li>
+            </ul>
+          </article>
+
+          <!-- zoe-school-checker -->
+          <article class="project-card-compact">
+            <span class="status-badge status-live">Running weekly</span>
+            <h4 class="project-title-sm">K1 School Date Checker <span style="font-weight:400; color: var(--color-muted);">(zoe-school-checker)</span></h4>
+            <p class="project-desc">A weekly crawler that checks 16 Hong Kong school websites for new K1 application and open-day dates. It extracts dates near key admission phrases, diffs the results against the previous run, and when something new appears it pushes a report branch to this site's repo so the <a href="zoe-school.html">school tracker page</a> can be updated with a one-click pull request.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">BeautifulSoup</li>
+              <li class="tech-badge">Regex date parsing</li>
+              <li class="tech-badge">Git automation</li>
+              <li class="tech-badge">Task Scheduler</li>
+            </ul>
+          </article>
+
+          <!-- zoe-school tracker page -->
+          <article class="project-card-compact">
+            <span class="status-badge status-live">Live</span>
+            <h4 class="project-title-sm">Zoe's K1 School Tracker <span style="font-weight:400; color: var(--color-muted);">(zoe-school)</span></h4>
+            <p class="project-desc">A standalone Chinese-language page on this site tracking Hong Kong kindergarten open-day and application dates for the 2027/28 intake — colour-coded by region (HK Island / Kowloon / New Territories) with confirmed, pending and warning statuses, all driven from a single JSON data file that the checker above keeps fresh.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">HTML / CSS / JS</li>
+              <li class="tech-badge">JSON data-driven</li>
+              <li class="tech-badge">GitHub Pages</li>
+            </ul>
+            <div class="project-links">
+              <a href="zoe-school.html" class="btn btn-sm btn-primary">View Page</a>
+              <a href="https://github.com/hkkendi/kendi-ng-dev/tree/master/zoe-school" class="btn btn-sm btn-outline" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </article>
+
+          <!-- zoe-ai-poc -->
+          <article class="project-card-compact">
+            <span class="status-badge status-live">Proof of concept</span>
+            <h4 class="project-title-sm">AI School-Tracker Agent <span style="font-weight:400; color: var(--color-muted);">(zoe-ai-poc)</span></h4>
+            <p class="project-desc">Experiments in making the school tracker fully self-updating with the Claude Agent SDK. The key finding: free-form AI extraction reads dates well but won't emit strict JSON, so the working prototype forces the agent through a schema-validated tool call to get structured, machine-checkable output — designed to run weekly and email newly discovered dates.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Claude Agent SDK</li>
+              <li class="tech-badge">JSON Schema tools</li>
+              <li class="tech-badge">GitHub Actions</li>
+            </ul>
+            <div class="project-links">
+              <a href="https://github.com/hkkendi/kendi-ng-dev/tree/master/zoe-ai-poc" class="btn btn-sm btn-outline" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </article>
+
+          <!-- JobTracker -->
+          <article class="project-card-compact">
+            <span class="status-badge status-private">Private · Running daily</span>
+            <h4 class="project-title-sm">Job Application Tracker <span style="font-weight:400; color: var(--color-muted);">(JobTracker)</span></h4>
+            <p class="project-desc">An automation that reads job-application emails from an Outlook 365 mailbox through the Microsoft Graph API, classifies each one (application submitted, rejection, or employer-viewed notification), and updates a job-applications spreadsheet on OneDrive — adding new rows or marking statuses like "Rejected" and "Reviewing" without any manual bookkeeping.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Microsoft Graph API</li>
+              <li class="tech-badge">MSAL</li>
+              <li class="tech-badge">openpyxl</li>
+              <li class="tech-badge">Task Scheduler</li>
+            </ul>
+          </article>
+
+          <!-- inbox-reader -->
+          <article class="project-card-compact">
+            <span class="status-badge status-private">Private · CLI tool</span>
+            <h4 class="project-title-sm">Inbox Reader <span style="font-weight:400; color: var(--color-muted);">(inbox-reader)</span></h4>
+            <p class="project-desc">A command-line Microsoft 365 inbox reader with app-only Graph API authentication. Subcommands to search mail, show a message, list recent items and download attachments across multiple mailboxes, with JSON output for machine consumption — it doubles as the backend for the <em>inbox</em> Claude Code skill below.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Microsoft Graph API</li>
+              <li class="tech-badge">argparse CLI</li>
+              <li class="tech-badge">JSON output</li>
+            </ul>
+          </article>
+
+          <!-- github-image-updater -->
+          <article class="project-card-compact">
+            <span class="status-badge status-private">Private · Hosted on Render</span>
+            <h4 class="project-title-sm">GitHub Image Updater <span style="font-weight:400; color: var(--color-muted);">(github-image-updater)</span></h4>
+            <p class="project-desc">A small Express web service that lets a non-technical user swap a website image without touching code: upload a JPG through a simple web page, and the service commits it to the right path in a GitHub Pages repo, where it goes live on the client site automatically.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Node.js</li>
+              <li class="tech-badge">Express</li>
+              <li class="tech-badge">Octokit (GitHub API)</li>
+              <li class="tech-badge">Render</li>
+            </ul>
+          </article>
+
+          <!-- parent-app -->
+          <article class="project-card-compact">
+            <span class="status-badge status-design">In design</span>
+            <h4 class="project-title-sm">Helper Receipt App <span style="font-weight:400; color: var(--color-muted);">(parent-app)</span></h4>
+            <p class="project-desc">A mobile app concept for Hong Kong households employing a domestic helper: reconcile the helper's shopping receipts against real Octopus and credit-card charges and track the cash shopping-float. Designed local-first — no financial data leaves the phone — with on-device OCR and an encrypted local database. The reconciliation engine already works today as the <em>maid</em> Claude Code skill below.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">React Native</li>
+              <li class="tech-badge">TypeScript</li>
+              <li class="tech-badge">ML Kit OCR</li>
+              <li class="tech-badge">SQLCipher</li>
+              <li class="tech-badge">Product Design</li>
+            </ul>
+          </article>
+
+          <!-- kendi-ng-dev -->
+          <article class="project-card-compact">
+            <span class="status-badge status-live">Live · This site</span>
+            <h4 class="project-title-sm">Portfolio Website <span style="font-weight:400; color: var(--color-muted);">(kendi-ng-dev)</span></h4>
+            <p class="project-desc">This website: a hand-built static portfolio on GitHub Pages with a custom domain — no framework, no build step, just semantic HTML, one CSS file and vanilla JavaScript. The repo also hosts the school-tracker page and two GitHub Actions workflows that run the AI school-checking experiments in the cloud.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">HTML / CSS / JS</li>
+              <li class="tech-badge">GitHub Pages</li>
+              <li class="tech-badge">GitHub Actions</li>
+            </ul>
+            <div class="project-links">
+              <a href="https://github.com/hkkendi/kendi-ng-dev" class="btn btn-sm btn-outline" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Claude Code Skills -->
+    <section class="skills">
+      <div class="container">
+        <h2 class="section-title">Custom Claude Code Skills</h2>
+        <p class="section-subtitle">Reusable AI skills I built for Claude Code — each packages a real workflow (scripts, prompts and rules) into a single command. <a href="claude-agents-skill/">See the full skill catalogue →</a></p>
+
+        <div class="projects-grid-compact">
+
+          <!-- /maid skill -->
+          <article class="project-card-compact">
+            <span class="status-badge status-live">In monthly use</span>
+            <h4 class="project-title-sm">/maid — Receipt Reconciliation</h4>
+            <p class="project-desc">Monthly household receipt matching in one command. It OCRs receipt scans dropped into OneDrive into a spreadsheet, classifies each receipt by payment method (Octopus, credit card, or cash), then reconciles them against the actual card statement and Octopus app screenshots — producing per-receipt match results and statement-side matching sheets. This working engine is the blueprint for the Helper Receipt App above.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Claude Code Skill</li>
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">OCR</li>
+              <li class="tech-badge">Excel automation</li>
+              <li class="tech-badge">Reconciliation logic</li>
+            </ul>
+          </article>
+
+          <!-- inbox skill -->
+          <article class="project-card-compact">
+            <span class="status-badge status-live">In daily use</span>
+            <h4 class="project-title-sm">inbox — Email Lookup</h4>
+            <p class="project-desc">Lets Claude Code look up an email by subject keyword across Microsoft 365 mailboxes and load its full content into the current conversation — so tasks like "check what the supplier quoted" or "reconcile against the invoice email" happen without leaving the terminal. Backed by the Inbox Reader CLI above.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Claude Code Skill</li>
+              <li class="tech-badge">Python CLI</li>
+              <li class="tech-badge">Microsoft Graph API</li>
+            </ul>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer / Contact -->
+  <footer id="contact" class="footer">
+    <div class="container">
+      <h2 class="section-title">Get in Touch</h2>
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="mailto:kendi@leary.hk">kendi@leary.hk</a>
+          <a href="https://www.linkedin.com/in/kendi-ng/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/hkkendi" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <p class="footer-location">Hong Kong</p>
+        <p class="footer-copyright">&copy; 2026 Kendi Ng</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
