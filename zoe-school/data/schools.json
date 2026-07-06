@@ -128,15 +128,26 @@
       "appMethod": "In-person / Post 親身/郵寄",
       "website": "https://www.truelightk-c.edu.hk",
       "estAppPeriod": "Sep 15–26, 2026 / 預計2026年9月15-26日",
-      "openDay": null,
-      "openDayNote": "Usually Saturday, Jul–Aug 2026",
-      "appDateConfirmed": null,
-      "appDateNote": "Est. Sep 15–26, 2026",
-      "status": "pending",
+      "openDay": "2026-09-19",
+      "openDayNote": "🤖 AI-detected 2026-09-19 — verify (Open Day)",
+      "appDateConfirmed": "2026-09-25",
+      "appDateNote": "🤖 AI-detected 2026-09-25 — verify (Application) · 🤖 Results: 2027-01-07 · Results: 2027-01-09",
+      "status": "confirmed",
       "crawlUrls": [
         "https://www.truelightk-c.edu.hk/m05_entry_page01.php",
         "https://www.truelightk-c.edu.hk/m01_latest_notice_page01.php"
-      ]
+      ],
+      "crawlerHint": {
+        "detectedAt": "2026-07-06",
+        "dates": [
+          "2026-10-15",
+          "2026-12-15"
+        ],
+        "lines": [
+          "Interview: 2026-10-15",
+          "Results: 2026-12-15"
+        ]
+      }
     },
     {
       "id": "truelight_taihang",
