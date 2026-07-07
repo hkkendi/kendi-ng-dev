@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2026-06-26",
   "child": {
     "name": "Zoe",
     "dob": "2024-02-21",
-    "dobDisplay": "21 Feb 2024"
+    "targetEntryYear": 2027
   },
+  "lastUpdated": "2026-06-26",
   "timeline": [
     {
       "date": "Jul–Aug 2026",

@@ -99,6 +99,26 @@ def level_of(school):
     return "primary" if school.get("category") == "primary" else "kindergarten"
 
 
+def eligible_categories(child):
+    """Categories worth crawling for this child in the target cycle, by the HK
+    entry-age rule (K1 = born targetEntryYear-3, P1 = born targetEntryYear-6).
+    Returns None (crawl everything) if the config is missing or the child fits
+    neither level, so a mis-set config never skips the whole list."""
+    if not child:
+        return None
+    m = re.match(r"(\d{4})", child.get("dob") or "")
+    year = child.get("targetEntryYear")
+    if not m or not year:
+        return None
+    b = int(m.group(1))
+    cats = set()
+    if b == year - 3:
+        cats.add("kindergarten")
+    if b == year - 6:
+        cats.add("primary")
+    return cats or None
+
+
 def system_for(level):
     spec = LEVELS.get(level, LEVELS["kindergarten"])
     grade, cohort = spec["grade"], spec["cohort"]
@@ -454,10 +474,15 @@ def main():
     all_new = []
     new_seen = set(prev_seen)
     hints = 0
+    cats = eligible_categories(data.get("child"))
+    if cats is not None:
+        print(f"Age filter: crawling only {sorted(cats)} for this cycle.")
     for school in data["schools"]:
         url = school.get("website")
         name = school.get("nameEn") or school.get("nameZh") or school["id"]
         if not url:
+            continue
+        if cats is not None and school.get("category") not in cats:
             continue
         level = level_of(school)
         print(f"- {name} ({school['id']}) [{level}]")

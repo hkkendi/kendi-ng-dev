@@ -81,6 +81,26 @@ def load_json(path, default):
         return default
 
 
+def eligible_categories(child):
+    """School categories the child can apply to in the target cycle, by the HK
+    entry-age rule (K1 = born targetEntryYear-3, P1 = born targetEntryYear-6).
+    Returns None (no filter) if the config is missing or the child fits neither,
+    so a mis-set config never silently drops every reminder."""
+    if not child:
+        return None
+    m = re.match(r"(\d{4})", child.get("dob") or "")
+    year = child.get("targetEntryYear")
+    if not m or not year:
+        return None
+    b = int(m.group(1))
+    cats = set()
+    if b == year - 3:
+        cats.add("kindergarten")
+    if b == year - 6:
+        cats.add("primary")
+    return cats or None
+
+
 def collect_due(schools, today, prev_sent):
     """Return (due, newly_sent).
 
@@ -207,7 +227,16 @@ def main():
     now = datetime.now(HKT)
     today = now.date()
 
-    due, newly_sent = collect_due(data["schools"], today, prev_sent)
+    schools = data["schools"]
+    cats = eligible_categories(data.get("child"))
+    if cats is not None:
+        before = len(schools)
+        schools = [s for s in schools if s.get("category") in cats]
+        if before != len(schools):
+            print(f"Age filter: {data['child'].get('name','child')} fits {sorted(cats)} "
+                  f"this cycle — skipping {before - len(schools)} non-eligible school(s).")
+
+    due, newly_sent = collect_due(schools, today, prev_sent)
 
     print(f"Zoe reminders — {now.strftime('%Y-%m-%d %H:%M HKT')}")
     if not due:
