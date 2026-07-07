@@ -82,6 +82,14 @@
     .prog-date.prog-manual { color: #1e6fb8; font-weight: 600; }
     .prog-edit { font-size: 11px; padding: 2px 6px; border: 1px solid var(--border); background: #fff; border-radius: 12px; cursor: pointer; line-height: 1; }
     .prog-edit:hover { background: #eef4fb; border-color: #1e6fb8; }
+    .prog-editwrap { display: inline-flex; gap: 4px; align-items: center; }
+    .prog-dateinput { font-size: 11px; padding: 2px 6px; border: 1px solid #1e6fb8; border-radius: 6px; }
+    .prog-clear, .prog-cancel { font-size: 11px; padding: 2px 6px; border: 1px solid var(--border); background: #fff; border-radius: 12px; cursor: pointer; line-height: 1; }
+    .dob-bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; background: #eef4fb; border: 1px solid #cfe0f0; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 12px; }
+    .dob-bar input[type=date] { font-size: 12px; padding: 2px 6px; border: 1px solid var(--border); border-radius: 6px; }
+    .dob-info { color: #1e6fb8; font-weight: 600; }
+    .prog-card.prog-inelig { opacity: 0.5; }
+    .inelig-badge { font-size: 10px; background: #fdf0d5; color: #8a6d3b; border: 1px solid #e6cf9c; border-radius: 10px; padding: 2px 8px; align-self: center; white-space: nowrap; }
     .prog-toggle, .prog-result { font-size: 11px; padding: 4px 11px; border: 1px solid var(--border); background: #fff; border-radius: 14px; cursor: pointer; color: var(--muted); }
     .prog-toggle.on { background: #d5f5e3; border-color: #1e8449; color: #1e8449; font-weight: 600; }
     .prog-result.on[data-val="offer"] { background: #d5f5e3; border-color: #1e8449; color: #1e8449; font-weight: 600; }
@@ -309,6 +317,47 @@ function init(data) {
     const all = loadProgress(); const cur = all[id] || {}; cur[field] = value; all[id] = cur;
     try { localStorage.setItem(PROG_KEY, JSON.stringify(all)); } catch (e) {}
   }
+
+  // --- Child DOB + admission-age eligibility --------------------------------
+  // HK entry rule for a September entry year Y: K1 = born Y-3, K2 = Y-4,
+  // K3 = Y-5, P1 (小一) = Y-6. TARGET_ENTRY is the admission cycle this tracker
+  // covers, so a child fits a school's level only if their birth year lines up.
+  const DOB_KEY = 'zoeDOB-v1';
+  const DEFAULT_DOB = '2024-02-21';
+  const TARGET_ENTRY = 2027;
+  let editing = null;   // {id, field} of the date cell currently being edited
+  function getDOB() { try { return localStorage.getItem(DOB_KEY) || DEFAULT_DOB; } catch (e) { return DEFAULT_DOB; } }
+  function setDOB(v) { try { v ? localStorage.setItem(DOB_KEY, v) : localStorage.removeItem(DOB_KEY); } catch (e) {} }
+  function isISO(d) { return /^\d{4}-\d{2}-\d{2}$/.test(d || ''); }
+  function birthYear() { const d = getDOB(); return isISO(d) ? parseInt(d.slice(0, 4), 10) : null; }
+  function ageYears(onISO) {
+    const b = getDOB(); if (!isISO(b)) return null;
+    const bd = new Date(b), on = new Date(onISO);
+    let a = on.getFullYear() - bd.getFullYear();
+    if (on.getMonth() < bd.getMonth() || (on.getMonth() === bd.getMonth() && on.getDate() < bd.getDate())) a--;
+    return a;
+  }
+  // For a school's level, the Sept entry year THIS child fits, and whether that
+  // equals the cycle the tracker currently covers.
+  function eligibility(s) {
+    const off = s.category === 'primary' ? 6 : 3;
+    const level = s.category === 'primary' ? 'P1 小一' : 'K1 幼稚園';
+    const b = birthYear();
+    if (b === null) return { ok: true, level };
+    const herYear = b + off;
+    return { ok: herYear === TARGET_ENTRY, level, herYear };
+  }
+  function dobBanner() {
+    const dob = getDOB(); const b = birthYear();
+    const k1 = b ? b + 3 : '—', p1 = b ? b + 6 : '—';
+    const age = ageYears(new Date().toISOString().slice(0, 10));
+    return `<div class="dob-bar">
+      <span>👧 <b>Zoe</b> · <label>DOB 出生 <input type="date" id="dobInput" value="${dob}"></label></span>
+      <span class="dob-info">${age != null ? `age ${age} 歲 · ` : ''}K1 幼稚園 → Sep ${k1} · P1 小一 → Sep ${p1}</span>
+      <span style="color:var(--muted)">This cycle 本輪 (${TARGET_ENTRY}): ${b === TARGET_ENTRY - 3 ? 'Kindergarten K1 幼稚園' : b === TARGET_ENTRY - 6 ? 'Primary P1 小一' : '—'}</span>
+    </div>`;
+  }
+
   // Effective date = the user's manual override (if any) else the crawl-detected
   // value. Manual overrides are stored per school under '<field>Manual' in the
   // same localStorage progress store, so you can fill any TBC field yourself.
@@ -323,6 +372,13 @@ function init(data) {
   function dateCell(s, label, dateField, crawlVal) {
     const e = effVal(s, dateField, crawlVal);
     const iso = toISO(e.v);
+    if (editing && editing.id === s.id && editing.field === dateField) {
+      return `<span class="prog-editwrap">
+        <input type="date" class="prog-dateinput" data-id="${s.id}" data-field="${dateField}" value="${iso || ''}">
+        <button type="button" class="prog-clear" data-id="${s.id}" data-field="${dateField}" title="Clear 清除">🗑</button>
+        <button type="button" class="prog-cancel" title="Cancel 取消">✕</button>
+      </span>`;
+    }
     const shown = e.v ? `${e.manual ? '✍️ ' : ''}${esc(e.v)}` : '<span style="color:var(--muted)">TBC</span>';
     const cal = iso ? `<button type="button" class="cal-btn" data-school="${esc(s.nameEn || s.nameZh)}" data-event="${esc(label)}" data-date="${iso}" data-url="${esc(s.website)}">📅</button>` : '';
     return `<span class="prog-date${e.manual ? ' prog-manual' : ''}">${shown}</span>${cal}${editBtn(s, dateField)}`;
@@ -337,9 +393,12 @@ function init(data) {
   }
   function progCard(s, st) {
     const result = st.result || null;
-    return `<div class="prog-card">
+    const el = eligibility(s);
+    const badge = el.ok ? '' : `<span class="inelig-badge" title="Zoe's age doesn't fit this cycle">Not this cycle 未到 · her ${el.level.split(' ')[0]} ~${el.herYear}</span>`;
+    return `<div class="prog-card${el.ok ? '' : ' prog-inelig'}">
       <div class="prog-head">
         <div><div class="school-name-zh">${s.nameZh}</div><div class="school-name-en">${s.nameEn} · ${esc(s.districtLabel)}</div></div>
+        ${badge}
         <a class="prog-site" href="${s.website}" target="_blank" title="School site">🔗</a>
       </div>
       <div class="prog-rows">
@@ -357,7 +416,7 @@ function init(data) {
   function progSummary() {
     const all = loadProgress(); let v = 0, a = 0, o = 0, r = 0;
     data.schools.forEach(s => { const p = all[s.id] || {}; if (p.visited) v++; if (p.applied) a++; if (p.result === 'offer') o++; if (p.result === 'rejected') r++; });
-    return `<div class="prog-summary"><span>✅ Visited <b>${v}</b></span><span>📝 Applied <b>${a}</b></span><span>🎉 Offers <b>${o}</b></span><span>❌ Rejected <b>${r}</b></span><span style="color:var(--muted)">✏️ tap to edit any date 手動輸入 · saved in this browser 儲存於此瀏覽器</span></div>`;
+    return `<div class="prog-summary"><span>✅ Visited <b>${v}</b></span><span>📝 Applied <b>${a}</b></span><span>🎉 Offers <b>${o}</b></span><span>❌ Rejected <b>${r}</b></span><span style="color:var(--muted)">✏️ tap to pick/edit any date 手動選擇日期 · saved in this browser 儲存於此瀏覽器</span></div>`;
   }
   function renderProgress() {
     const prog = loadProgress();
@@ -368,7 +427,7 @@ function init(data) {
       return h;
     };
     document.getElementById('tracker-list').innerHTML =
-      progSummary() + section('🎓 Kindergarten 幼稚園', kgSchools) + section('🎒 Primary Schools 小學', primarySchools);
+      dobBanner() + progSummary() + section('🎓 Kindergarten 幼稚園', kgSchools) + section('🎒 Primary Schools 小學', primarySchools);
   }
   renderProgress();
   document.getElementById('tracker-list').addEventListener('click', e => {
@@ -380,17 +439,22 @@ function init(data) {
     if (res) { const cur = getP(res.dataset.id).result || null; setP(res.dataset.id, 'result', cur === res.dataset.val ? null : res.dataset.val); renderProgress(); return; }
     const ed = e.target.closest && e.target.closest('.prog-edit');
     if (ed) {
-      const key = ed.dataset.field + 'Manual';
-      const cur = getP(ed.dataset.id)[key] || '';
-      const inp = prompt('Enter date as YYYY-MM-DD (leave blank to clear)\n手動輸入日期，例如 2026-08-05（留空即清除）：', cur);
-      if (inp !== null) {
-        const t = inp.trim();
-        if (t === '') { setP(ed.dataset.id, key, null); renderProgress(); }
-        else if (/^\d{4}-\d{2}-\d{2}$/.test(t) && !isNaN(Date.parse(t))) { setP(ed.dataset.id, key, t); renderProgress(); }
-        else { alert('Please use the format YYYY-MM-DD, e.g. 2026-08-05\n請用格式 YYYY-MM-DD'); }
-      }
+      editing = { id: ed.dataset.id, field: ed.dataset.field };
+      renderProgress();
+      const inp = document.querySelector('.prog-dateinput');
+      if (inp) { inp.focus(); try { inp.showPicker && inp.showPicker(); } catch (_) {} }
       return;
     }
+    const clr = e.target.closest && e.target.closest('.prog-clear');
+    if (clr) { setP(clr.dataset.id, clr.dataset.field + 'Manual', null); editing = null; renderProgress(); return; }
+    const cxl = e.target.closest && e.target.closest('.prog-cancel');
+    if (cxl) { editing = null; renderProgress(); return; }
+  });
+  // Saving a picked date (or changing Zoe's DOB) commits immediately.
+  document.getElementById('tracker-list').addEventListener('change', e => {
+    const di = e.target.closest && e.target.closest('.prog-dateinput');
+    if (di) { setP(di.dataset.id, di.dataset.field + 'Manual', di.value || null); editing = null; renderProgress(); return; }
+    if (e.target.id === 'dobInput') { setDOB(e.target.value || null); renderProgress(); return; }
   });
 
   let tlHTML = '';
