@@ -266,7 +266,7 @@ def send_email(updates):
     for k in ("MS_TENANT_ID", "MS_CLIENT_ID", "MS_CLIENT_SECRET", "SENDER_EMAIL"):
         if not env.get(k):
             print(f"   email skipped: missing {k}")
-            return
+            return False
     tok = requests.post(
         f"https://login.microsoftonline.com/{env['MS_TENANT_ID']}/oauth2/v2.0/token",
         data={
@@ -276,7 +276,7 @@ def send_email(updates):
     )
     if tok.status_code != 200:
         print(f"   email token failed: HTTP {tok.status_code}")
-        return
+        return False
     token = tok.json()["access_token"]
     message = {
         "subject": f"Zoe school tracker — {len(updates)} new date(s) this week",
@@ -292,8 +292,9 @@ def send_email(updates):
     )
     if r.status_code in (200, 202):
         print(f"   emailed {RECIPIENT} ({len(updates)} new date(s))")
-    else:
-        print(f"   email send failed: HTTP {r.status_code} {r.text[:200]}")
+        return True
+    print(f"   email send failed: HTTP {r.status_code} {r.text[:200]}")
+    return False
 
 
 # ---------------------------------------------------------------- main
@@ -350,17 +351,33 @@ def main():
     with open(SCHOOLS_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
         f.write("\n")
-    with open(AI_STATE_FILE, "w", encoding="utf-8") as f:
-        json.dump({"updatedAt": now.isoformat(timespec="seconds"),
-                   "seen": sorted(list(new_seen))}, f, ensure_ascii=False, indent=2)
-        f.write("\n")
 
     print(f"\nSummary: {len(all_new)} new high-confidence date(s), {hints} hint(s)")
-    if all_new and os.environ.get("ZOE_AI_EMAIL") == "1":
-        try:
-            send_email(all_new)
-        except Exception as e:
-            print(f"   email error: {str(e)[:160]}")
+
+    # Advance the "seen" set only for dates we've actually notified about. If the
+    # email fails (or emailing is disabled), keep the previous seen set so those
+    # dates are retried next run — otherwise a failed send silently marks them
+    # seen and they're never emailed. (schools.json already holds the new dates
+    # regardless, so the tracker UI still shows them.)
+    seen_to_persist = new_seen
+    if all_new:
+        if os.environ.get("ZOE_AI_EMAIL") == "1":
+            sent_ok = False
+            try:
+                sent_ok = send_email(all_new)
+            except Exception as e:
+                print(f"   email error: {str(e)[:160]}")
+            if not sent_ok:
+                print("   email not confirmed — keeping these dates unseen; will retry next run.")
+                seen_to_persist = prev_seen
+        else:
+            print("   emailing disabled (ZOE_AI_EMAIL != 1) — not marking new dates seen.")
+            seen_to_persist = prev_seen
+
+    with open(AI_STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump({"updatedAt": now.isoformat(timespec="seconds"),
+                   "seen": sorted(list(seen_to_persist))}, f, ensure_ascii=False, indent=2)
+        f.write("\n")
     return 0
 
 
