@@ -78,15 +78,44 @@ FINDINGS_SCHEMA = {
     "required": ["found", "items"],
 }
 
-SYSTEM = (
-    "You are a data-extraction backend for a Hong Kong kindergarten admission "
-    "tracker. You read page text and call the record_findings tool exactly once "
-    "with K1 (nursery) 2027/2028 admission dates: open days, application periods, "
-    "briefings, interviews, and result-announcement dates. Normalise every date to "
-    "ISO YYYY-MM-DD. Ignore unrelated dates (copyright, past events, other grades). "
-    "Mark confidence 'high' only when the date is explicit and clearly tied to K1 "
-    "admission. You MUST call record_findings — never answer in prose."
-)
+# The entry level a school admits at drives what dates we ask the model to find.
+# Not hardcoded to K1 any more: a school's `category` in schools.json selects the
+# right grade + cohort so kindergartens surface K1 dates and primary schools
+# surface P1 (小一) dates from the same crawl.
+LEVELS = {
+    "kindergarten": {
+        "grade": "K1 (nursery / 幼兒班)",
+        "cohort": "the 2027/2028 school year (child entering K1 in Sep 2027)",
+    },
+    "primary": {
+        "grade": "Primary One (P1 / 小一)",
+        "cohort": "September 2027 entry (2027/2028 school year)",
+    },
+}
+
+
+def level_of(school):
+    """Map a school's category to a known admission level (default kindergarten)."""
+    return "primary" if school.get("category") == "primary" else "kindergarten"
+
+
+def system_for(level):
+    spec = LEVELS.get(level, LEVELS["kindergarten"])
+    grade, cohort = spec["grade"], spec["cohort"]
+    return (
+        "You are a data-extraction backend for a Hong Kong school admission "
+        "tracker. You read page text and call the record_findings tool exactly "
+        f"once with {grade} admission dates for {cohort}: open days / briefings "
+        "(簡介會), application periods, interviews, and result-announcement dates. "
+        "For an application period, report the CLOSING / deadline (截止) date as the "
+        "'Application' date. Normalise every date to ISO YYYY-MM-DD. Ignore unrelated "
+        "dates (copyright, past events, other grades or year levels, other cohorts). "
+        f"Mark confidence 'high' only when the date is explicit and clearly tied to "
+        f"{grade} admission for {cohort}. Some primary schools admit through the "
+        "government Primary One Admission (POA / 自行分配學位 · 統一派位) system with no "
+        "separate school application — if so, still capture any published key dates "
+        "but mark them 'medium'. You MUST call record_findings — never answer in prose."
+    )
 
 # ---------------------------------------------------------------- pure helpers
 
@@ -212,7 +241,7 @@ def fetch_combined(school):
 _captured = {}
 
 
-async def _extract(text):
+async def _extract(text, level="kindergarten"):
     """Run the Agent SDK record_findings tool and return its validated args."""
     from claude_agent_sdk import (
         AssistantMessage, ClaudeAgentOptions, ResultMessage, ToolUseBlock,
@@ -221,7 +250,9 @@ async def _extract(text):
 
     _captured.clear()
 
-    @tool("record_findings", "Record extracted K1 admission dates.", FINDINGS_SCHEMA)
+    grade = LEVELS.get(level, LEVELS["kindergarten"])["grade"]
+
+    @tool("record_findings", f"Record extracted {grade} admission dates.", FINDINGS_SCHEMA)
     async def record_findings(args):
         _captured.clear()
         _captured.update(args)
@@ -230,13 +261,13 @@ async def _extract(text):
     server = create_sdk_mcp_server("zoe", tools=[record_findings])
     options = ClaudeAgentOptions(
         model=MODEL,
-        system_prompt=SYSTEM,
+        system_prompt=system_for(level),
         mcp_servers={"zoe": server},
         allowed_tools=["mcp__zoe__record_findings"],
         permission_mode="bypassPermissions",
         max_turns=3,
     )
-    prompt = "Extract K1 admission dates from this page text:\n\n" + text[:12000]
+    prompt = f"Extract {grade} admission dates from this page text:\n\n" + text[:12000]
     last_result = None
     try:
         async for msg in query(prompt=prompt, options=options):
@@ -260,8 +291,8 @@ async def _extract(text):
     return dict(_captured)
 
 
-def extract(text):
-    return asyncio.run(_extract(text))
+def extract(text, level="kindergarten"):
+    return asyncio.run(_extract(text, level))
 
 
 # ---------------------------------------------------------------- email (Graph)
@@ -410,12 +441,13 @@ def main():
         name = school.get("nameEn") or school.get("nameZh") or school["id"]
         if not url:
             continue
-        print(f"- {name} ({school['id']})")
+        level = level_of(school)
+        print(f"- {name} ({school['id']}) [{level}]")
         text = page_text(school)
         if not text or len(text) < 50:
             continue
         try:
-            result = extract(text)
+            result = extract(text, level)
         except Exception as e:
             print(f"   extract error: {str(e)[:120]}")
             continue
