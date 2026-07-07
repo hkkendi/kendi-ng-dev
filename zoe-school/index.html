@@ -79,6 +79,9 @@
     .prog-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .prog-label { font-size: 12px; font-weight: 600; min-width: 96px; }
     .prog-date { font-size: 11px; color: var(--muted); min-width: 56px; }
+    .prog-date.prog-manual { color: #1e6fb8; font-weight: 600; }
+    .prog-edit { font-size: 11px; padding: 2px 6px; border: 1px solid var(--border); background: #fff; border-radius: 12px; cursor: pointer; line-height: 1; }
+    .prog-edit:hover { background: #eef4fb; border-color: #1e6fb8; }
     .prog-toggle, .prog-result { font-size: 11px; padding: 4px 11px; border: 1px solid var(--border); background: #fff; border-radius: 14px; cursor: pointer; color: var(--muted); }
     .prog-toggle.on { background: #d5f5e3; border-color: #1e8449; color: #1e8449; font-weight: 600; }
     .prog-result.on[data-val="offer"] { background: #d5f5e3; border-color: #1e8449; color: #1e8449; font-weight: 600; }
@@ -306,15 +309,30 @@ function init(data) {
     const all = loadProgress(); const cur = all[id] || {}; cur[field] = value; all[id] = cur;
     try { localStorage.setItem(PROG_KEY, JSON.stringify(all)); } catch (e) {}
   }
-  function progLine(s, icon, label, val, field, on) {
-    const iso = toISO(val);
-    const shown = val ? esc(val) : '<span style="color:var(--muted)">TBC</span>';
+  // Effective date = the user's manual override (if any) else the crawl-detected
+  // value. Manual overrides are stored per school under '<field>Manual' in the
+  // same localStorage progress store, so you can fill any TBC field yourself.
+  function effVal(s, dateField, crawlVal) {
+    const m = getP(s.id)[dateField + 'Manual'];
+    return (m !== undefined && m !== null && m !== '')
+      ? { v: m, manual: true } : { v: crawlVal, manual: false };
+  }
+  function editBtn(s, dateField) {
+    return `<button type="button" class="prog-edit" data-id="${s.id}" data-field="${dateField}" title="Edit date 手動輸入">✏️</button>`;
+  }
+  function dateCell(s, label, dateField, crawlVal) {
+    const e = effVal(s, dateField, crawlVal);
+    const iso = toISO(e.v);
+    const shown = e.v ? `${e.manual ? '✍️ ' : ''}${esc(e.v)}` : '<span style="color:var(--muted)">TBC</span>';
     const cal = iso ? `<button type="button" class="cal-btn" data-school="${esc(s.nameEn || s.nameZh)}" data-event="${esc(label)}" data-date="${iso}" data-url="${esc(s.website)}">📅</button>` : '';
-    const txt = field === 'visited' ? 'Visited 已參觀' : 'Applied 已申請';
+    return `<span class="prog-date${e.manual ? ' prog-manual' : ''}">${shown}</span>${cal}${editBtn(s, dateField)}`;
+  }
+  function progLine(s, icon, label, crawlVal, dateField, toggleField, on) {
+    const txt = toggleField === 'visited' ? 'Visited 已參觀' : 'Applied 已申請';
     return `<div class="prog-line">
       <span class="prog-label">${icon} ${label}</span>
-      <span class="prog-date">${shown}</span>${cal}
-      <button type="button" class="prog-toggle${on ? ' on' : ''}" data-id="${s.id}" data-field="${field}">${on ? '✅' : '○'} ${txt}</button>
+      ${dateCell(s, label, dateField, crawlVal)}
+      <button type="button" class="prog-toggle${on ? ' on' : ''}" data-id="${s.id}" data-field="${toggleField}">${on ? '✅' : '○'} ${txt}</button>
     </div>`;
   }
   function progCard(s, st) {
@@ -325,11 +343,11 @@ function init(data) {
         <a class="prog-site" href="${s.website}" target="_blank" title="School site">🔗</a>
       </div>
       <div class="prog-rows">
-        ${progLine(s, '📅', 'Open Day', s.openDay, 'visited', !!st.visited)}
-        ${progLine(s, '📝', 'Apply', s.appDateConfirmed, 'applied', !!st.applied)}
+        ${progLine(s, '📅', 'Open Day', s.openDay, 'openDay', 'visited', !!st.visited)}
+        ${progLine(s, '📝', 'Apply', s.appDateConfirmed, 'appDateConfirmed', 'applied', !!st.applied)}
         <div class="prog-line">
           <span class="prog-label">🎓 Result</span>
-          <span class="prog-date">${s.resultDate ? esc(s.resultDate) : '<span style="color:var(--muted)">TBC</span>'}</span>${toISO(s.resultDate) ? `<button type="button" class="cal-btn" data-school="${esc(s.nameEn || s.nameZh)}" data-event="Results" data-date="${toISO(s.resultDate)}" data-url="${esc(s.website)}">📅</button>` : ''}
+          ${dateCell(s, 'Results', 'resultDate', s.resultDate)}
           <button type="button" class="prog-result${result === 'offer' ? ' on' : ''}" data-id="${s.id}" data-field="result" data-val="offer">🎉 Offer 取錄</button>
           <button type="button" class="prog-result${result === 'rejected' ? ' on' : ''}" data-id="${s.id}" data-field="result" data-val="rejected">❌ Rejected 落選</button>
         </div>
@@ -339,7 +357,7 @@ function init(data) {
   function progSummary() {
     const all = loadProgress(); let v = 0, a = 0, o = 0, r = 0;
     data.schools.forEach(s => { const p = all[s.id] || {}; if (p.visited) v++; if (p.applied) a++; if (p.result === 'offer') o++; if (p.result === 'rejected') r++; });
-    return `<div class="prog-summary"><span>✅ Visited <b>${v}</b></span><span>📝 Applied <b>${a}</b></span><span>🎉 Offers <b>${o}</b></span><span>❌ Rejected <b>${r}</b></span><span style="color:var(--muted)">Saved in this browser 儲存於此瀏覽器</span></div>`;
+    return `<div class="prog-summary"><span>✅ Visited <b>${v}</b></span><span>📝 Applied <b>${a}</b></span><span>🎉 Offers <b>${o}</b></span><span>❌ Rejected <b>${r}</b></span><span style="color:var(--muted)">✏️ tap to edit any date 手動輸入 · saved in this browser 儲存於此瀏覽器</span></div>`;
   }
   function renderProgress() {
     const prog = loadProgress();
@@ -360,6 +378,19 @@ function init(data) {
     if (tog) { setP(tog.dataset.id, tog.dataset.field, !getP(tog.dataset.id)[tog.dataset.field]); renderProgress(); return; }
     const res = e.target.closest && e.target.closest('.prog-result');
     if (res) { const cur = getP(res.dataset.id).result || null; setP(res.dataset.id, 'result', cur === res.dataset.val ? null : res.dataset.val); renderProgress(); return; }
+    const ed = e.target.closest && e.target.closest('.prog-edit');
+    if (ed) {
+      const key = ed.dataset.field + 'Manual';
+      const cur = getP(ed.dataset.id)[key] || '';
+      const inp = prompt('Enter date as YYYY-MM-DD (leave blank to clear)\n手動輸入日期，例如 2026-08-05（留空即清除）：', cur);
+      if (inp !== null) {
+        const t = inp.trim();
+        if (t === '') { setP(ed.dataset.id, key, null); renderProgress(); }
+        else if (/^\d{4}-\d{2}-\d{2}$/.test(t) && !isNaN(Date.parse(t))) { setP(ed.dataset.id, key, t); renderProgress(); }
+        else { alert('Please use the format YYYY-MM-DD, e.g. 2026-08-05\n請用格式 YYYY-MM-DD'); }
+      }
+      return;
+    }
   });
 
   let tlHTML = '';
