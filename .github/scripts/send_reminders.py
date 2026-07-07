@@ -44,9 +44,9 @@ LEADS = [7, 1]
 
 # The recorded date fields we count down to, with their display label.
 DATE_FIELDS = [
-    ("openDay", "Open Day"),
-    ("appDateConfirmed", "Application"),
-    ("resultDate", "Results"),
+    ("openDay", "Open Day 開放日"),
+    ("appDateConfirmed", "Application 申請"),
+    ("resultDate", "Results 放榜"),
 ]
 
 ISO_RE = re.compile(r"\b(\d{4})-(\d{2})-(\d{2})\b")
@@ -67,10 +67,10 @@ def to_iso_date(value):
 
 def when_phrase(days):
     if days == 0:
-        return "today"
+        return "today 今天"
     if days == 1:
-        return "tomorrow"
-    return f"in {days} days"
+        return "tomorrow 明天"
+    return f"in {days} days / {days}天後"
 
 
 def load_json(path, default):
@@ -134,24 +134,25 @@ def build_html(rows):
         f"<td style='padding:6px 12px;border:1px solid #ddd'>{r['event']}</td>"
         f"<td style='padding:6px 12px;border:1px solid #ddd'><b>{r['date']}</b></td>"
         f"<td style='padding:6px 12px;border:1px solid #ddd'><b>{r['when']}</b></td>"
-        f"<td style='padding:6px 12px;border:1px solid #ddd'><a href='{r['url']}'>site</a></td></tr>"
+        f"<td style='padding:6px 12px;border:1px solid #ddd'><a href='{r['url']}'>site 校網</a></td></tr>"
         for r in rows
     )
     return (
         "<div style=\"font-family:Arial,sans-serif;font-size:14px;color:#222\">"
         "<p>Hi Mum &amp; Dad \U0001F476,</p>"
-        f"<p>Reminder — <b>{len(rows)} of Zoe's school date(s)</b> are coming up:</p>"
+        f"<p>Reminder — <b>{len(rows)} of Zoe's school date(s)</b> are coming up:<br>"
+        f"<span style=\"color:#555\">提提你 — Zoe 有 <b>{len(rows)} 個學校日期</b>快到：</span></p>"
         "<table style=\"border-collapse:collapse;margin:12px 0\">"
         "<tr style=\"background:#f3f3f3\">"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">School</th>"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Event</th>"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Date</th>"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">When</th>"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Link</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">School 學校</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Event 項目</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Date 日期</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">When 尚餘</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Link 連結</th>"
         f"</tr>{body}</table>"
-        "<p>Full tracker: <a href=\"https://kendi-ng.com/zoe-school/\">kendi-ng.com/zoe-school</a></p>"
-        "<p style=\"color:#888;font-size:12px\">Dates are AI-detected — confirm against "
-        "the school site before relying on one.</p></div>"
+        "<p>Full tracker 完整追蹤器：<a href=\"https://kendi-ng.com/zoe-school/\">kendi-ng.com/zoe-school</a></p>"
+        "<p style=\"color:#888;font-size:12px\">Dates are AI-detected — confirm against the school site "
+        "before relying on one. 日期由 AI 偵測，報名前請以官方網站核實。</p></div>"
     )
 
 
@@ -173,7 +174,8 @@ def send_email(rows):
         return False
     token = tok.json()["access_token"]
     soonest = min(r["days"] for r in rows)
-    subject = f"Zoe school reminder — {len(rows)} date(s) coming up ({when_phrase(soonest)})"
+    subject = (f"Zoe school reminder 學校提示 — {len(rows)} date(s) coming up 個日期快到 "
+               f"({when_phrase(soonest)})")
     message = {
         "subject": subject,
         "body": {"contentType": "HTML", "content": build_html(rows)},

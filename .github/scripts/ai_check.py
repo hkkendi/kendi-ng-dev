@@ -312,23 +312,24 @@ def build_html(updates):
         f"<span style='color:#666'>{u['nameZh']}</span></td>"
         f"<td style='padding:6px 12px;border:1px solid #ddd'>{u['event']}</td>"
         f"<td style='padding:6px 12px;border:1px solid #ddd'><b>{u['date']}</b></td>"
-        f"<td style='padding:6px 12px;border:1px solid #ddd'><a href='{u['url']}'>site</a></td></tr>"
+        f"<td style='padding:6px 12px;border:1px solid #ddd'><a href='{u['url']}'>site 校網</a></td></tr>"
         for u in updates
     )
     return (
         "<div style=\"font-family:Arial,sans-serif;font-size:14px;color:#222\">"
         "<p>Hi Mum &amp; Dad \U0001F476,</p>"
-        f"<p>The Zoe school checker found <b>{len(updates)} new date(s)</b> this week:</p>"
+        f"<p>The Zoe school checker found <b>{len(updates)} new date(s)</b> this week:<br>"
+        f"<span style=\"color:#555\">Zoe 學校檢查器今週發現 <b>{len(updates)} 個新日期</b>：</span></p>"
         "<table style=\"border-collapse:collapse;margin:12px 0\">"
         "<tr style=\"background:#f3f3f3\">"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">School</th>"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Event</th>"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Date</th>"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Link</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">School 學校</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Event 項目</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Date 日期</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Link 連結</th>"
         f"</tr>{rows}</table>"
-        "<p>Full tracker: <a href=\"https://kendi-ng.com/zoe-school/\">kendi-ng.com/zoe-school</a></p>"
-        "<p style=\"color:#888;font-size:12px\">Auto-extracted by Claude — confirm against "
-        "the school site before relying on a date.</p></div>"
+        "<p>Full tracker 完整追蹤器：<a href=\"https://kendi-ng.com/zoe-school/\">kendi-ng.com/zoe-school</a></p>"
+        "<p style=\"color:#888;font-size:12px\">Auto-extracted by Claude — confirm against the school site "
+        "before relying on a date. 由 Claude 自動擷取，報名前請以官方網站核實。</p></div>"
     )
 
 
@@ -350,7 +351,7 @@ def send_email(updates):
         return False
     token = tok.json()["access_token"]
     message = {
-        "subject": f"Zoe school tracker — {len(updates)} new date(s) this week",
+        "subject": f"Zoe school tracker 學校追蹤 — {len(updates)} new date(s) 個新日期 this week",
         "body": {"contentType": "HTML", "content": build_html(updates)},
         "toRecipients": [{"emailAddress": {"address": RECIPIENT}}],
     }
