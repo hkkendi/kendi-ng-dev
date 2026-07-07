@@ -43,6 +43,8 @@
             <a href="#projects" class="btn btn-primary">View Projects</a>
             <a href="https://www.linkedin.com/in/kendi-ng/" class="btn btn-outline" target="_blank" rel="noopener">LinkedIn</a>
             <a href="https://github.com/hkkendi" class="btn btn-outline" target="_blank" rel="noopener">GitHub</a>
+            <a href="cv-analytics/" class="btn btn-outline">Data Analyst CV</a>
+            <a href="cv-dm/" class="btn btn-outline">Digital Marketing CV</a>
           </div>
         </div>
       </div>
@@ -159,6 +161,25 @@
 
         <!-- ===== FEATURED PROJECTS (full detail) ===== -->
         <div class="projects-list">
+
+          <!-- Featured 0: CRM Platform Migration & Self-Hosted Dashboards (added 2026-07) -->
+          <article class="project-card">
+            <div class="project-card-body">
+              <h3 class="project-title">CRM Platform Migration — Netsuite → Odoo → FastAPI + React</h3>
+              <p class="project-problem"><strong>Problem:</strong> When I joined the company, its CRM ran on Netsuite, which didn't fit the sales, MPF and reporting workflows the business actually needed. After migrating to Odoo, a second gap opened up: Odoo's own dashboard and reporting tools couldn't support the interactive, cross-source analytics the teams needed to run the business day to day.</p>
+              <p class="project-solution">I assisted the initial migration from Netsuite to Odoo CRM, then — once Odoo's built-in reporting proved too limited — designed and self-hosted a full external dashboard layer on my own AWS EC2 server, replacing what the CRM couldn't do natively with Streamlit/FastAPI apps I built and deployed myself. The company is now migrating again, from Odoo to a FastAPI + React platform, and that self-hosted reporting layer is what's carrying over: the underlying report logic has already been re-architected as a framework-neutral, unit-tested package (see "Portable Reporting Logic Layer" below), so the new platform inherits verified, working dashboards instead of a rebuild from scratch.</p>
+              <ul class="project-tech">
+                <li class="tech-badge">Netsuite</li>
+                <li class="tech-badge">Odoo CRM</li>
+                <li class="tech-badge">FastAPI</li>
+                <li class="tech-badge">React</li>
+                <li class="tech-badge">AWS EC2</li>
+                <li class="tech-badge">Docker</li>
+                <li class="tech-badge">PostgreSQL</li>
+                <li class="tech-badge">Streamlit</li>
+              </ul>
+            </div>
+          </article>
 
           <!-- Featured 1: Digital Marketing Analytics Platform -->
           <article class="project-card">
