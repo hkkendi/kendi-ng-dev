@@ -24,6 +24,7 @@
         <li><a href="#skills">Skills</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#timeline">Career</a></li>
+        <li><a href="project-list.html">Project List</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
@@ -42,6 +43,8 @@
             <a href="#projects" class="btn btn-primary">View Projects</a>
             <a href="https://www.linkedin.com/in/kendi-ng/" class="btn btn-outline" target="_blank" rel="noopener">LinkedIn</a>
             <a href="https://github.com/hkkendi" class="btn btn-outline" target="_blank" rel="noopener">GitHub</a>
+            <a href="cv-analytics/" class="btn btn-outline">Data Analyst CV</a>
+            <a href="cv-dm/" class="btn btn-outline">Digital Marketing CV</a>
           </div>
         </div>
       </div>
@@ -62,6 +65,8 @@
               <li class="skill-badge">SQL</li>
               <li class="skill-badge">Pandas</li>
               <li class="skill-badge">NumPy</li>
+              <li class="skill-badge">pytest</li>
+              <li class="skill-badge">Pydantic</li>
               <li class="skill-badge">VBA Excel</li>
               <li class="skill-badge">GitHub</li>
             </ul>
@@ -157,6 +162,25 @@
         <!-- ===== FEATURED PROJECTS (full detail) ===== -->
         <div class="projects-list">
 
+          <!-- Featured 0: CRM Platform Migration & Self-Hosted Dashboards (added 2026-07) -->
+          <article class="project-card">
+            <div class="project-card-body">
+              <h3 class="project-title">CRM Platform Migration — Netsuite → Odoo → FastAPI + React</h3>
+              <p class="project-problem"><strong>Problem:</strong> When I joined the company, its CRM ran on Netsuite, which didn't fit the sales, MPF and reporting workflows the business actually needed. After migrating to Odoo, a second gap opened up: Odoo's own dashboard and reporting tools couldn't support the interactive, cross-source analytics the teams needed to run the business day to day.</p>
+              <p class="project-solution">I assisted the initial migration from Netsuite to Odoo CRM, then — once Odoo's built-in reporting proved too limited — designed and self-hosted a full external dashboard layer on my own AWS EC2 server, replacing what the CRM couldn't do natively with Streamlit/FastAPI apps I built and deployed myself. The company is now migrating again, from Odoo to a FastAPI + React platform, and that self-hosted reporting layer is what's carrying over: the underlying report logic has already been re-architected as a framework-neutral, unit-tested package (see "Portable Reporting Logic Layer" below), so the new platform inherits verified, working dashboards instead of a rebuild from scratch.</p>
+              <ul class="project-tech">
+                <li class="tech-badge">Netsuite</li>
+                <li class="tech-badge">Odoo CRM</li>
+                <li class="tech-badge">FastAPI</li>
+                <li class="tech-badge">React</li>
+                <li class="tech-badge">AWS EC2</li>
+                <li class="tech-badge">Docker</li>
+                <li class="tech-badge">PostgreSQL</li>
+                <li class="tech-badge">Streamlit</li>
+              </ul>
+            </div>
+          </article>
+
           <!-- Featured 1: Digital Marketing Analytics Platform -->
           <article class="project-card">
             <div class="project-card-body">
@@ -176,12 +200,6 @@
               <div class="project-links">
                 <a href="https://github.com/hkkendi/work-app-copy/tree/main/streamlit_apps" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a>
               </div>
-            </div>
-            <div class="project-media">
-              <video class="project-video" controls preload="metadata">
-                <source src="assets/videos/Digital%20Marketing%20Analytics%20Platform.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
             </div>
           </article>
 
@@ -243,12 +261,6 @@
               <div class="project-links">
                 <a href="https://github.com/hkkendi/work-app-copy/tree/main/streamlit_apps" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a>
               </div>
-            </div>
-            <div class="project-media">
-              <video class="project-video" controls preload="metadata" poster="">
-                <source src="assets/videos/CRM%20Reporting%20%26%20Analytics%20Dashboard.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
             </div>
           </article>
 
@@ -319,6 +331,51 @@
         <!-- ===== MORE PROJECTS (compact grid) ===== -->
         <h3 class="subsection-title">More Projects</h3>
         <div class="projects-grid-compact">
+
+          <!-- AI Agent Tooling: Skills & Model Routing (added 2026-07) -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">AI Agent Tooling — Skills &amp; Model Routing</h4>
+            <p class="project-desc">Beyond using AI inside the products I build, I engineer my own agent workflows in Claude Code: recurring tasks packaged as reusable, version-controlled <strong>skills</strong> (a single command that runs the same process every time), and a deliberate <strong>task-to-model routing</strong> strategy — premium models for precise edits and anything that ships, low-cost open models (Qwen3-Coder, GPT-OSS, Llama) for read-heavy drafting, a long-context model for large refactors. Cheap models draft, the premium model applies — cutting cost without risking the output that matters.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Claude Code</li>
+              <li class="tech-badge">AI Agents</li>
+              <li class="tech-badge">Prompt Engineering</li>
+              <li class="tech-badge">OpenRouter</li>
+              <li class="tech-badge">Cost Optimisation</li>
+            </ul>
+            <div class="project-links">
+              <a href="claude-agents-skill/" class="btn btn-sm btn-primary">Skill Catalogue</a>
+              <a href="claude-agents-model/" class="btn btn-sm btn-primary">Model Routing</a>
+            </div>
+          </article>
+
+          <!-- Automated Schedule Monitoring & Alerting (added 2026-07) -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Automated Schedule Monitoring &amp; Alerting</h4>
+            <p class="project-desc">Built a live monitoring dashboard and alert system that continuously reconciles every scheduled report/automation run (Windows Task Scheduler jobs + n8n workflows) against an expected-schedule manifest, flagging any missed or failed run before it causes a silent reporting gap. Shipped after a real incident where an automation change silently dropped a step and a report went out late — the same detection logic now backs both a live status page and a proactive alert email, closing the gap for good.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">n8n</li>
+              <li class="tech-badge">Windows Task Scheduler</li>
+              <li class="tech-badge">Streamlit</li>
+            </ul>
+            <div class="project-links"><a href="https://github.com/hkkendi/work-app-copy/tree/main/streamlit_apps" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a></div>
+          </article>
+
+          <!-- Portable Reporting Logic Layer (added 2026-07) -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Portable Reporting Logic Layer</h4>
+            <p class="project-desc">Re-architected CRM reporting into a framework-neutral, unit-tested Python package: each report is a pure function (query + business rules) returning typed data, with automated tests asserting the numbers, consumed by thin UI pages that hold no logic. The same verified logic can be repointed at a future CRM database and reused unchanged — so a platform migration to a new FastAPI + React CRM needs no report re-spec or rewrite. Reports ported and running so far: pension blocks, marketing activity, relationship-management, employee-benefits and won-case analysis.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">pytest</li>
+              <li class="tech-badge">Pydantic</li>
+              <li class="tech-badge">PostgreSQL</li>
+              <li class="tech-badge">Streamlit</li>
+              <li class="tech-badge">FastAPI</li>
+            </ul>
+            <div class="project-links"><a href="https://github.com/hkkendi/work-app-copy" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a></div>
+          </article>
 
           <!-- Lead Management & CRM Automation -->
           <article class="project-card-compact">

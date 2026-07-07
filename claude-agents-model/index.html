@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How Kendi Ng routes each kind of agent task to a deliberately chosen AI model — matching cost and reliability to what the task actually needs.">
+  <title>Claude Agents Model Routing — Kendi Ng</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .page-hero { padding: 3.5rem 0 3rem; }
+    .note-callout {
+      background: rgba(0, 180, 166, 0.06);
+      border-left: 3px solid var(--color-accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1rem 1.25rem;
+      font-size: 0.9rem;
+      color: var(--color-text);
+      margin-top: 2rem;
+    }
+    .profile-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 2rem 0 2.5rem;
+    }
+    .profile-stat {
+      flex: 1;
+      min-width: 150px;
+      background: var(--color-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      padding: 1.25rem 1.5rem;
+      text-align: center;
+    }
+    .profile-stat .count {
+      display: block;
+      font-family: var(--font-code);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      word-break: break-word;
+    }
+    .profile-stat .label {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      font-weight: 600;
+    }
+    .skill-table-wrap {
+      overflow-x: auto;
+      background: var(--color-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+    }
+    .skill-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      min-width: 640px;
+    }
+    .skill-table th, .skill-table td {
+      text-align: left;
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid rgba(26, 39, 68, 0.08);
+      vertical-align: top;
+    }
+    .skill-table th {
+      color: var(--color-primary);
+      font-weight: 600;
+      background: rgba(26, 39, 68, 0.03);
+    }
+    .skill-table tr:last-child td { border-bottom: none; }
+    .model-badge {
+      display: inline-block;
+      font-family: var(--font-code);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--color-accent-dark);
+      background: rgba(0, 180, 166, 0.08);
+      border: 1px solid rgba(0, 180, 166, 0.25);
+      border-radius: 6px;
+      padding: 0.1rem 0.45rem;
+      white-space: nowrap;
+    }
+    .skill-table td.task-cell { font-weight: 600; color: var(--color-primary); }
+    .skill-table td.task-cell code {
+      display: block;
+      font-family: var(--font-code);
+      font-weight: 400;
+      font-size: 0.78rem;
+      color: var(--color-accent-dark);
+      margin-top: 0.2rem;
+    }
+    .tier-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 5px;
+      padding: 0.1rem 0.4rem;
+    }
+    .tier-premium { background: rgba(230, 81, 0, 0.1); color: #b34700; }
+    .tier-cheap   { background: rgba(25, 135, 84, 0.12); color: #0f5132; }
+    .tier-mid     { background: rgba(13, 110, 253, 0.1); color: #0a58ca; }
+  </style>
+</head>
+<body>
+
+  <!-- Header / Navigation -->
+  <header class="site-header">
+    <nav class="nav-container container">
+      <a href="../index.html" class="nav-logo">Kendi Ng</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../index.html#skills">Skills</a></li>
+        <li><a href="../index.html#projects">Projects</a></li>
+        <li><a href="../index.html#timeline">Career</a></li>
+        <li><a href="../project-list.html">Project List</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Page Hero -->
+    <section class="hero page-hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Claude Agents Model Routing</h1>
+          <p class="hero-subtitle">Which AI model I point each kind of agent task at — and why.</p>
+          <p class="hero-bio">Running AI agents well isn't just <em>which</em> model — it's using the <strong>right model for each task</strong>. A premium model on every job is wasteful; a cheap one on the wrong job is unreliable. So I route work deliberately: read-heavy, low-stakes drafting goes to inexpensive open models, while precise edits and anything that ships stay on a premium model where a mistake is expensive. Claude Code lets each recurring skill <strong>pin its own model</strong> in its config, so a task always runs at the cost/quality point it actually needs — independent of whatever model the interactive session happens to be on. This page is the routing map I work to.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guiding principle -->
+    <section class="skills">
+      <div class="container">
+        <h2 class="section-title">The Routing Principle</h2>
+        <p class="section-subtitle">Three questions decide the model for any task.</p>
+        <div class="note-callout">
+          <strong>1. How costly is a mistake?</strong> High-stakes, hard-to-reverse work (shipping code, editing live files) → the most reliable model, cost second.<br>
+          <strong>2. Is it read/draft, or precise edit?</strong> Reading code and drafting text tolerate a lighter model; surgical structural edits do not.<br>
+          <strong>3. How much context must it hold at once?</strong> Whole-codebase or long-horizon work needs a large-context model even if the per-token price is higher.
+        </div>
+      </div>
+    </section>
+
+    <!-- Model roster -->
+    <section class="projects">
+      <div class="container">
+        <h2 class="section-title">The Model Roster</h2>
+        <p class="section-subtitle">The models I route between, from premium-reliable to low-cost open.</p>
+        <div class="profile-stats">
+          <div class="profile-stat"><span class="count">Claude</span><span class="label">Premium · precise edits &amp; shipping</span></div>
+          <div class="profile-stat"><span class="count">Qwen3-Coder</span><span class="label">Cheap · code reading &amp; drafting</span></div>
+          <div class="profile-stat"><span class="count">GPT-OSS-120B</span><span class="label">Cheap · general reasoning</span></div>
+          <div class="profile-stat"><span class="count">Llama 3.3 70B</span><span class="label">Cheap · quick light tasks</span></div>
+          <div class="profile-stat"><span class="count">GLM-5.2</span><span class="label">Long-context · large refactors</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Routing table -->
+    <section class="projects">
+      <div class="container">
+        <h2 class="section-title">Task → Model Map</h2>
+        <p class="section-subtitle">What each kind of task currently runs on, and the reason behind the choice.</p>
+        <div class="skill-table-wrap">
+          <table class="skill-table">
+            <thead>
+              <tr><th>Task</th><th>Model</th><th>Tier</th><th>Why this model</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="task-cell">Draft documentation from a codebase<code>/update_crm_docs</code></td>
+                <td><span class="model-badge">Qwen3-Coder</span></td>
+                <td><span class="tier-tag tier-cheap">cheap</span></td>
+                <td>Reads a whole app in one large context and writes structured prose at a fraction of premium cost. Drafting tolerates a lighter model — the output is reviewed before it lands.</td>
+              </tr>
+              <tr>
+                <td class="task-cell">Database schema &amp; ER diagrams<code>Mermaid / DBML</code></td>
+                <td><span class="model-badge">Qwen3-Coder</span></td>
+                <td><span class="tier-tag tier-cheap">cheap</span></td>
+                <td>Diagram syntax is essentially code, so a coding model infers table relationships and cardinality accurately — and it's cheap enough to iterate on the layout.</td>
+              </tr>
+              <tr>
+                <td class="task-cell">Read &amp; explain unfamiliar code</td>
+                <td><span class="model-badge">Qwen3-Coder</span></td>
+                <td><span class="tier-tag tier-cheap">cheap</span></td>
+                <td>Read-only and long-context — no risk from a lighter model, and the large window means fewer round-trips.</td>
+              </tr>
+              <tr>
+                <td class="task-cell">Apply drafted docs into real files<code>/c-update_crm_doc</code></td>
+                <td><span class="model-badge">Claude</span></td>
+                <td><span class="tier-tag tier-premium">premium</span></td>
+                <td>Precise structural edits — HTML sections, page code — where a weaker model corrupts tag nesting. Here reliability matters more than cost, so the cheap draft is applied by the premium model.</td>
+              </tr>
+              <tr>
+                <td class="task-cell">Production code, report/email changes — anything that ships</td>
+                <td><span class="model-badge">Claude</span></td>
+                <td><span class="tier-tag tier-premium">premium</span></td>
+                <td>Highest-stakes work; a mistake is expensive and hard to reverse, so it runs on the most reliable model available.</td>
+              </tr>
+              <tr>
+                <td class="task-cell">General reasoning when the task isn't code-shaped</td>
+                <td><span class="model-badge">GPT-OSS-120B</span></td>
+                <td><span class="tier-tag tier-mid">cheap · reliable</span></td>
+                <td>A dependable open model for analysis and prose, and the fallback when the coding model's endpoint is momentarily busy.</td>
+              </tr>
+              <tr>
+                <td class="task-cell">Quick lookups &amp; light formatting</td>
+                <td><span class="model-badge">Llama 3.3 70B</span></td>
+                <td><span class="tier-tag tier-cheap">cheap</span></td>
+                <td>Fast and inexpensive for low-stakes turns where a large model would be overkill.</td>
+              </tr>
+              <tr>
+                <td class="task-cell">Long-horizon refactoring across a large codebase</td>
+                <td><span class="model-badge">GLM-5.2</span></td>
+                <td><span class="tier-tag tier-mid">long-context</span></td>
+                <td>Holds architecture, module boundaries and API contracts across a very large (~1M-token) context — worth the higher per-token price when the task spans the whole system.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="section-subtitle" style="margin-top: 1.5rem;">The cheap open models run through a single low-cost gateway on a separate Claude Code profile; the premium tier is the standard Claude account. A skill can hard-pin any of these in its config so the choice is made once, not re-decided every run.</p>
+      </div>
+    </section>
+
+    <!-- Companion note -->
+    <section class="skills">
+      <div class="container">
+        <div class="note-callout" style="margin-top:0;">
+          Companion to <a href="../claude-agents-skill/index.html">Claude Agents Skill</a> — that page lists <em>what</em> the automations do; this one maps <em>which model</em> each runs on.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer / Contact -->
+  <footer id="contact" class="footer">
+    <div class="container">
+      <h2 class="section-title">Get in Touch</h2>
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="mailto:kendi@leary.hk">kendi@leary.hk</a>
+          <a href="https://www.linkedin.com/in/kendi-ng/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/hkkendi" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <p class="footer-location">Hong Kong</p>
+        <p class="footer-copyright">&copy; 2026 Kendi Ng</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

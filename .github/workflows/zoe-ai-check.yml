@@ -43,7 +43,8 @@ jobs:
             exit 0
           fi
           sudo apt-get update -qq
-          sudo apt-get install -y wireguard-tools openresolv
+          # ubuntu-24.04 ships resolvconf (not openresolv); wg-quick needs it for the conf's DNS line.
+          sudo apt-get install -y wireguard-tools resolvconf || sudo apt-get install -y wireguard-tools
           umask 077
           echo "$WG_CONF" | sudo tee /etc/wireguard/hk.conf >/dev/null
           if sudo wg-quick up hk; then
@@ -53,6 +54,23 @@ jobs:
             sudo wg-quick down hk 2>/dev/null || true
           fi
 
+      # Phase 1 — fetch pages through the HK VPN (some HK school sites geo-block
+      # non-HK IPs). No Claude API calls here, so the HK exit IP is fine.
+      - name: Fetch school pages (VPN up)
+        continue-on-error: true
+        env:
+          ZOE_CACHE_DIR: /tmp/zoe_pages
+          PYTHONUTF8: '1'
+          PYTHONIOENCODING: utf-8
+        run: python .github/scripts/ai_check.py --fetch-only
+
+      # Anthropic does not serve Hong Kong: a HK exit IP gets every Claude API
+      # call 403'd. Drop the VPN before extraction so the API uses the US runner IP.
+      - name: Disconnect HK VPN
+        if: always()
+        run: sudo wg-quick down hk 2>/dev/null || true
+
+      # Phase 2 — extract from the cached pages with the VPN down.
       - name: Run AI checker
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -61,15 +79,12 @@ jobs:
           MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
           SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
           BCC_EMAIL: ${{ secrets.BCC_EMAIL }}
+          ZOE_CACHE_DIR: /tmp/zoe_pages
           ZOE_AI_EMAIL: '1'
           ZOE_AI_MODEL: claude-sonnet-4-6
           PYTHONUTF8: '1'
           PYTHONIOENCODING: utf-8
         run: python .github/scripts/ai_check.py
-
-      - name: Disconnect HK VPN
-        if: always()
-        run: sudo wg-quick down hk 2>/dev/null || true
 
       - name: Commit updated schools.json & AI state
         run: |

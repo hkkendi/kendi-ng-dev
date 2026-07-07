@@ -184,13 +184,38 @@ def fetch_text(url):
         return None
 
 
+def urls_for(school):
+    """Homepage plus any extra admission/news sub-pages to crawl for this school.
+
+    Many HK school sites keep the actual open-day/application dates on an
+    admissions or news sub-page (or behind a JS redirect), not the homepage —
+    so `crawlUrls` lets a school point the crawler straight at them.
+    """
+    out = []
+    for u in [school.get("website")] + list(school.get("crawlUrls", [])):
+        if u and u not in out:
+            out.append(u)
+    return out
+
+
+def fetch_combined(school):
+    """Fetch every URL for a school and join the page text (sub-pages first,
+    as they carry the dates; homepage last)."""
+    parts = []
+    for u in urls_for(school):
+        t = fetch_text(u)
+        if t and len(t) >= 30:
+            parts.append(t)
+    return "\n\n----\n\n".join(parts) if parts else None
+
+
 _captured = {}
 
 
 async def _extract(text):
     """Run the Agent SDK record_findings tool and return its validated args."""
     from claude_agent_sdk import (
-        AssistantMessage, ClaudeAgentOptions, ToolUseBlock,
+        AssistantMessage, ClaudeAgentOptions, ResultMessage, ToolUseBlock,
         create_sdk_mcp_server, query, tool,
     )
 
@@ -211,12 +236,27 @@ async def _extract(text):
         permission_mode="bypassPermissions",
         max_turns=3,
     )
-    prompt = "Extract K1 admission dates from this page text:\n\n" + text[:6000]
-    async for msg in query(prompt=prompt, options=options):
-        if isinstance(msg, AssistantMessage):
-            for block in msg.content:
-                if isinstance(block, ToolUseBlock) and block.name.endswith("record_findings"):
-                    pass
+    prompt = "Extract K1 admission dates from this page text:\n\n" + text[:12000]
+    last_result = None
+    try:
+        async for msg in query(prompt=prompt, options=options):
+            if isinstance(msg, ResultMessage):
+                last_result = msg
+            elif isinstance(msg, AssistantMessage):
+                for block in msg.content:
+                    if isinstance(block, ToolUseBlock) and block.name.endswith("record_findings"):
+                        pass
+    except Exception as e:
+        # The CLI emits a result with is_error=True then exits non-zero on an
+        # API error (401/429/5xx); the raised error only carries the subtype.
+        # Surface the real HTTP status the CLI reported so failures are diagnosable.
+        status = getattr(last_result, "api_error_status", None)
+        errs = getattr(last_result, "errors", None)
+        if status or errs:
+            raise RuntimeError(
+                f"API error (HTTP {status or '?'}) from Claude CLI: {errs or e}"
+            ) from e
+        raise
     return dict(_captured)
 
 
@@ -307,11 +347,57 @@ def load_json(path, default):
         return default
 
 
+def cache_path(school):
+    d = os.environ.get("ZOE_CACHE_DIR")
+    return os.path.join(d, f"{school['id']}.txt") if d else None
+
+
+def page_text(school):
+    """Read page text from the cache dir if present, else fetch live.
+
+    The cache lets us split the run in two: fetch pages while the HK VPN is
+    up (some HK school sites geo-block non-HK IPs), then run the Claude API
+    with the VPN down (Anthropic does not serve Hong Kong — a HK exit IP
+    gets every API call 403'd). Local runs with no cache just fetch live.
+    """
+    cp = cache_path(school)
+    if cp and os.path.exists(cp):
+        with open(cp, "r", encoding="utf-8") as f:
+            return f.read()
+    return fetch_combined(school)
+
+
+def fetch_phase(data):
+    """Download every school page to the cache dir; no extraction. Run with VPN up."""
+    cache_dir = os.environ.get("ZOE_CACHE_DIR")
+    os.makedirs(cache_dir, exist_ok=True)
+    n = 0
+    for school in data["schools"]:
+        url = school.get("website")
+        name = school.get("nameEn") or school.get("nameZh") or school["id"]
+        if not url:
+            continue
+        print(f"- {name} ({school['id']})")
+        text = fetch_combined(school)
+        if text and len(text) >= 50:
+            with open(cache_path(school), "w", encoding="utf-8") as f:
+                f.write(text)
+            n += 1
+        else:
+            print("   (no usable text — skipped)")
+    print(f"\nFetched {n}/{len(data['schools'])} page(s) to {cache_dir}")
+    return 0
+
+
 def main():
     data = load_json(SCHOOLS_FILE, None)
     if not data or "schools" not in data:
         print(f"Could not read {SCHOOLS_FILE}")
         return 1
+
+    if "--fetch-only" in sys.argv:
+        return fetch_phase(data)
+
     state = load_json(AI_STATE_FILE, {"seen": []})
     prev_seen = {tuple(x) for x in state.get("seen", [])}
     now = datetime.now(HKT)
@@ -325,7 +411,7 @@ def main():
         if not url:
             continue
         print(f"- {name} ({school['id']})")
-        text = fetch_text(url)
+        text = page_text(school)
         if not text or len(text) < 50:
             continue
         try:
