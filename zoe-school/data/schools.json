@@ -229,6 +229,10 @@
       "sessionZh": "半日班（上午及下午班）",
       "appMethod": "Online (eClass) 網上",
       "website": "https://www.pcps.edu.hk/kg",
+      "crawlUrls": [
+        "https://www.pcps.edu.hk/kg/tc/2027-2028-%E5%B9%BC%E5%85%92%E7%8F%ADk1%E5%85%A5%E5%AD%B8%E7%94%B3%E8%AB%8B",
+        "https://www.pcps.edu.hk/kg/tc/%E6%8B%9B%E7%94%9F%E9%80%9A%E5%91%8A"
+      ],
       "estAppPeriod": "2026-07-02 to 2026-08-05 / 2026年7月2日至8月5日",
       "openDay": null,
       "openDayNote": "Usually Saturday, Jul–Aug 2026",
@@ -262,6 +266,10 @@
       "sessionZh": "全日制",
       "appMethod": "Online (ievent/AlipayHK) 網上",
       "website": "https://www.pcps.edu.hk",
+      "crawlUrls": [
+        "https://www.pcps.edu.hk/tc/2027%E8%87%B32028%E5%B9%B4%E5%BA%A6%E5%B0%8F%E4%B8%80%E5%85%A5%E5%AD%B8%E7%94%B3%E8%AB%8B",
+        "https://pcps.ievent.hk/event/2027-p"
+      ],
       "estAppPeriod": "2026-07-02 to 2026-08-05 / 2026年7月2日至8月5日",
       "openDay": null,
       "openDayNote": "—",

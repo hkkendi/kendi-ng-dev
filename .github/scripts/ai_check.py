@@ -241,8 +241,15 @@ def fetch_combined(school):
 _captured = {}
 
 
-async def _extract(text, level="kindergarten"):
-    """Run the Agent SDK record_findings tool and return its validated args."""
+async def _extract(text, level="kindergarten", urls=None):
+    """Run the Agent SDK record_findings tool and return its validated args.
+
+    Plain `requests` can't see dates on JavaScript-rendered school sites (the
+    content loads client-side after the HTML). When `urls` are given we also let
+    the agent use WebFetch — which renders those pages — so it can read dates the
+    pre-fetched text is missing, then record them. WebFetch is additive: if it
+    fails (e.g. a geo-blocked HK site with the VPN down) the agent still has the
+    pre-fetched text to fall back on."""
     from claude_agent_sdk import (
         AssistantMessage, ClaudeAgentOptions, ResultMessage, ToolUseBlock,
         create_sdk_mcp_server, query, tool,
@@ -259,15 +266,25 @@ async def _extract(text, level="kindergarten"):
         return {"content": [{"type": "text", "text": "recorded"}]}
 
     server = create_sdk_mcp_server("zoe", tools=[record_findings])
+    allowed = ["mcp__zoe__record_findings"]
+    if urls:
+        allowed.append("WebFetch")
     options = ClaudeAgentOptions(
         model=MODEL,
         system_prompt=system_for(level),
         mcp_servers={"zoe": server},
-        allowed_tools=["mcp__zoe__record_findings"],
+        allowed_tools=allowed,
         permission_mode="bypassPermissions",
-        max_turns=3,
+        max_turns=6 if urls else 3,
     )
     prompt = f"Extract {grade} admission dates from this page text:\n\n" + text[:12000]
+    if urls:
+        prompt += (
+            "\n\n----\nIf the text above is missing clear, explicit "
+            f"{grade} admission dates (or shows only a JS/loading shell), use the "
+            "WebFetch tool to read the official page(s) below, which render the "
+            "live dates, then extract from what you read:\n" + "\n".join(urls[:3])
+        )
     last_result = None
     try:
         async for msg in query(prompt=prompt, options=options):
@@ -291,8 +308,8 @@ async def _extract(text, level="kindergarten"):
     return dict(_captured)
 
 
-def extract(text, level="kindergarten"):
-    return asyncio.run(_extract(text, level))
+def extract(text, level="kindergarten", urls=None):
+    return asyncio.run(_extract(text, level, urls))
 
 
 # ---------------------------------------------------------------- email (Graph)
@@ -448,7 +465,11 @@ def main():
         if not text or len(text) < 50:
             continue
         try:
-            result = extract(text, level)
+            # WebFetch (renders JS pages) is enabled only for schools flagged
+            # with crawlUrls — the JS-rendered sites plain requests can't read —
+            # so the rest keep the cheaper text-only extraction.
+            fetch_urls = urls_for(school) if school.get("crawlUrls") else None
+            result = extract(text, level, fetch_urls)
         except Exception as e:
             print(f"   extract error: {str(e)[:120]}")
             continue
