@@ -1,0 +1,52 @@
+name: Zoe School Date Reminders
+
+on:
+  schedule:
+    # 00:30 UTC daily = 08:30 HKT daily. Reads the curated dates already in
+    # schools.json and emails 7-day / 1-day-before reminders. No crawling.
+    - cron: '30 0 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write   # commit updated reminder-state.json
+
+concurrency:
+  group: zoe-school-reminders
+  cancel-in-progress: false
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Send due reminders
+        env:
+          MS_TENANT_ID: ${{ secrets.MS_TENANT_ID }}
+          MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
+          MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          BCC_EMAIL: ${{ secrets.BCC_EMAIL }}
+          ZOE_REMINDER_EMAIL: '1'
+          PYTHONUTF8: '1'
+          PYTHONIOENCODING: utf-8
+        run: python .github/scripts/send_reminders.py
+
+      - name: Commit updated reminder state
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add zoe-school/data/reminder-state.json
+          if git diff --cached --quiet; then
+            echo "No reminder state changes to commit."
+          else
+            git commit -m "chore(zoe-school): reminder state $(date -u +%Y-%m-%d)"
+            git push
+          fi

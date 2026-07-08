@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2026-06-26",
   "child": {
     "name": "Zoe",
     "dob": "2024-02-21",
-    "dobDisplay": "21 Feb 2024"
+    "targetEntryYear": 2027
   },
+  "lastUpdated": "2026-06-26",
   "timeline": [
     {
       "date": "Jul–Aug 2026",
@@ -60,6 +60,8 @@
       "openDayNote": "Usually Saturday, Jul–Aug 2026",
       "appDateConfirmed": null,
       "appDateNote": "Est. mid-Sep 2026",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending"
     },
     {
@@ -84,6 +86,8 @@
       "openDayNote": "Usually Saturday, Jul–Aug 2026",
       "appDateConfirmed": null,
       "appDateNote": "Est. Oct 1–15, 2026",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending"
     },
     {
@@ -108,6 +112,8 @@
       "openDayNote": "Usually Saturday, Jul–Aug 2026",
       "appDateConfirmed": null,
       "appDateNote": "Est. late Sep 2026",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending"
     },
     {
@@ -132,6 +138,8 @@
       "openDayNote": "🤖 AI-detected 2026-09-19 — verify (Open Day)",
       "appDateConfirmed": "2026-09-25",
       "appDateNote": "🤖 AI-detected 2026-09-25 — verify (Application) · 🤖 Results: 2027-01-07 · Results: 2027-01-09",
+      "resultDate": "2027-01-07",
+      "resultDateNote": "🤖 AI-detected 2027-01-07 — verify (Results; also 2027-01-09)",
       "status": "confirmed",
       "crawlUrls": [
         "https://www.truelightk-c.edu.hk/m05_entry_page01.php",
@@ -171,6 +179,8 @@
       "openDayNote": "Usually Saturday, Jul–Aug 2026",
       "appDateConfirmed": null,
       "appDateNote": "TBC — call 2577 3569",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending",
       "crawlUrls": [
         "https://www.tlhkps.edu.hk/kindergarten/tc/content.php?wid=6"
@@ -198,6 +208,8 @@
       "openDayNote": "Usually Saturday, Jul–Aug 2026",
       "appDateConfirmed": null,
       "appDateNote": "Est. late Sep–Oct 2026",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending"
     },
     {
@@ -217,12 +229,18 @@
       "sessionZh": "半日班（上午及下午班）",
       "appMethod": "Online (eClass) 網上",
       "website": "https://www.pcps.edu.hk/kg",
-      "estAppPeriod": "Sep 2026, TBC / 預計2026年9月，待公佈",
+      "crawlUrls": [
+        "https://www.pcps.edu.hk/kg/tc/2027-2028-%E5%B9%BC%E5%85%92%E7%8F%ADk1%E5%85%A5%E5%AD%B8%E7%94%B3%E8%AB%8B",
+        "https://www.pcps.edu.hk/kg/tc/%E6%8B%9B%E7%94%9F%E9%80%9A%E5%91%8A"
+      ],
+      "estAppPeriod": "2026-07-02 to 2026-08-05 / 2026年7月2日至8月5日",
       "openDay": null,
       "openDayNote": "Usually Saturday, Jul–Aug 2026",
-      "appDateConfirmed": null,
-      "appDateNote": "TBC",
-      "status": "pending",
+      "appDateConfirmed": "2026-08-05",
+      "appDateNote": "截止報名 2026-08-05（申請期 7/2–8/5）· 費用HK$100 AlipayHK · 官網確認",
+      "resultDate": "2026-12-08",
+      "resultDateNote": "公佈結果 2026-12-08（官網確認）",
+      "status": "confirmed",
       "crawlerHint": {
         "detectedAt": "2026-07-06",
         "dates": [
@@ -230,6 +248,36 @@
         ],
         "lines": []
       }
+    },
+    {
+      "id": "pcps_primary",
+      "category": "primary",
+      "district": "kln",
+      "districtLabel": "Kowloon 九龍區",
+      "nameZh": "香港培正小學",
+      "nameEn": "Pui Ching Primary School",
+      "address": "九龍何文田培正道20號 20 Pui Ching Rd, Ho Man Tin, Kowloon",
+      "feederZh": "一條龍：香港培正中學",
+      "feederEn": "Through-train: Pui Ching Middle School",
+      "rankingZh": "私立名校（基督教）",
+      "rankingEn": "Private Christian primary (top-tier)",
+      "rankingSource": "—",
+      "session": "Whole Day",
+      "sessionZh": "全日制",
+      "appMethod": "Online (ievent/AlipayHK) 網上",
+      "website": "https://www.pcps.edu.hk",
+      "crawlUrls": [
+        "https://www.pcps.edu.hk/tc/2027%E8%87%B32028%E5%B9%B4%E5%BA%A6%E5%B0%8F%E4%B8%80%E5%85%A5%E5%AD%B8%E7%94%B3%E8%AB%8B",
+        "https://pcps.ievent.hk/event/2027-p"
+      ],
+      "estAppPeriod": "2026-07-02 to 2026-08-05 / 2026年7月2日至8月5日",
+      "openDay": null,
+      "openDayNote": "—",
+      "appDateConfirmed": "2026-08-05",
+      "appDateNote": "截止報名 2026-08-05（申請期 7/2 10:00–8/5）· 面試 8/27–28 · HK$100 AlipayHK · 官網確認",
+      "resultDate": "2026-11-03",
+      "resultDateNote": "首輪結果 2026-09-11 · 最終取錄 2026-11-03 · 註冊 11/06（官網確認）",
+      "status": "confirmed"
     },
     {
       "id": "dgs",
@@ -252,7 +300,9 @@
       "openDay": null,
       "openDayNote": "Open day usually autumn; register early — fills within hours.",
       "appDateConfirmed": null,
-      "appDateNote": "Private P1 (小一) — check DGJS website",
+      "appDateNote": "2027小一：暫未公布，預計8月中開放（去年8/15–8/26）· 留意校網",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending"
     },
     {
@@ -277,6 +327,8 @@
       "openDayNote": "Usually Saturday, Jul–Aug 2026",
       "appDateConfirmed": null,
       "appDateNote": "TBC",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending",
       "crawlUrls": [
         "https://www.ktlks.edu.hk/news-tc/"
@@ -319,6 +371,8 @@
       "openDayNote": "Usually Saturday, Jul–Aug 2026",
       "appDateConfirmed": null,
       "appDateNote": "Est. mid-Sep–Oct 2026",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending"
     },
     {
@@ -343,6 +397,8 @@
       "openDayNote": "Usually Saturday, Jul–Aug 2026",
       "appDateConfirmed": null,
       "appDateNote": "TBC",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending"
     },
     {
@@ -367,6 +423,8 @@
       "openDayNote": "Usually Saturday, Jul–Aug 2026. Register ASAP — extremely oversubscribed.",
       "appDateConfirmed": null,
       "appDateNote": "TBC — check website from Jul 2026",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending"
     },
     {
@@ -390,7 +448,9 @@
       "openDay": null,
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
-      "appDateNote": "Private/DSS P1 application — check website",
+      "appDateNote": "2027小一：暫未公布，預計9月初開放（去年9/1–9/5，約5天）· 留意校網",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending",
       "crawlerHint": {
         "detectedAt": "2026-07-06",
@@ -419,12 +479,14 @@
       "sessionZh": "全日 (男女 co-ed)",
       "appMethod": "Online / see site 網上",
       "website": "https://www.hkugaps.edu.hk",
-      "estAppPeriod": "P1 admission — see school site / 小一入學詳情見校網",
+      "estAppPeriod": "2026-05-02 to 2026-05-22（已截止）/ closed",
       "openDay": null,
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
-      "appDateNote": "Private/DSS P1 application — check website",
-      "status": "pending",
+      "appDateNote": "⚠ 2027入學申請已於 2026-05-22 截止（已過）· 面試 9/23–25 · 最終取錄 12/8",
+      "resultDate": "2026-12-08",
+      "resultDateNote": "首輪 2026-10-06 · 最終取錄 2026-12-08（官網 flow PDF）",
+      "status": "closed",
       "crawlerHint": {
         "detectedAt": "2026-07-06",
         "dates": [
@@ -461,7 +523,9 @@
       "openDay": null,
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
-      "appDateNote": "Private/DSS P1 application — check website",
+      "appDateNote": "直資2027：暫未公布，預計9–10月開放 · 留意校網",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending",
       "crawlerHint": {
         "detectedAt": "2026-07-06",
@@ -493,7 +557,9 @@
       "openDay": null,
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
-      "appDateNote": "Private/DSS P1 application — check website",
+      "appDateNote": "私立部2027：暫未公布，預計8月中開放（去年8/11–9/14）· 正確網址 shcsps.edu.hk",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending",
       "crawlUrls": [
         "https://www.shcs.edu.hk/it-school/php/webcms/public/mainpage/main.php3"
@@ -516,12 +582,14 @@
       "sessionZh": "全日 (女 girls)",
       "appMethod": "Online / see site 網上",
       "website": "https://www.ssgps.edu.hk",
-      "estAppPeriod": "P1 admission — see school site / 小一入學詳情見校網",
+      "estAppPeriod": "POA（非私立申請）/ Gov Primary-One Admission",
       "openDay": null,
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
-      "appDateNote": "Private/DSS P1 application — check website",
-      "status": "pending"
+      "appDateNote": "資助/官立學校 — 經教育局『小一入學統籌辦法』(POA)，無獨立報名；自行分配學位約2026年9月，統一派位約2027年1月",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
+      "status": "poa"
     },
     {
       "id": "maryknoll_p",
@@ -539,13 +607,15 @@
       "session": "Full Day",
       "sessionZh": "全日 (女 girls)",
       "appMethod": "Online / see site 網上",
-      "website": "https://www.mcs.edu.hk",
-      "estAppPeriod": "P1 admission — see school site / 小一入學詳情見校網",
+      "website": "https://mcsps.edu.hk",
+      "estAppPeriod": "POA（非私立申請）/ Gov Primary-One Admission",
       "openDay": null,
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
-      "appDateNote": "Private/DSS P1 application — check website",
-      "status": "pending"
+      "appDateNote": "資助/官立學校 — 經教育局『小一入學統籌辦法』(POA)，無獨立報名；自行分配學位約2026年9月，統一派位約2027年1月",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
+      "status": "poa"
     },
     {
       "id": "smcs",
@@ -564,12 +634,14 @@
       "sessionZh": "全日 (女 girls)",
       "appMethod": "Online / see site 網上",
       "website": "https://www.smcs.edu.hk",
-      "estAppPeriod": "P1 admission — see school site / 小一入學詳情見校網",
+      "estAppPeriod": "POA（非私立申請）/ Gov Primary-One Admission",
       "openDay": null,
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
-      "appDateNote": "Private/DSS P1 application — check website",
-      "status": "pending"
+      "appDateNote": "資助/官立學校 — 經教育局『小一入學統籌辦法』(POA)，無獨立報名；自行分配學位約2026年9月，統一派位約2027年1月",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
+      "status": "poa"
     },
     {
       "id": "plkcky",
@@ -592,7 +664,9 @@
       "openDay": null,
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
-      "appDateNote": "Private/DSS P1 application — check website",
+      "appDateNote": "2027小一：暫未公布，預計7月中開放（去年7/14–9/26）· 簡介會6/27已過 · 留意校網",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending",
       "crawlerHint": {
         "detectedAt": "2026-07-06",
@@ -619,12 +693,14 @@
       "sessionZh": "全日 (女 girls)",
       "appMethod": "Online / see site 網上",
       "website": "https://www.hyps.edu.hk",
-      "estAppPeriod": "P1 admission — see school site / 小一入學詳情見校網",
+      "estAppPeriod": "POA（非私立申請）/ Gov Primary-One Admission",
       "openDay": null,
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
-      "appDateNote": "Private/DSS P1 application — check website",
-      "status": "pending"
+      "appDateNote": "資助/官立學校 — 經教育局『小一入學統籌辦法』(POA)，無獨立報名；自行分配學位約2026年9月，統一派位約2027年1月",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
+      "status": "poa"
     },
     {
       "id": "puikiu",
@@ -647,7 +723,9 @@
       "openDay": null,
       "openDayNote": "Check school site for open day / 留意校網開放日",
       "appDateConfirmed": null,
-      "appDateNote": "Private/DSS P1 application — check website",
+      "appDateNote": "2027小一：暫未公布，預計7月底開放（去年7/25–9/19）· 留意校網",
+      "resultDate": null,
+      "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending"
     },
     {
@@ -667,12 +745,14 @@
       "sessionZh": "全日 (男女 co-ed)",
       "appMethod": "Online / see site 網上",
       "website": "https://www.hkbuas.edu.hk",
-      "estAppPeriod": "P1 admission — see school site / 小一入學詳情見校網",
+      "estAppPeriod": "2026-06-06 to 2026-07-21 / 2026年6月6日至7月21日",
       "openDay": null,
-      "openDayNote": "Check school site for open day / 留意校網開放日",
-      "appDateConfirmed": null,
-      "appDateNote": "Private/DSS P1 application — check website",
-      "status": "pending",
+      "openDayNote": "簡介會/開放日 2026-06-06（已過）",
+      "appDateConfirmed": "2026-07-21",
+      "appDateNote": "⚠最緊急 截止 2026-07-21 12:00（申請期 6/6–7/21）· 面試 9月及11月 · 官網確認",
+      "resultDate": null,
+      "resultDateNote": "Est. Dec 2026（面試後公布）",
+      "status": "confirmed",
       "crawlerHint": {
         "detectedAt": "2026-07-06",
         "dates": [

@@ -78,15 +78,64 @@ FINDINGS_SCHEMA = {
     "required": ["found", "items"],
 }
 
-SYSTEM = (
-    "You are a data-extraction backend for a Hong Kong kindergarten admission "
-    "tracker. You read page text and call the record_findings tool exactly once "
-    "with K1 (nursery) 2027/2028 admission dates: open days, application periods, "
-    "briefings, interviews, and result-announcement dates. Normalise every date to "
-    "ISO YYYY-MM-DD. Ignore unrelated dates (copyright, past events, other grades). "
-    "Mark confidence 'high' only when the date is explicit and clearly tied to K1 "
-    "admission. You MUST call record_findings — never answer in prose."
-)
+# The entry level a school admits at drives what dates we ask the model to find.
+# Not hardcoded to K1 any more: a school's `category` in schools.json selects the
+# right grade + cohort so kindergartens surface K1 dates and primary schools
+# surface P1 (小一) dates from the same crawl.
+LEVELS = {
+    "kindergarten": {
+        "grade": "K1 (nursery / 幼兒班)",
+        "cohort": "the 2027/2028 school year (child entering K1 in Sep 2027)",
+    },
+    "primary": {
+        "grade": "Primary One (P1 / 小一)",
+        "cohort": "September 2027 entry (2027/2028 school year)",
+    },
+}
+
+
+def level_of(school):
+    """Map a school's category to a known admission level (default kindergarten)."""
+    return "primary" if school.get("category") == "primary" else "kindergarten"
+
+
+def eligible_categories(child):
+    """Categories worth crawling for this child in the target cycle, by the HK
+    entry-age rule (K1 = born targetEntryYear-3, P1 = born targetEntryYear-6).
+    Returns None (crawl everything) if the config is missing or the child fits
+    neither level, so a mis-set config never skips the whole list."""
+    if not child:
+        return None
+    m = re.match(r"(\d{4})", child.get("dob") or "")
+    year = child.get("targetEntryYear")
+    if not m or not year:
+        return None
+    b = int(m.group(1))
+    cats = set()
+    if b == year - 3:
+        cats.add("kindergarten")
+    if b == year - 6:
+        cats.add("primary")
+    return cats or None
+
+
+def system_for(level):
+    spec = LEVELS.get(level, LEVELS["kindergarten"])
+    grade, cohort = spec["grade"], spec["cohort"]
+    return (
+        "You are a data-extraction backend for a Hong Kong school admission "
+        "tracker. You read page text and call the record_findings tool exactly "
+        f"once with {grade} admission dates for {cohort}: open days / briefings "
+        "(簡介會), application periods, interviews, and result-announcement dates. "
+        "For an application period, report the CLOSING / deadline (截止) date as the "
+        "'Application' date. Normalise every date to ISO YYYY-MM-DD. Ignore unrelated "
+        "dates (copyright, past events, other grades or year levels, other cohorts). "
+        f"Mark confidence 'high' only when the date is explicit and clearly tied to "
+        f"{grade} admission for {cohort}. Some primary schools admit through the "
+        "government Primary One Admission (POA / 自行分配學位 · 統一派位) system with no "
+        "separate school application — if so, still capture any published key dates "
+        "but mark them 'medium'. You MUST call record_findings — never answer in prose."
+    )
 
 # ---------------------------------------------------------------- pure helpers
 
@@ -113,7 +162,9 @@ def map_event(event):
         return "openDay"
     if any(k in e for k in ("application", "報名", "申請", "enrol", "register", "招生")):
         return "appDateConfirmed"
-    # interview / results / 公佈 / 放榜 — informative, but not a primary date field
+    if any(k in e for k in ("result", "放榜", "公佈", "公布", "取錄", "announce", "notification")):
+        return "resultDate"
+    # interview etc. — informative, but not a primary date field
     return "note"
 
 
@@ -143,6 +194,9 @@ def apply_findings(school, items, prev_seen, now):
                 school["appDateConfirmed"] = iso
                 school["appDateNote"] = f"\U0001F916 AI-detected {iso} — verify ({ev})"
                 school["status"] = "confirmed"
+            elif field == "resultDate" and school.get("resultDate") != iso:
+                school["resultDate"] = iso
+                school["resultDateNote"] = f"\U0001F916 AI-detected {iso} — verify ({ev})"
             elif field == "note":
                 notes.append(f"{ev}: {iso}")
             if (school["id"], ev, iso) not in prev_seen:
@@ -207,8 +261,15 @@ def fetch_combined(school):
 _captured = {}
 
 
-async def _extract(text):
-    """Run the Agent SDK record_findings tool and return its validated args."""
+async def _extract(text, level="kindergarten", urls=None):
+    """Run the Agent SDK record_findings tool and return its validated args.
+
+    Plain `requests` can't see dates on JavaScript-rendered school sites (the
+    content loads client-side after the HTML). When `urls` are given we also let
+    the agent use WebFetch — which renders those pages — so it can read dates the
+    pre-fetched text is missing, then record them. WebFetch is additive: if it
+    fails (e.g. a geo-blocked HK site with the VPN down) the agent still has the
+    pre-fetched text to fall back on."""
     from claude_agent_sdk import (
         AssistantMessage, ClaudeAgentOptions, ResultMessage, ToolUseBlock,
         create_sdk_mcp_server, query, tool,
@@ -216,22 +277,34 @@ async def _extract(text):
 
     _captured.clear()
 
-    @tool("record_findings", "Record extracted K1 admission dates.", FINDINGS_SCHEMA)
+    grade = LEVELS.get(level, LEVELS["kindergarten"])["grade"]
+
+    @tool("record_findings", f"Record extracted {grade} admission dates.", FINDINGS_SCHEMA)
     async def record_findings(args):
         _captured.clear()
         _captured.update(args)
         return {"content": [{"type": "text", "text": "recorded"}]}
 
     server = create_sdk_mcp_server("zoe", tools=[record_findings])
+    allowed = ["mcp__zoe__record_findings"]
+    if urls:
+        allowed.append("WebFetch")
     options = ClaudeAgentOptions(
         model=MODEL,
-        system_prompt=SYSTEM,
+        system_prompt=system_for(level),
         mcp_servers={"zoe": server},
-        allowed_tools=["mcp__zoe__record_findings"],
+        allowed_tools=allowed,
         permission_mode="bypassPermissions",
-        max_turns=3,
+        max_turns=6 if urls else 3,
     )
-    prompt = "Extract K1 admission dates from this page text:\n\n" + text[:12000]
+    prompt = f"Extract {grade} admission dates from this page text:\n\n" + text[:12000]
+    if urls:
+        prompt += (
+            "\n\n----\nIf the text above is missing clear, explicit "
+            f"{grade} admission dates (or shows only a JS/loading shell), use the "
+            "WebFetch tool to read the official page(s) below, which render the "
+            "live dates, then extract from what you read:\n" + "\n".join(urls[:3])
+        )
     last_result = None
     try:
         async for msg in query(prompt=prompt, options=options):
@@ -255,8 +328,8 @@ async def _extract(text):
     return dict(_captured)
 
 
-def extract(text):
-    return asyncio.run(_extract(text))
+def extract(text, level="kindergarten", urls=None):
+    return asyncio.run(_extract(text, level, urls))
 
 
 # ---------------------------------------------------------------- email (Graph)
@@ -276,23 +349,24 @@ def build_html(updates):
         f"<span style='color:#666'>{u['nameZh']}</span></td>"
         f"<td style='padding:6px 12px;border:1px solid #ddd'>{u['event']}</td>"
         f"<td style='padding:6px 12px;border:1px solid #ddd'><b>{u['date']}</b></td>"
-        f"<td style='padding:6px 12px;border:1px solid #ddd'><a href='{u['url']}'>site</a></td></tr>"
+        f"<td style='padding:6px 12px;border:1px solid #ddd'><a href='{u['url']}'>site 校網</a></td></tr>"
         for u in updates
     )
     return (
         "<div style=\"font-family:Arial,sans-serif;font-size:14px;color:#222\">"
         "<p>Hi Mum &amp; Dad \U0001F476,</p>"
-        f"<p>The Zoe school checker found <b>{len(updates)} new date(s)</b> this week:</p>"
+        f"<p>The Zoe school checker found <b>{len(updates)} new date(s)</b> this week:<br>"
+        f"<span style=\"color:#555\">Zoe 學校檢查器今週發現 <b>{len(updates)} 個新日期</b>：</span></p>"
         "<table style=\"border-collapse:collapse;margin:12px 0\">"
         "<tr style=\"background:#f3f3f3\">"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">School</th>"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Event</th>"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Date</th>"
-        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Link</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">School 學校</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Event 項目</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Date 日期</th>"
+        "<th style=\"padding:6px 12px;border:1px solid #ddd;text-align:left\">Link 連結</th>"
         f"</tr>{rows}</table>"
-        "<p>Full tracker: <a href=\"https://kendi-ng.com/zoe-school/\">kendi-ng.com/zoe-school</a></p>"
-        "<p style=\"color:#888;font-size:12px\">Auto-extracted by Claude — confirm against "
-        "the school site before relying on a date.</p></div>"
+        "<p>Full tracker 完整追蹤器：<a href=\"https://kendi-ng.com/zoe-school/\">kendi-ng.com/zoe-school</a></p>"
+        "<p style=\"color:#888;font-size:12px\">Auto-extracted by Claude — confirm against the school site "
+        "before relying on a date. 由 Claude 自動擷取，報名前請以官方網站核實。</p></div>"
     )
 
 
@@ -301,7 +375,7 @@ def send_email(updates):
     for k in ("MS_TENANT_ID", "MS_CLIENT_ID", "MS_CLIENT_SECRET", "SENDER_EMAIL"):
         if not env.get(k):
             print(f"   email skipped: missing {k}")
-            return
+            return False
     tok = requests.post(
         f"https://login.microsoftonline.com/{env['MS_TENANT_ID']}/oauth2/v2.0/token",
         data={
@@ -311,10 +385,10 @@ def send_email(updates):
     )
     if tok.status_code != 200:
         print(f"   email token failed: HTTP {tok.status_code}")
-        return
+        return False
     token = tok.json()["access_token"]
     message = {
-        "subject": f"Zoe school tracker — {len(updates)} new date(s) this week",
+        "subject": f"Zoe school tracker 學校追蹤 — {len(updates)} new date(s) 個新日期 this week",
         "body": {"contentType": "HTML", "content": build_html(updates)},
         "toRecipients": [{"emailAddress": {"address": RECIPIENT}}],
     }
@@ -327,8 +401,9 @@ def send_email(updates):
     )
     if r.status_code in (200, 202):
         print(f"   emailed {RECIPIENT} ({len(updates)} new date(s))")
-    else:
-        print(f"   email send failed: HTTP {r.status_code} {r.text[:200]}")
+        return True
+    print(f"   email send failed: HTTP {r.status_code} {r.text[:200]}")
+    return False
 
 
 # ---------------------------------------------------------------- main
@@ -399,17 +474,27 @@ def main():
     all_new = []
     new_seen = set(prev_seen)
     hints = 0
+    cats = eligible_categories(data.get("child"))
+    if cats is not None:
+        print(f"Age filter: crawling only {sorted(cats)} for this cycle.")
     for school in data["schools"]:
         url = school.get("website")
         name = school.get("nameEn") or school.get("nameZh") or school["id"]
         if not url:
             continue
-        print(f"- {name} ({school['id']})")
+        if cats is not None and school.get("category") not in cats:
+            continue
+        level = level_of(school)
+        print(f"- {name} ({school['id']}) [{level}]")
         text = page_text(school)
         if not text or len(text) < 50:
             continue
         try:
-            result = extract(text)
+            # WebFetch (renders JS pages) is enabled only for schools flagged
+            # with crawlUrls — the JS-rendered sites plain requests can't read —
+            # so the rest keep the cheaper text-only extraction.
+            fetch_urls = urls_for(school) if school.get("crawlUrls") else None
+            result = extract(text, level, fetch_urls)
         except Exception as e:
             print(f"   extract error: {str(e)[:120]}")
             continue
@@ -431,17 +516,33 @@ def main():
     with open(SCHOOLS_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
         f.write("\n")
-    with open(AI_STATE_FILE, "w", encoding="utf-8") as f:
-        json.dump({"updatedAt": now.isoformat(timespec="seconds"),
-                   "seen": sorted(list(new_seen))}, f, ensure_ascii=False, indent=2)
-        f.write("\n")
 
     print(f"\nSummary: {len(all_new)} new high-confidence date(s), {hints} hint(s)")
-    if all_new and os.environ.get("ZOE_AI_EMAIL") == "1":
-        try:
-            send_email(all_new)
-        except Exception as e:
-            print(f"   email error: {str(e)[:160]}")
+
+    # Advance the "seen" set only for dates we've actually notified about. If the
+    # email fails (or emailing is disabled), keep the previous seen set so those
+    # dates are retried next run — otherwise a failed send silently marks them
+    # seen and they're never emailed. (schools.json already holds the new dates
+    # regardless, so the tracker UI still shows them.)
+    seen_to_persist = new_seen
+    if all_new:
+        if os.environ.get("ZOE_AI_EMAIL") == "1":
+            sent_ok = False
+            try:
+                sent_ok = send_email(all_new)
+            except Exception as e:
+                print(f"   email error: {str(e)[:160]}")
+            if not sent_ok:
+                print("   email not confirmed — keeping these dates unseen; will retry next run.")
+                seen_to_persist = prev_seen
+        else:
+            print("   emailing disabled (ZOE_AI_EMAIL != 1) — not marking new dates seen.")
+            seen_to_persist = prev_seen
+
+    with open(AI_STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump({"updatedAt": now.isoformat(timespec="seconds"),
+                   "seen": sorted(list(seen_to_persist))}, f, ensure_ascii=False, indent=2)
+        f.write("\n")
     return 0
 
 
