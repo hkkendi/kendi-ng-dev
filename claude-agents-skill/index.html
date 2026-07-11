@@ -162,7 +162,7 @@
               <span class="skill-invoke">/update-portfolio</span>
               <h3 class="project-title">Recurring Portfolio Updater</h3>
               <p class="project-problem"><strong>Problem:</strong> Keeping a portfolio site in sync with ongoing work means remembering to write it up — in practice that never happens consistently, and manually re-reading a large codebase every time to find what's new is slow and expensive.</p>
-              <p class="project-solution">A skill that diffs a work project against the last commit it processed, delegates the "what changed and is it interesting" judgment to a sub-agent so only relevant context enters the main analysis, and — only for genuinely new capabilities, not refactors or fixes — drafts an update to the matching project card on this site, in the site's existing voice and HTML structure. It advances its own progress marker after each run and never publishes automatically; edits are left for review. Pinned to a specific model in its own frontmatter, so it always runs at a deliberately chosen cost/quality point regardless of which model the session is using.</p>
+              <p class="project-solution">A skill that diffs a work project against the last commit it processed, delegates the change-summarization to a sub-agent so only a concise summary — not the full diff — enters the main context, then judges portfolio-worthiness itself against explicit criteria: only genuinely new capabilities, never refactors or fixes, get drafted into an update to the matching project card, in the site's existing voice and HTML structure. It advances its own progress marker after each run and never publishes automatically; edits are left for review. Pinned to a specific model in its own frontmatter, so it always runs at a deliberately chosen cost/quality point regardless of which model the session is using.</p>
               <ul class="project-tech">
                 <li class="tech-badge">Claude Code Skill (SKILL.md)</li>
                 <li class="tech-badge">Git diffing</li>
@@ -220,9 +220,9 @@
         <p class="section-subtitle">Every custom skill installed across my three Claude Code environments, grouped by profile — a static snapshot of what a private internal dashboard tracks live.</p>
 
         <div class="profile-stats">
-          <div class="profile-stat"><span class="count">49</span><span class="label">💼 Work</span></div>
-          <div class="profile-stat"><span class="count">7</span><span class="label">🟣 Personal</span></div>
-          <div class="profile-stat"><span class="count">1</span><span class="label">🟢 FreeModel</span></div>
+          <div class="profile-stat"><span class="count">50</span><span class="label">💼 Work</span></div>
+          <div class="profile-stat"><span class="count">8</span><span class="label">🟣 Personal</span></div>
+          <div class="profile-stat"><span class="count">2</span><span class="label">🟢 FreeModel</span></div>
         </div>
 
         <!-- Work profile -->
@@ -246,6 +246,7 @@
                 <tr><td>/push</td><td>Update the session continuation notes, commit all changes, push to main — then reflect any portfolio-worthy new work on kendi-ng.com</td></tr>
                 <tr><td>/test</td><td>Run the test for the most-recently-edited email/report code, with mandatory safety overrides (drafts only, or a single safe test recipient)</td></tr>
                 <tr><td>/watch-reset</td><td>Choose which Claude sessions the auto-resume watcher babysits (resumes after a usage-limit reset). Interactive allowlist.</td></tr>
+                <tr><td>/watch-freemodel</td><td>Choose which FreeModel (OpenRouter) sessions the 429 auto-resume watcher babysits — resumes after a rate-limit throttle or daily free-tier reset. Interactive allowlist.</td></tr>
                 <tr><td>/ask-matt</td><td>Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.</td></tr>
                 <tr><td>/codebase-design</td><td>Shared vocabulary for designing deep modules — module interfaces, deepening opportunities, seams, testability</td></tr>
                 <tr><td>/decision-mapping</td><td>Turn a loose idea into a sequenced map of investigation tickets, then drive them to resolution one at a time</td></tr>
@@ -297,6 +298,7 @@
               <tbody>
                 <tr><td>/inbox</td><td>Look up an email in a personal or business inbox by subject keyword and load its content for the current conversation</td></tr>
                 <tr><td>/watch-reset</td><td>Choose which personal Claude sessions the auto-resume watcher babysits (resumes after a usage-limit reset). Interactive allowlist.</td></tr>
+                <tr><td>/watch-freemodel</td><td>Choose which FreeModel (OpenRouter) sessions the 429 auto-resume watcher babysits — resumes after a rate-limit throttle or daily free-tier reset. Interactive allowlist.</td></tr>
                 <tr><td>/grill-me</td><td>A relentless interview to sharpen a plan or design</td></tr>
                 <tr><td>/grill-with-docs</td><td>A relentless interview to sharpen a plan or design, which also creates docs (ADRs and glossary) as it goes</td></tr>
                 <tr><td>/grilling</td><td>Interview the user relentlessly about a plan or design — stress-test a plan before building</td></tr>
@@ -315,7 +317,8 @@
             <table class="skill-table">
               <thead><tr><th>Skill</th><th>Description</th></tr></thead>
               <tbody>
-                <tr><td>/update_crm_docs</td><td>Read a CRM reporting app's code/state and draft documentation updates for its reference pages — text only, no code edits</td></tr>
+                <tr><td>/update_crm_docs</td><td>Read the CRM reporting app's code/state (mid-migration to new_crm_report_app) and draft updates for its PRD and data-validation docs into dated draft files — text only, no code edits. Hands off to /c-update_crm_doc (Work profile) to apply.</td></tr>
+                <tr><td>/watch-freemodel</td><td>Choose which FreeModel (OpenRouter) sessions the 429 auto-resume watcher babysits — resumes after a rate-limit throttle or daily free-tier reset. Interactive allowlist.</td></tr>
               </tbody>
             </table>
           </div>

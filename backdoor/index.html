@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Site Index — Kendi Ng</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .page-hero { padding: 3.5rem 0 3rem; }
+    .backdoor-table-wrap {
+      overflow-x: auto;
+      background: var(--color-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+    }
+    .backdoor-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .backdoor-table th, .backdoor-table td {
+      text-align: left;
+      padding: 0.75rem 1.1rem;
+      border-bottom: 1px solid rgba(26, 39, 68, 0.08);
+      vertical-align: top;
+    }
+    .backdoor-table th {
+      color: var(--color-primary);
+      font-weight: 600;
+      background: rgba(26, 39, 68, 0.03);
+    }
+    .backdoor-table tr:last-child td { border-bottom: none; }
+    .backdoor-table td:first-child {
+      font-family: var(--font-code);
+      color: var(--color-accent-dark);
+      white-space: nowrap;
+      font-weight: 500;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 0.15rem 0.65rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .status-live {
+      color: var(--color-accent-dark);
+      background: rgba(0, 180, 166, 0.1);
+      border: 1px solid rgba(0, 180, 166, 0.3);
+    }
+    .status-unlinked {
+      color: var(--color-muted);
+      background: rgba(113, 128, 150, 0.08);
+      border: 1px solid rgba(113, 128, 150, 0.25);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header / Navigation -->
+  <header class="site-header">
+    <nav class="nav-container container">
+      <a href="../index.html" class="nav-logo">Kendi Ng</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../index.html#skills">Skills</a></li>
+        <li><a href="../index.html#projects">Projects</a></li>
+        <li><a href="../index.html#timeline">Career</a></li>
+        <li><a href="../project-list.html">Project List</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Page Hero -->
+    <section class="hero page-hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Site Index</h1>
+          <p class="hero-subtitle">Every page currently live under kendi-ng.com, in one place.</p>
+          <p class="hero-bio">A flat directory of the site — including pages that aren't in the main navigation. Not indexed by search engines; this is a quick-access list for me, not a public landing page.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Page directory -->
+    <section class="projects">
+      <div class="container">
+        <h2 class="section-title">All Pages</h2>
+        <div class="backdoor-table-wrap">
+          <table class="backdoor-table">
+            <thead><tr><th>Page</th><th>Description</th><th>Nav</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><a href="../index.html">/</a></td>
+                <td>Homepage — marketing analytics &amp; digital strategist profile, skills, projects, career timeline, contact.</td>
+                <td><span class="status-badge status-live">Main nav</span></td>
+              </tr>
+              <tr>
+                <td><a href="../project-list.html">/project-list.html</a></td>
+                <td>Full list of personal apps, automations, and custom Claude Code skills, with what each one does.</td>
+                <td><span class="status-badge status-live">Main nav</span></td>
+              </tr>
+              <tr>
+                <td><a href="../cv-analytics/">/cv-analytics/</a></td>
+                <td>CV — Data Analyst. Python &amp; ETL, AI integration, CRM analytics.</td>
+                <td><span class="status-badge status-live">Homepage CTA</span></td>
+              </tr>
+              <tr>
+                <td><a href="../cv-dm/">/cv-dm/</a></td>
+                <td>CV — Digital Marketing. SEO/SEM, paid ads, marketing analytics.</td>
+                <td><span class="status-badge status-live">Homepage CTA</span></td>
+              </tr>
+              <tr>
+                <td><a href="../claude-agents-skill/">/claude-agents-skill/</a></td>
+                <td>Custom Claude Code skills built to automate recurring personal and work tasks — full catalogue across all profiles.</td>
+                <td><span class="status-badge status-live">Homepage + Project List</span></td>
+              </tr>
+              <tr>
+                <td><a href="../claude-agents-model/">/claude-agents-model/</a></td>
+                <td>How each kind of agent task gets routed to a deliberately chosen AI model, matching cost and reliability to the task.</td>
+                <td><span class="status-badge status-live">Homepage + Project List</span></td>
+              </tr>
+              <tr>
+                <td><a href="../zoe-school/">/zoe-school/</a></td>
+                <td>Zoe's K1 kindergarten &amp; primary school application tracker for the 2027/28 intake — rankings, timeline, personal progress.</td>
+                <td><span class="status-badge status-unlinked">Linked from Project List (GitHub only)</span></td>
+              </tr>
+              <tr>
+                <td><a href="../404.html">/404.html</a></td>
+                <td>Custom "page not found" error page.</td>
+                <td><span class="status-badge status-unlinked">Not linked (error page)</span></td>
+              </tr>
+              <tr>
+                <td><a href="./">/backdoor/</a></td>
+                <td>This page.</td>
+                <td><span class="status-badge status-unlinked">Not linked</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="section-subtitle" style="margin-top: 1.25rem;">Kept in sync by hand — if a new page goes live and isn't listed here yet, that's on me.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer / Contact -->
+  <footer id="contact" class="footer">
+    <div class="container">
+      <h2 class="section-title">Get in Touch</h2>
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="mailto:kendi@leary.hk">kendi@leary.hk</a>
+          <a href="https://www.linkedin.com/in/kendi-ng/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/hkkendi" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <p class="footer-location">Hong Kong</p>
+        <p class="footer-copyright">&copy; 2026 Kendi Ng</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
