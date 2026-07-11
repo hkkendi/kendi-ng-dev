@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frequent Flyer Miles Rebate Calculator</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #1a1d24;
+    --panel-2: #20242c;
+    --border: #2b3038;
+    --text: #f5f6f7;
+    --muted: #9aa3af;
+    --accent: #3ddc97;
+    --accent-2: #5b8cff;
+    --warn: #ffb648;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(circle at 20% -10%, #1c2230 0%, var(--bg) 45%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  header.page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  header.page-header h1 {
+    font-size: 1.6rem;
+    margin: 0 0 0.4rem;
+    letter-spacing: -0.01em;
+  }
+
+  header.page-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  .card h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 0 0 1.2rem;
+  }
+
+  .field {
+    margin-bottom: 1.1rem;
+  }
+
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-group .prefix {
+    position: absolute;
+    left: 0.9rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+    pointer-events: none;
+  }
+
+  input[type="number"],
+  select {
+    width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 0.75rem 0.9rem;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .input-group input[type="number"] {
+    padding-left: 1.9rem;
+  }
+
+  input[type="number"]:focus,
+  select:focus {
+    border-color: var(--accent-2);
+    box-shadow: 0 0 0 3px rgba(91, 140, 255, 0.18);
+  }
+
+  select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%239aa3af'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+    padding-right: 2.3rem;
+  }
+
+  .custom-rate-field {
+    margin-top: 0.8rem;
+    display: none;
+  }
+
+  .custom-rate-field.visible {
+    display: block;
+  }
+
+  .hint {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+  }
+
+  button#calcBtn {
+    width: 100%;
+    padding: 0.95rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f1115;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.1s ease, opacity 0.15s ease;
+  }
+
+  button#calcBtn:hover { opacity: 0.92; }
+  button#calcBtn:active { transform: scale(0.98); }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .result-tile {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: left;
+  }
+
+  .result-tile .label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 0.35rem;
+  }
+
+  .result-tile .value {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .result-tile.highlight {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(61, 220, 151, 0.14), rgba(91, 140, 255, 0.1));
+    border: 1px solid rgba(61, 220, 151, 0.35);
+    padding: 1.3rem 1.2rem;
+    text-align: center;
+  }
+
+  .result-tile.highlight .label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .result-tile.highlight .value {
+    font-size: 2.4rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .summary {
+    margin-top: 1.2rem;
+    padding: 1rem 1.1rem;
+    background: rgba(255, 182, 72, 0.08);
+    border-left: 3px solid var(--warn);
+    border-radius: 0 10px 10px 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .summary strong { color: var(--warn); }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.78rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    .results-grid { grid-template-columns: 1fr; }
+    .result-tile.highlight .value { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page-header">
+    <h1>✈️ Frequent Flyer Miles Rebate Calculator</h1>
+    <p>Work out the real cash-back value of redeeming miles vs. buying the ticket outright.</p>
+  </header>
+
+  <section class="card">
+    <h2>Ticket Details</h2>
+
+    <div class="field">
+      <label for="ticketPrice">Ticket Cash Price (Local Currency)</label>
+      <div class="input-group">
+        <span class="prefix">$</span>
+        <input type="number" id="ticketPrice" placeholder="e.g. 8500" min="0" step="0.01" inputmode="decimal">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="airportTaxes">Airport Taxes &amp; Surcharges (Cash portion for award ticket)</label>
+      <div class="input-group">
+        <span class="prefix">$</span>
+        <input type="number" id="airportTaxes" placeholder="e.g. 900" min="0" step="0.01" inputmode="decimal">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="milesNeeded">Total Miles Needed</label>
+      <input type="number" id="milesNeeded" placeholder="e.g. 40000" min="0" step="1" inputmode="numeric">
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Card Earning Rate</h2>
+
+    <div class="field">
+      <label for="ratePreset">Earning Rate Preset</label>
+      <select id="ratePreset">
+        <option value="4">HK$4 = 1 Mile (Local general spending)</option>
+        <option value="2">HK$2 = 1 Mile (Dining / Online / Overseas)</option>
+        <option value="custom">Custom Rate…</option>
+      </select>
+
+      <div class="custom-rate-field" id="customRateField">
+        <label for="customRate">Custom Rate ($ = 1 Mile)</label>
+        <input type="number" id="customRate" placeholder="e.g. 5.5" min="0.01" step="0.01" inputmode="decimal">
+        <div class="hint">Enter how many dollars of spend earns 1 mile on your card.</div>
+      </div>
+    </div>
+
+    <button id="calcBtn">Calculate Rebate</button>
+  </section>
+
+  <section class="card">
+    <h2>Results</h2>
+    <div class="results-grid">
+      <div class="result-tile highlight">
+        <div class="label">Net Rebate % (Real Value)</div>
+        <div class="value" id="netRebate">—</div>
+      </div>
+      <div class="result-tile">
+        <div class="label">Total Card Spend Required</div>
+        <div class="value" id="spendRequired">—</div>
+      </div>
+      <div class="result-tile">
+        <div class="label">Value Per Mile</div>
+        <div class="value" id="valuePerMile">—</div>
+      </div>
+      <div class="result-tile">
+        <div class="label">Gross Rebate %</div>
+        <div class="value" id="grossRebate">—</div>
+      </div>
+      <div class="result-tile">
+        <div class="label">Net Ticket Value</div>
+        <div class="value" id="netTicketValue">—</div>
+      </div>
+    </div>
+
+    <div class="summary" id="summaryText">
+      Fill in the fields above and hit <strong>Calculate Rebate</strong> to see your results.
+    </div>
+  </section>
+
+  <footer>All figures are illustrative only — always confirm redemption rates with your card issuer and airline.</footer>
+</div>
+
+<script>
+  const ticketPriceEl = document.getElementById('ticketPrice');
+  const airportTaxesEl = document.getElementById('airportTaxes');
+  const milesNeededEl = document.getElementById('milesNeeded');
+  const ratePresetEl = document.getElementById('ratePreset');
+  const customRateField = document.getElementById('customRateField');
+  const customRateEl = document.getElementById('customRate');
+  const calcBtn = document.getElementById('calcBtn');
+
+  const netRebateEl = document.getElementById('netRebate');
+  const spendRequiredEl = document.getElementById('spendRequired');
+  const valuePerMileEl = document.getElementById('valuePerMile');
+  const grossRebateEl = document.getElementById('grossRebate');
+  const netTicketValueEl = document.getElementById('netTicketValue');
+  const summaryTextEl = document.getElementById('summaryText');
+
+  function formatCurrency(num) {
+    if (!isFinite(num)) return '—';
+    return '$' + num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function formatPercent(num) {
+    if (!isFinite(num)) return '—';
+    return num.toFixed(2) + '%';
+  }
+
+  function getEarningRate() {
+    if (ratePresetEl.value === 'custom') {
+      const rate = parseFloat(customRateEl.value);
+      return rate > 0 ? rate : NaN;
+    }
+    return parseFloat(ratePresetEl.value);
+  }
+
+  function toggleCustomRate() {
+    customRateField.classList.toggle('visible', ratePresetEl.value === 'custom');
+  }
+
+  function calculate() {
+    const ticketPrice = parseFloat(ticketPriceEl.value) || 0;
+    const airportTaxes = parseFloat(airportTaxesEl.value) || 0;
+    const milesNeeded = parseFloat(milesNeededEl.value) || 0;
+    const earningRate = getEarningRate();
+
+    if (!milesNeeded || !earningRate || isNaN(earningRate)) {
+      netRebateEl.textContent = '—';
+      spendRequiredEl.textContent = '—';
+      valuePerMileEl.textContent = '—';
+      grossRebateEl.textContent = '—';
+      netTicketValueEl.textContent = '—';
+      summaryTextEl.innerHTML = 'Enter the miles needed and a valid earning rate to see your results.';
+      return;
+    }
+
+    const totalSpendNeeded = milesNeeded * earningRate;
+    const netTicketValue = ticketPrice - airportTaxes;
+    const valuePerMile = netTicketValue / milesNeeded;
+    const grossRebate = totalSpendNeeded > 0 ? (ticketPrice / totalSpendNeeded) * 100 : NaN;
+    const netRebate = totalSpendNeeded > 0 ? (netTicketValue / totalSpendNeeded) * 100 : NaN;
+
+    spendRequiredEl.textContent = formatCurrency(totalSpendNeeded);
+    valuePerMileEl.textContent = formatCurrency(valuePerMile) + ' / mile';
+    grossRebateEl.textContent = formatPercent(grossRebate);
+    netRebateEl.textContent = formatPercent(netRebate);
+    netTicketValueEl.textContent = formatCurrency(netTicketValue);
+
+    let comparisonText;
+    if (netRebate > 2) {
+      comparisonText = `beats a standard 2% cash-back card`;
+    } else if (netRebate > 0) {
+      comparisonText = `falls short of a standard 2% cash-back card`;
+    } else {
+      comparisonText = `is a poor use of your card spend compared to a standard 2% cash-back card`;
+    }
+
+    summaryTextEl.innerHTML =
+      `This redemption gives you a <strong>${formatPercent(netRebate)}</strong> net return on your card spending ` +
+      `(worth ${formatCurrency(valuePerMile)} per mile), which ${comparisonText}.`;
+  }
+
+  ratePresetEl.addEventListener('change', () => {
+    toggleCustomRate();
+    calculate();
+  });
+
+  [ticketPriceEl, airportTaxesEl, milesNeededEl, customRateEl].forEach(el => {
+    el.addEventListener('input', calculate);
+  });
+
+  calcBtn.addEventListener('click', calculate);
+
+  toggleCustomRate();
+</script>
+
+</body>
+</html>
