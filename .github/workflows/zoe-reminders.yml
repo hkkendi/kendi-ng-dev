@@ -43,6 +43,13 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # The state file only exists after a reminder is actually sent. On the
+          # (common) days with nothing due, it's absent — so skip cleanly rather
+          # than let `git add` fail with pathspec-did-not-match (exit 128).
+          if [ ! -f zoe-school/data/reminder-state.json ]; then
+            echo "No reminder-state.json yet (nothing due) — nothing to commit."
+            exit 0
+          fi
           git add zoe-school/data/reminder-state.json
           if git diff --cached --quiet; then
             echo "No reminder state changes to commit."
