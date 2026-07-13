@@ -385,8 +385,6 @@ def send_email(updates):
     )
     if tok.status_code != 200:
         print(f"   email token failed: HTTP {tok.status_code}")
-        print(f"   [debug] tenant_id len={len(env['MS_TENANT_ID'])} client_id len={len(env['MS_CLIENT_ID'])} client_secret len={len(env['MS_CLIENT_SECRET'])}")
-        print(f"   [debug] body: {tok.text[:300]}")
         return False
     token = tok.json()["access_token"]
     message = {
