@@ -1,5 +1,5 @@
 {
-  "lastCrawl": "2026-07-06T13:14:45+08:00",
+  "lastCrawl": "2026-07-13T12:14:48+08:00",
   "schools": {
     "spk": {
       "fingerprint": "d72047b643cd952fff3cd7f236932f14a3810fc7594b520afc95f0dd652fcda5",
@@ -8,7 +8,7 @@
         "招生簡章",
         "Admission"
       ],
-      "checked_at": "2026-07-06T13:14:46+08:00"
+      "checked_at": "2026-07-13T12:14:50+08:00"
     },
     "ssgs": {
       "fingerprint": "49d4beb528a3ca32a4dc2aec94a70d476ede0024d328536fb36a7e1973ca0812",
@@ -33,7 +33,7 @@
         "親子活動(新生家長會、小一入學家長講)",
         "Application Website"
       ],
-      "checked_at": "2026-07-06T13:14:48+08:00"
+      "checked_at": "2026-07-13T12:14:53+08:00"
     },
     "shck": {
       "fingerprint": "28e34be77fbc0c18b8cec56da4ba25c02bc6d08c74a8aa95bdcc1fc2274aaf1f",
@@ -43,7 +43,7 @@
         "申請程序",
         "插班申請"
       ],
-      "checked_at": "2026-07-06T13:14:52+08:00"
+      "checked_at": "2026-07-13T12:14:55+08:00"
     },
     "truelight_caine": {
       "fingerprint": "2af6ba5ff3724f7685551f861a5962a247cce99365e98645c0012393bd012d57",
@@ -53,7 +53,7 @@
         "有關2027/28年度招生安排",
         "校慶開放日 - 真光嘉年華暨國藝日"
       ],
-      "checked_at": "2026-07-06T13:14:53+08:00"
+      "checked_at": "2026-07-13T12:14:56+08:00"
     },
     "truelight_taihang": {
       "fingerprint": "470969aea7c5c248937b0cd778159f39a485580d96e13afce7a9ec92a27dc83b",
@@ -64,7 +64,7 @@
         "二零二五年度幼兒班招生簡章",
         "入學報名"
       ],
-      "checked_at": "2026-07-06T13:14:53+08:00"
+      "checked_at": "2026-07-13T12:14:57+08:00"
     },
     "sfx": {
       "fingerprint": "f2b0ddd4f69cebb1d2c05e5daec50b16c0c5c54c4a6d7ae38caef2a11b7e550b",
@@ -135,12 +135,17 @@
         "面試日期：",
         "面試地點："
       ],
-      "checked_at": "2026-07-06T13:14:59+08:00"
+      "checked_at": "2026-07-13T12:15:02+08:00"
     },
     "gskd": {
-      "fingerprint": "e25db5442a8ac8440b75d150686bf716b621c35e9617a3944993797fee504b2c",
+      "fingerprint": "68836f225a0bea0a7d470965d59ce3e3f26c8ffc44d27fd216e75ee5f1aef23d",
       "dates": [
+        "3 July 2026",
+        "2 July 2026",
+        "26 June 2026",
+        "12 June 2026",
         "19 May 2026",
+        "14 May 2026",
         "17 April 2026",
         "15 April 2026",
         "1 April 2026",
@@ -151,7 +156,7 @@
       "snippets": [
         "Admission"
       ],
-      "checked_at": "2026-07-06T13:15:01+08:00"
+      "checked_at": "2026-07-13T12:15:04+08:00"
     },
     "maryknoll": {
       "fingerprint": "366451c4d96b1b2cc3498a0efc3a8f0ba4b030071293679f67cd2340cd06c82f",
@@ -161,18 +166,18 @@
       "snippets": [
         "Admission"
       ],
-      "checked_at": "2026-07-06T13:15:02+08:00"
+      "checked_at": "2026-07-13T12:15:05+08:00"
     },
     "spcc_prep": {
-      "fingerprint": "f9d3ecd5dabb06ccdbb9b7c4866deda4b4daf362f5b5b396f312cfade4f0bb9a",
+      "fingerprint": "d18c7af658bd29beef2d3e06f1371d7587e015c3b7824ad0066c9834d622c525",
       "dates": [
         "2026年6月10日",
         "2026年4月24日",
         "2026年1月26日",
+        "2026年6月30日",
+        "2026年6月26日",
+        "2026年6月25日",
         "2026年6月23日",
-        "2026年6月22日",
-        "2026年6月17日",
-        "2026年6月9日",
         "2026年6月",
         "2026年4月",
         "2026年1月",
@@ -201,31 +206,31 @@
         "有關2024 年度小一入學申請第二輪面見事宜",
         "申請2024年小一入學甄選安排"
       ],
-      "checked_at": "2026-07-06T13:15:04+08:00"
+      "checked_at": "2026-07-13T12:15:07+08:00"
     },
     "hkuga_p": {
-      "fingerprint": "cdeec0a95e702f7393a52e6b5edb628f8d6079e3d756a867d78c98a403767a45",
+      "fingerprint": "c8fa6a16527269b3db5ac548c807fc89aa026f1c355202a32a1019c8fa06ecc7",
       "dates": [
+        "2026年07月13日",
+        "2026年07月11日",
+        "2026年07月09日",
         "2026年06月11日",
-        "2026年04月20日",
-        "2026年04月10日",
-        "2026年01月19日",
         "2026年03月30日",
         "2026年02月09日",
-        "2026年07月05日",
+        "2026年03月05日",
         "2026年06月25日",
+        "2026年07月",
         "2026年06月",
         "2026年9月",
-        "2026年04月",
-        "2026年01月",
         "2026年03月",
         "2026年02月",
-        "2026年07月",
+        "07月13日",
+        "07月11日",
+        "07月09日",
         "06月11日",
-        "04月20日",
-        "04月10日",
-        "01月19日",
-        "03月30日"
+        "03月30日",
+        "04月01日",
+        "02月09日"
       ],
       "snippets": [
         "入學資料",
@@ -234,9 +239,10 @@
         "入學申請 (二至五年級)",
         "開放日",
         "暨小一入學簡介會",
+        "2027-28年度 一年級入學申請 - 第一階段面試通知",
         "入學申請"
       ],
-      "checked_at": "2026-07-06T13:15:06+08:00"
+      "checked_at": "2026-07-13T12:15:09+08:00"
     },
     "honwah_p": {
       "fingerprint": "59b56122c2694df0901e090c8fc5a29ff1a0c6867c029b72578d78afb413b709",
@@ -253,13 +259,13 @@
         "中二至中五插班申請",
         "童心共創在漢華 小學學校開放日"
       ],
-      "checked_at": "2026-07-06T13:15:07+08:00"
+      "checked_at": "2026-07-13T12:15:11+08:00"
     },
     "shcs": {
       "fingerprint": "cbe5cfdf7c2118a9c3d78ef1d684f3afa089201352886449a06a6511cfef74a7",
       "dates": [],
       "snippets": [],
-      "checked_at": "2026-07-06T13:15:08+08:00"
+      "checked_at": "2026-07-13T12:15:11+08:00"
     },
     "ssgps": {
       "fingerprint": "7e22f570f1d07b1c68a869537655b574fdd952432b2f8b68b758abca01d94668",
@@ -270,40 +276,39 @@
         "辦理學生註冊手續",
         "申請插班生"
       ],
-      "checked_at": "2026-07-06T13:15:09+08:00"
+      "checked_at": "2026-07-13T12:15:12+08:00"
     },
     "maryknoll_p": {
-      "fingerprint": "f68cb9e3c0ba0458269ca218ac150c4c67ac38802f7a65711a6e0352ad2ca30e",
-      "dates": [],
-      "snippets": [
-        "Admissions",
-        "Form One Admission",
-        "中一入學申請",
-        "Form Two to Form Four Admissions",
-        "中二至中四入學申請",
-        "Student Admissions"
+      "fingerprint": "366451c4d96b1b2cc3498a0efc3a8f0ba4b030071293679f67cd2340cd06c82f",
+      "dates": [
+        "28 March 2026"
       ],
-      "checked_at": "2026-07-06T13:15:11+08:00"
+      "snippets": [
+        "Admission"
+      ],
+      "checked_at": "2026-07-13T12:15:13+08:00"
     },
     "smcs": {
-      "fingerprint": "76b18591a96c604033e0de2f531aae2f4b19ecfc36ae60839bbb7843da01e1bd",
+      "fingerprint": "418b8c05e148785b702828f170fe25aff513b0321f9e9cfa02710b23980829fd",
       "dates": [
         "25.4.2026",
         "16.6.2026",
         "12.6.2026",
-        "5.6.2026",
         "2月14日",
-        "4月29日"
+        "4月29日",
+        "6月25日",
+        "6月23日"
       ],
       "snippets": [
         "2026-27小二至小六插班生 申請須知",
         "2026-27小一候補學位 申請須知"
       ],
-      "checked_at": "2026-07-06T13:15:13+08:00"
+      "checked_at": "2026-07-13T12:15:14+08:00"
     },
     "plkcky": {
-      "fingerprint": "05e3a441f7ab63432667d742af02635e475b363c08b8680330ef27e95c22ed6d",
+      "fingerprint": "137abc49a819000d89d0413156fe6d5c2933bf3b4c17e02a239d90ab2b15a29c",
       "dates": [
+        "06/07/2026",
         "15/06/2026",
         "07/06/2026",
         "06/06/2026",
@@ -312,8 +317,7 @@
         "30/05/2026",
         "29/05/2026",
         "09/05/2026",
-        "20/04/2026",
-        "19/04/2026"
+        "20/04/2026"
       ],
       "snippets": [
         "Admissions",
@@ -321,19 +325,19 @@
         "Admissions Update",
         "Admissions Update: 26th June 2026."
       ],
-      "checked_at": "2026-07-06T13:15:15+08:00"
+      "checked_at": "2026-07-13T12:15:16+08:00"
     },
     "heepyunn_p": {
       "fingerprint": "cbe5cfdf7c2118a9c3d78ef1d684f3afa089201352886449a06a6511cfef74a7",
       "dates": [],
       "snippets": [],
-      "checked_at": "2026-07-06T13:15:16+08:00"
+      "checked_at": "2026-07-13T12:15:17+08:00"
     },
     "puikiu": {
       "fingerprint": "cbe5cfdf7c2118a9c3d78ef1d684f3afa089201352886449a06a6511cfef74a7",
       "dates": [],
       "snippets": [],
-      "checked_at": "2026-07-06T13:15:16+08:00"
+      "checked_at": "2026-07-13T12:15:18+08:00"
     },
     "hkbuas": {
       "fingerprint": "e2e34624e16665482c05cdd5baa1bf603e2ed5e33a3259fbf916a2b4826ec783",
@@ -357,7 +361,7 @@
         "Application Forms",
         "Admission Coaching"
       ],
-      "checked_at": "2026-07-06T13:15:18+08:00"
+      "checked_at": "2026-07-13T12:15:20+08:00"
     }
   }
 }

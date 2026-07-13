@@ -373,7 +373,18 @@
       "appDateNote": "Est. mid-Sep–Oct 2026",
       "resultDate": null,
       "resultDateNote": "Est. Nov–Dec 2026",
-      "status": "pending"
+      "status": "pending",
+      "crawlerHint": {
+        "detectedAt": "2026-07-13",
+        "dates": [
+          "3 July 2026",
+          "2 July 2026",
+          "26 June 2026",
+          "12 June 2026",
+          "14 May 2026"
+        ],
+        "lines": []
+      }
     },
     {
       "id": "maryknoll",
@@ -453,11 +464,11 @@
       "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending",
       "crawlerHint": {
-        "detectedAt": "2026-07-06",
+        "detectedAt": "2026-07-13",
         "dates": [
-          "2026年6月23日",
-          "2026年6月17日",
-          "2026年6月9日"
+          "2026年6月30日",
+          "2026年6月26日",
+          "2026年6月25日"
         ],
         "lines": []
       }
@@ -488,18 +499,21 @@
       "resultDateNote": "首輪 2026-10-06 · 最終取錄 2026-12-08（官網 flow PDF）",
       "status": "closed",
       "crawlerHint": {
-        "detectedAt": "2026-07-06",
+        "detectedAt": "2026-07-13",
         "dates": [
-          "2026年01月19日",
-          "2026年03月30日",
-          "2026年07月05日",
-          "2026年06月25日",
-          "2026年01月",
-          "2026年07月",
-          "01月19日",
-          "03月30日"
+          "2026年07月13日",
+          "2026年07月11日",
+          "2026年07月09日",
+          "2026年03月05日",
+          "07月13日",
+          "07月11日",
+          "07月09日",
+          "04月01日",
+          "02月09日"
         ],
-        "lines": []
+        "lines": [
+          "2027-28年度 一年級入學申請 - 第一階段面試通知"
+        ]
       }
     },
     {
@@ -615,7 +629,16 @@
       "appDateNote": "資助/官立學校 — 經教育局『小一入學統籌辦法』(POA)，無獨立報名；自行分配學位約2026年9月，統一派位約2027年1月",
       "resultDate": null,
       "resultDateNote": "Est. Nov–Dec 2026",
-      "status": "poa"
+      "status": "poa",
+      "crawlerHint": {
+        "detectedAt": "2026-07-13",
+        "dates": [
+          "28 March 2026"
+        ],
+        "lines": [
+          "Admission"
+        ]
+      }
     },
     {
       "id": "smcs",
@@ -641,7 +664,15 @@
       "appDateNote": "資助/官立學校 — 經教育局『小一入學統籌辦法』(POA)，無獨立報名；自行分配學位約2026年9月，統一派位約2027年1月",
       "resultDate": null,
       "resultDateNote": "Est. Nov–Dec 2026",
-      "status": "poa"
+      "status": "poa",
+      "crawlerHint": {
+        "detectedAt": "2026-07-13",
+        "dates": [
+          "6月25日",
+          "6月23日"
+        ],
+        "lines": []
+      }
     },
     {
       "id": "plkcky",
@@ -669,11 +700,11 @@
       "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending",
       "crawlerHint": {
-        "detectedAt": "2026-07-06",
-        "dates": [],
-        "lines": [
-          "Admissions Update"
-        ]
+        "detectedAt": "2026-07-13",
+        "dates": [
+          "06/07/2026"
+        ],
+        "lines": []
       }
     },
     {
@@ -767,5 +798,5 @@
       }
     }
   ],
-  "lastCrawl": "2026-07-06"
+  "lastCrawl": "2026-07-13"
 }
