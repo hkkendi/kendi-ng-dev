@@ -156,13 +156,13 @@
 
         <div class="projects-list">
 
-          <!-- /update-portfolio -->
+          <!-- /kendi-ng-ship -->
           <article class="project-card">
             <div class="project-card-body">
-              <span class="skill-invoke">/update-portfolio</span>
-              <h3 class="project-title">Recurring Portfolio Updater</h3>
-              <p class="project-problem"><strong>Problem:</strong> Keeping a portfolio site in sync with ongoing work means remembering to write it up — in practice that never happens consistently, and manually re-reading a large codebase every time to find what's new is slow and expensive.</p>
-              <p class="project-solution">A skill that diffs a work project against the last commit it processed, delegates the change-summarization to a sub-agent so only a concise summary — not the full diff — enters the main context, then judges portfolio-worthiness itself against explicit criteria: only genuinely new capabilities, never refactors or fixes, get drafted into an update to the matching project card, in the site's existing voice and HTML structure. It advances its own progress marker after each run and never publishes automatically; edits are left for review. Pinned to a specific model in its own frontmatter, so it always runs at a deliberately chosen cost/quality point regardless of which model the session is using.</p>
+              <span class="skill-invoke">/kendi-ng-ship</span>
+              <h3 class="project-title">Portfolio Content Sync &amp; Ship Pipeline</h3>
+              <p class="project-problem"><strong>Problem:</strong> Keeping a portfolio site in sync with ongoing work means remembering to write it up, and every edit still means a manual commit/push/PR/site-index cycle — in practice the write-up never happens consistently, and the small bookkeeping steps are the first thing to get forgotten.</p>
+              <p class="project-solution">A two-part skill. The content-sync half diffs recent work against the last commit it processed, delegates change-summarization to a sub-agent so only a concise summary enters the main context, then judges portfolio-worthiness against explicit criteria — genuinely new capabilities only, never refactors or fixes — and routes each item to whichever page(s) actually fit it, matching each page's existing voice and HTML structure. The ship half commits, checks whether a new page needs a row added to the site's hand-maintained index, pushes, and opens a PR — then stops; merging to the live branch stays a manual, deliberate click, never automatic. Pinned to a specific model in its own frontmatter, so it always runs at a deliberately chosen cost/quality point regardless of which model the session is using.</p>
               <ul class="project-tech">
                 <li class="tech-badge">Claude Code Skill (SKILL.md)</li>
                 <li class="tech-badge">Git diffing</li>
@@ -199,7 +199,7 @@
         <p class="section-subtitle">A skill is a Markdown file with a small YAML header and a set of instructions — no separate app or infrastructure required.</p>
 
         <div class="anatomy-box">---
-<span class="fm">name</span>: update-portfolio
+<span class="fm">name</span>: kendi-ng-ship
 <span class="fm">description</span>: <span class="cm"># when the agent should reach for this skill</span>
 <span class="fm">model</span>: sonnet          <span class="cm"># pin cost/quality independent of the active session</span>
 <span class="fm">effort</span>: medium
@@ -220,9 +220,9 @@
         <p class="section-subtitle">Every custom skill installed across my three Claude Code environments, grouped by profile — a static snapshot of what a private internal dashboard tracks live.</p>
 
         <div class="profile-stats">
-          <div class="profile-stat"><span class="count">50</span><span class="label">💼 Work</span></div>
-          <div class="profile-stat"><span class="count">8</span><span class="label">🟣 Personal</span></div>
-          <div class="profile-stat"><span class="count">2</span><span class="label">🟢 FreeModel</span></div>
+          <div class="profile-stat"><span class="count">49</span><span class="label">💼 Work</span></div>
+          <div class="profile-stat"><span class="count">9</span><span class="label">🟢 Razer</span></div>
+          <div class="profile-stat"><span class="count">9</span><span class="label">🔵 Cmix</span></div>
         </div>
 
         <!-- Work profile -->
@@ -246,7 +246,6 @@
                 <tr><td>/push</td><td>Update the session continuation notes, commit all changes, push to main — then reflect any portfolio-worthy new work on kendi-ng.com</td></tr>
                 <tr><td>/test</td><td>Run the test for the most-recently-edited email/report code, with mandatory safety overrides (drafts only, or a single safe test recipient)</td></tr>
                 <tr><td>/watch-reset</td><td>Choose which Claude sessions the auto-resume watcher babysits (resumes after a usage-limit reset). Interactive allowlist.</td></tr>
-                <tr><td>/watch-freemodel</td><td>Choose which FreeModel (OpenRouter) sessions the 429 auto-resume watcher babysits — resumes after a rate-limit throttle or daily free-tier reset. Interactive allowlist.</td></tr>
                 <tr><td>/ask-matt</td><td>Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.</td></tr>
                 <tr><td>/codebase-design</td><td>Shared vocabulary for designing deep modules — module interfaces, deepening opportunities, seams, testability</td></tr>
                 <tr><td>/decision-mapping</td><td>Turn a loose idea into a sequenced map of investigation tickets, then drive them to resolution one at a time</td></tr>
@@ -288,40 +287,32 @@
           </div>
         </div>
 
-        <!-- Personal profile -->
+        <!-- Razer profile -->
         <div class="profile-block">
-          <h3>🟣 Personal</h3>
-          <p class="profile-blurb">Personal Claude Code account for my own repos, tools, and household automations — kept isolated from work.</p>
+          <h3>🟢 Razer</h3>
+          <p class="profile-blurb">Personal Claude Code account on my Razer laptop, for my own repos, tools, and household automations — kept isolated from work.</p>
           <div class="skill-table-wrap">
             <table class="skill-table">
               <thead><tr><th>Skill</th><th>Description</th></tr></thead>
               <tbody>
-                <tr><td>/inbox</td><td>Look up an email in a personal or business inbox by subject keyword and load its content for the current conversation</td></tr>
-                <tr><td>/watch-reset</td><td>Choose which personal Claude sessions the auto-resume watcher babysits (resumes after a usage-limit reset). Interactive allowlist.</td></tr>
-                <tr><td>/watch-freemodel</td><td>Choose which FreeModel (OpenRouter) sessions the 429 auto-resume watcher babysits — resumes after a rate-limit throttle or daily free-tier reset. Interactive allowlist.</td></tr>
                 <tr><td>/grill-me</td><td>A relentless interview to sharpen a plan or design</td></tr>
                 <tr><td>/grill-with-docs</td><td>A relentless interview to sharpen a plan or design, which also creates docs (ADRs and glossary) as it goes</td></tr>
                 <tr><td>/grilling</td><td>Interview the user relentlessly about a plan or design — stress-test a plan before building</td></tr>
+                <tr><td>/inbox</td><td>Look up an email in a personal or business inbox by subject keyword and load its content for the current conversation</td></tr>
+                <tr><td>/kendi-ng-ship</td><td>Sync portfolio-worthy work into kendi-ng.com and its CV pages, then commit, push, and open a PR for review — merging stays a manual step</td></tr>
                 <tr><td>/maid</td><td>Monthly receipt reconciliation. OCRs receipt scans into a working spreadsheet, classifies each receipt by payment method (Octopus / credit card / Cash), then reconciles against the card statement and Octopus app screenshots, producing per-receipt match-status columns and two statement-side matching sheets.</td></tr>
-                <tr><td>/update-portfolio</td><td>Analyze recent changes in a work project and update this portfolio site's content accordingly</td></tr>
+                <tr><td>/off-pc</td><td>Shut down this Windows PC</td></tr>
+                <tr><td>/watch-reset</td><td>Choose which personal Claude sessions the auto-resume watcher babysits (resumes after a usage-limit reset). Interactive allowlist.</td></tr>
+                <tr><td>/zzz</td><td>Put this Windows PC to sleep</td></tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- FreeModel profile -->
+        <!-- Cmix profile -->
         <div class="profile-block">
-          <h3>🟢 FreeModel</h3>
-          <p class="profile-blurb">Claude Code pointed at free/low-cost community models, for cheap read-heavy drafting work — not for precise file edits.</p>
-          <div class="skill-table-wrap">
-            <table class="skill-table">
-              <thead><tr><th>Skill</th><th>Description</th></tr></thead>
-              <tbody>
-                <tr><td>/update_crm_docs</td><td>Read the CRM reporting app's code/state (mid-migration to new_crm_report_app) and draft updates for its PRD and data-validation docs into dated draft files — text only, no code edits. Hands off to /c-update_crm_doc (Work profile) to apply.</td></tr>
-                <tr><td>/watch-freemodel</td><td>Choose which FreeModel (OpenRouter) sessions the 429 auto-resume watcher babysits — resumes after a rate-limit throttle or daily free-tier reset. Interactive allowlist.</td></tr>
-              </tbody>
-            </table>
-          </div>
+          <h3>🔵 Cmix</h3>
+          <p class="profile-blurb">Claude Code routed through a local model proxy for cheap, lower-stakes runs — shares Razer's skill folder rather than keeping a separate one, so the same 9 skills apply, just on a different backend when I don't need full-power Claude.</p>
         </div>
 
         <p class="section-subtitle" style="margin-top: -1rem;">Live scan of each profile's skill and command files, 30-second cache, on the internal dashboard this page mirrors. Add a skill by dropping a new skill folder into the matching profile; it appears there on next refresh.</p>
