@@ -540,11 +540,10 @@
       "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending",
       "crawlerHint": {
-        "detectedAt": "2026-07-06",
+        "detectedAt": "2026-07-14",
         "dates": [],
         "lines": [
-          "中一新生註冊須知",
-          "中一候補生申請及面試須知"
+          "中六重讀申請"
         ]
       }
     },
