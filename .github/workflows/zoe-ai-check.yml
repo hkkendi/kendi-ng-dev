@@ -95,5 +95,13 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "chore(zoe-school): weekly AI crawl $(date -u +%Y-%m-%d)"
-            git push
+            # The regex checker (school-checker.yml) can land its own commit on
+            # master while this run is in flight — rebase and retry instead of
+            # letting a non-fast-forward push drop this run's results.
+            for i in 1 2 3 4 5; do
+              git fetch origin master
+              git rebase origin/master && git push origin HEAD:master && break
+              echo "Push attempt $i failed (likely a race with another workflow) — retrying..."
+              sleep 5
+            done
           fi
