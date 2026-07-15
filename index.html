@@ -380,12 +380,15 @@
           <!-- Lead Management & CRM Automation -->
           <article class="project-card-compact">
             <h4 class="project-title-sm">Lead Management &amp; CRM Automation</h4>
-            <p class="project-desc">Built lead assignment (10 preset workflows), lead release, and contact analysis tools that automate CRM operations and generate Odoo-importable files. Includes 7-stage filter pipeline for data quality monitoring.</p>
+            <p class="project-desc"><strong>Problem:</strong> every inbound web lead triggered an "action required" broadcast to the whole sales team — but roughly 70% already belonged to a named salesperson, so most of those alerts were noise, and the follow-up task still arrived as a manual weekly spreadsheet import.</p>
+            <p class="project-desc"><strong>Solution:</strong> an ownership-aware routing layer. Unowned leads still go to the team; owned ones skip the broadcast and become a one-click approval that writes the follow-up task straight into the CRM over JSON-RPC — same hour instead of same week. Because company matching falls back to fuzzy name search and can return several candidates, a human-in-the-loop gate confirms the match before anything is written, preventing mis-assignment. Builds on the earlier lead assignment (10 preset workflows), lead release, and 7-stage contact-quality pipeline.</p>
             <ul class="project-tech">
               <li class="tech-badge">Python</li>
               <li class="tech-badge">Streamlit</li>
               <li class="tech-badge">PostgreSQL</li>
               <li class="tech-badge">Pandas</li>
+              <li class="tech-badge">JSON-RPC</li>
+              <li class="tech-badge">Odoo CRM</li>
             </ul>
             <div class="project-links"><a href="https://github.com/hkkendi/work-app-copy/tree/main/streamlit_apps" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a></div>
           </article>
