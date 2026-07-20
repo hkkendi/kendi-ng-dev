@@ -275,7 +275,14 @@
       "appDateNote": "截止報名 2026-08-05（申請期 7/2 10:00–8/5）· 面試 8/27–28 · HK$100 AlipayHK · 官網確認",
       "resultDate": "2026-11-03",
       "resultDateNote": "首輪結果 2026-09-11 · 最終取錄 2026-11-03 · 註冊 11/06（官網確認）",
-      "status": "confirmed"
+      "status": "confirmed",
+      "crawlerHint": {
+        "detectedAt": "2026-07-20",
+        "dates": [
+          "20/07/2026"
+        ],
+        "lines": []
+      }
     },
     {
       "id": "dgs",
@@ -332,18 +339,10 @@
         "https://www.ktlks.edu.hk/news-tc/"
       ],
       "crawlerHint": {
-        "detectedAt": "2026-07-06",
-        "dates": [
-          "2026年9月",
-          "9月1日",
-          "12月31日",
-          "9月13日",
-          "11月1日",
-          "11月12日"
-        ],
+        "detectedAt": "2026-07-20",
+        "dates": [],
         "lines": [
-          "26-27入學簡介會直播重溫",
-          "26-27入學申請"
+          "26-27入學申請表"
         ]
       }
     },
@@ -462,11 +461,12 @@
       "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending",
       "crawlerHint": {
-        "detectedAt": "2026-07-13",
+        "detectedAt": "2026-07-20",
         "dates": [
-          "2026年6月30日",
-          "2026年6月26日",
-          "2026年6月25日"
+          "2026年7月16日",
+          "2026年7月8日",
+          "2026年7月",
+          "7月16日"
         ],
         "lines": []
       }
@@ -663,10 +663,10 @@
       "resultDateNote": "Est. Nov–Dec 2026",
       "status": "poa",
       "crawlerHint": {
-        "detectedAt": "2026-07-13",
+        "detectedAt": "2026-07-20",
         "dates": [
-          "6月25日",
-          "6月23日"
+          "8.7.2026",
+          "30.6 .2026"
         ],
         "lines": []
       }
@@ -697,9 +697,14 @@
       "resultDateNote": "Est. Nov–Dec 2026",
       "status": "pending",
       "crawlerHint": {
-        "detectedAt": "2026-07-13",
+        "detectedAt": "2026-07-20",
         "dates": [
-          "06/07/2026"
+          "29/06/2026",
+          "26/06/2026",
+          "24/06/2026",
+          "22/06/2026",
+          "20/06/2026",
+          "18/06/2026"
         ],
         "lines": []
       }
@@ -795,5 +800,5 @@
       }
     }
   ],
-  "lastCrawl": "2026-07-14"
+  "lastCrawl": "2026-07-20"
 }
