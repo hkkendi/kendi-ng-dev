@@ -217,10 +217,10 @@
     <section class="projects">
       <div class="container">
         <h2 class="section-title">Full Skill Catalogue</h2>
-        <p class="section-subtitle">Every custom skill installed across my three Claude Code environments, grouped by profile — a static snapshot of what a private internal dashboard tracks live.</p>
+        <p class="section-subtitle">Every custom skill installed across my three Claude Code profiles, grouped by profile — a static snapshot of what a private internal dashboard tracks live.</p>
 
         <div class="profile-stats">
-          <div class="profile-stat"><span class="count">49</span><span class="label">💼 Work</span></div>
+          <div class="profile-stat"><span class="count">52</span><span class="label">💼 Work</span></div>
           <div class="profile-stat"><span class="count">9</span><span class="label">🟢 Razer</span></div>
           <div class="profile-stat"><span class="count">9</span><span class="label">🔵 Cmix</span></div>
         </div>
@@ -238,8 +238,11 @@
                 <tr><td>/add_no_send</td><td>Mark a handler as no-individual-report (resigned, cross-team-only, etc.) in the reporting config</td></tr>
                 <tr><td>/add_rmt</td><td>Add a new RMT solo handler to the CRM reporting config (handler groups + email + SharePoint URL)</td></tr>
                 <tr><td>/add_rmt_w_team</td><td>Add a new RMT handler with team members to the CRM reporting config (handler groups + email + SharePoint URL)</td></tr>
-                <tr><td>/c-update_crm_doc</td><td>Apply drafted documentation updates into the real CRM reporting HTML/page files</td></tr>
+                <tr><td>/draft-to-gum</td><td>Draft an internal work email in my own voice as an Outlook draft — composes, confirms, then creates the draft. Never sends.</td></tr>
                 <tr><td>/inbox</td><td>Look up an email in the work inbox by subject keyword and load its content for the current conversation</td></tr>
+                <tr><td>/lead-release</td><td>Manually run the lead-release flow on one specific inbox email (by subject) ahead of the schedule — drafts the release reply and imports the reassignment into the production CRM</td></tr>
+                <tr><td>/lead-request</td><td>Manually run the new-lead-request flow on one specific inbox email (by subject) ahead of the schedule — proposes a handler split and emails an approval link for the internal report app</td></tr>
+                <tr><td>/lead-update</td><td>Manually run the lead sales-rep update flow on one specific inbox email — builds a proposal (target handler + which rep slot) and emails an approval link; no CRM write happens until it's approved on the web page</td></tr>
                 <tr><td>/move_to_EB</td><td>Mark a sales handler as moved to Employee Benefits — finds them across handler groups and adds them to the no-report list with a labelled note</td></tr>
                 <tr><td>/no_test</td><td>Run an email/report ad-hoc with real configured recipients (no test override) — mirror of /test for production sends</td></tr>
                 <tr><td>/preview</td><td>Deploy the current pending code changes into the live checkout and restart the matching app service so the change is visible locally (preview before /push)</td></tr>
