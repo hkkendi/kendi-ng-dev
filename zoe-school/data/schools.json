@@ -277,9 +277,10 @@
       "resultDateNote": "首輪結果 2026-09-11 · 最終取錄 2026-11-03 · 註冊 11/06（官網確認）",
       "status": "confirmed",
       "crawlerHint": {
-        "detectedAt": "2026-07-20",
+        "detectedAt": "2026-07-27",
         "dates": [
-          "20/07/2026"
+          "25/07/2026",
+          "23/07/2026"
         ],
         "lines": []
       }
@@ -308,7 +309,14 @@
       "appDateNote": "2027小一：暫未公布，預計8月中開放（去年8/15–8/26）· 留意校網",
       "resultDate": null,
       "resultDateNote": "Est. Nov–Dec 2026",
-      "status": "pending"
+      "status": "pending",
+      "crawlerHint": {
+        "detectedAt": "2026-07-27",
+        "dates": [],
+        "lines": [
+          "Application for Primary One Admission 2027-2028"
+        ]
+      }
     },
     {
       "id": "truelight_kln",
@@ -497,21 +505,13 @@
       "resultDateNote": "首輪 2026-10-06 · 最終取錄 2026-12-08（官網 flow PDF）",
       "status": "closed",
       "crawlerHint": {
-        "detectedAt": "2026-07-13",
+        "detectedAt": "2026-07-27",
         "dates": [
-          "2026年07月13日",
-          "2026年07月11日",
-          "2026年07月09日",
-          "2026年03月05日",
-          "07月13日",
-          "07月11日",
-          "07月09日",
-          "04月01日",
-          "02月09日"
+          "2026年04月20日",
+          "2026年04月",
+          "04月20日"
         ],
-        "lines": [
-          "2027-28年度 一年級入學申請 - 第一階段面試通知"
-        ]
+        "lines": []
       }
     },
     {
@@ -800,5 +800,5 @@
       }
     }
   ],
-  "lastCrawl": "2026-07-20"
+  "lastCrawl": "2026-07-27"
 }
