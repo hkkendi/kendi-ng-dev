@@ -95,52 +95,6 @@
             </ul>
           </article>
 
-          <!-- zoe-school-checker -->
-          <article class="project-card-compact">
-            <span class="status-badge status-live">Running weekly</span>
-            <h4 class="project-title-sm">K1 School Date Checker <span style="font-weight:400; color: var(--color-muted);">(zoe-school-checker)</span></h4>
-            <p class="project-desc">A weekly crawler that checks 16 Hong Kong school websites for new K1 application and open-day dates. It extracts dates near key admission phrases, diffs the results against the previous run, and when something new appears it pushes a report branch to this site's repo so the <a href="zoe-school.html">school tracker page</a> can be updated with a one-click pull request.</p>
-            <ul class="project-tech">
-              <li class="tech-badge">Python</li>
-              <li class="tech-badge">BeautifulSoup</li>
-              <li class="tech-badge">Regex date parsing</li>
-              <li class="tech-badge">Git automation</li>
-              <li class="tech-badge">Task Scheduler</li>
-            </ul>
-          </article>
-
-          <!-- zoe-school tracker page -->
-          <article class="project-card-compact">
-            <span class="status-badge status-live">Live</span>
-            <h4 class="project-title-sm">Zoe's K1 School Tracker <span style="font-weight:400; color: var(--color-muted);">(zoe-school)</span></h4>
-            <p class="project-desc">A standalone Chinese-language page on this site tracking Hong Kong kindergarten open-day and application dates for the 2027/28 intake — colour-coded by region (HK Island / Kowloon / New Territories) with confirmed, pending and warning statuses, all driven from a single JSON data file that the checker above keeps fresh.</p>
-            <ul class="project-tech">
-              <li class="tech-badge">HTML / CSS / JS</li>
-              <li class="tech-badge">JSON data-driven</li>
-              <li class="tech-badge">GitHub Pages</li>
-            </ul>
-            <div class="project-links">
-              <a href="zoe-school.html" class="btn btn-sm btn-primary">View Page</a>
-              <a href="https://github.com/hkkendi/kendi-ng-dev/tree/master/zoe-school" class="btn btn-sm btn-outline" target="_blank" rel="noopener">GitHub</a>
-            </div>
-          </article>
-
-          <!-- zoe-ai-poc -->
-          <article class="project-card-compact">
-            <span class="status-badge status-live">Proof of concept</span>
-            <h4 class="project-title-sm">AI School-Tracker Agent <span style="font-weight:400; color: var(--color-muted);">(zoe-ai-poc)</span></h4>
-            <p class="project-desc">Experiments in making the school tracker fully self-updating with the Claude Agent SDK. The key finding: free-form AI extraction reads dates well but won't emit strict JSON, so the working prototype forces the agent through a schema-validated tool call to get structured, machine-checkable output — designed to run weekly and email newly discovered dates.</p>
-            <ul class="project-tech">
-              <li class="tech-badge">Python</li>
-              <li class="tech-badge">Claude Agent SDK</li>
-              <li class="tech-badge">JSON Schema tools</li>
-              <li class="tech-badge">GitHub Actions</li>
-            </ul>
-            <div class="project-links">
-              <a href="https://github.com/hkkendi/kendi-ng-dev/tree/master/zoe-ai-poc" class="btn btn-sm btn-outline" target="_blank" rel="noopener">GitHub</a>
-            </div>
-          </article>
-
           <!-- JobTracker -->
           <article class="project-card-compact">
             <span class="status-badge status-private">Private · Running daily</span>
