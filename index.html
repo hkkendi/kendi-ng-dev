@@ -124,6 +124,8 @@
               <li class="skill-badge">Data Mapping</li>
               <li class="skill-badge">Role-Based Access</li>
               <li class="skill-badge">Audit Logging</li>
+              <li class="skill-badge">Lead Scoring &amp; Segmentation</li>
+              <li class="skill-badge">Data Quality Auditing</li>
             </ul>
           </div>
 
@@ -325,7 +327,25 @@
             </div>
           </article>
 
-          <!-- Featured 8: Google Apps Script SEO Reporting -->
+          <!-- Featured 8: Lead Quality Triage Engine (added 2026-08) -->
+          <article class="project-card">
+            <div class="project-card-body">
+              <h3 class="project-title">Lead Quality Triage — Turning a Dormant Database into a Work List</h3>
+              <p class="project-problem"><strong>Problem:</strong> A five-figure database of leads and lapsed customers had accumulated over years, and reporting on it only ever answered "how many are there?" — never "which of these is worth anyone's time?". Records nobody could contact, companies that had explicitly declined, and genuinely warm prospects all sat in the same undifferentiated pile, so sales worked whatever surfaced first and marketing had no evidence for what to fix.</p>
+              <p class="project-solution">Built a triage engine that assigns every company exactly one disposition through a priority waterfall — archive, keep, win-back, declined, responded, re-engage, enrich, tried, never-tried — so the buckets total the whole database and each one carries a specific next action. <strong>Profiling the data first overturned the original premise:</strong> the assumption was that leads passed between reps repeatedly were the low-quality ones, but the numbers showed the opposite — heavily-recycled leads had markedly <em>higher</em> contact rates, because a lead only gets passed on after someone has actually worked it. Building on that assumption would have discarded the most responsive prospects. The engine instead scores effort against response, and separates "we tried and got nothing" from "nobody has tried yet" — the second turned out to be a large, entirely workable segment. Data quality is tracked as an independent flag rather than a bucket, so a warm prospect with a broken phone number appears on the sales list and the enrichment list at the same time instead of being hidden behind one label. Parent companies and their subsidiaries are scored as a group so no subsidiary of an active account is ever written off. Results snapshot monthly into a warehouse, making the cleanup measurable rather than anecdotal — a baseline that is unrecoverable if you start cleaning before you start recording.</p>
+              <ul class="project-tech">
+                <li class="tech-badge">Python</li>
+                <li class="tech-badge">Pandas</li>
+                <li class="tech-badge">PostgreSQL</li>
+                <li class="tech-badge">Streamlit</li>
+                <li class="tech-badge">Odoo CRM</li>
+                <li class="tech-badge">n8n</li>
+                <li class="tech-badge">pytest</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Featured 9: Google Apps Script SEO Reporting -->
           <article class="project-card">
             <div class="project-card-body">
               <h3 class="project-title">AI-Powered SEO Reporting Pipeline</h3>
