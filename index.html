@@ -122,6 +122,8 @@
               <li class="skill-badge">UAT</li>
               <li class="skill-badge">Requirements Gathering</li>
               <li class="skill-badge">Data Mapping</li>
+              <li class="skill-badge">Role-Based Access</li>
+              <li class="skill-badge">Audit Logging</li>
             </ul>
           </div>
 
@@ -348,6 +350,21 @@
         <!-- ===== MORE PROJECTS (compact grid) ===== -->
         <h3 class="subsection-title">More Projects</h3>
         <div class="projects-grid-compact">
+
+          <!-- Self-Service CRM Bulk Data Maintenance (added 2026-08) -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Self-Service CRM Bulk Data Maintenance</h4>
+            <p class="project-desc">Business-critical CRM fields feeding a management report could only be bulk-updated by one administrator, so the team that actually owns the data queued behind a single person — and because the tooling ran on one shared API key, every change was attributed to that administrator regardless of who asked for it. I built a self-service upload tool that hands the job back to the business team without loosening control: <strong>each user authenticates with their own CRM credentials</strong>, so the write executes under their own permissions and carries their name in the CRM's own audit trail. It reads current values back before writing, so the operator sees a real <strong>before → after diff</strong> instead of taking a leap of faith; rows already matching the system are skipped rather than rewritten; blank cells are non-destructive by default; and a dry-run rehearsal is the default setting. Every run — rehearsals included — lands in a row-level audit log recording who was signed in, which account performed the write, and the old → new value of each field changed.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Streamlit</li>
+              <li class="tech-badge">Odoo CRM</li>
+              <li class="tech-badge">XML-RPC</li>
+              <li class="tech-badge">Role-Based Access</li>
+              <li class="tech-badge">Audit Logging</li>
+            </ul>
+            <div class="project-links"><a href="https://github.com/hkkendi/work-app-copy" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a></div>
+          </article>
 
           <!-- AI Agent Tooling: Skills & Model Routing (added 2026-07) -->
           <article class="project-card-compact">
