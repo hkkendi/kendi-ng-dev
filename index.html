@@ -371,6 +371,21 @@
         <h3 class="subsection-title">More Projects</h3>
         <div class="projects-grid-compact">
 
+          <!-- Rule-Routed CRM Archiving with Approval Gates (added 2026-08) -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Rule-Routed CRM Archiving with Approval Gates</h4>
+            <p class="project-desc">A weekly data-quality email listed every company the registry had dissolved — 250+ rows — and left the team to work out by hand which ones were safe to archive and who had to sign off on the rest. I turned the list into a decision: each company is classified by <strong>record type × who actually owns it in the CRM</strong> (a real salesperson in one of nine rep fields vs. a placeholder pool), and that classification routes it — no owner → archived in the CRM automatically via API; owned by the insurance line → routed to that line's approver; owned by the pension line → routed to theirs; anything outside the rules is surfaced as unclassified rather than guessed. The automatic path is deliberately cautious: it re-reads each record's status immediately before writing, uses the CRM's own reversible archive action, verifies every write by reading it back, and appends a row-level audit log — which the report itself then renders as "archived this week", so the email is both the request for approvals and the receipt for what was done. The first run cleared <strong>~90% of the backlog</strong> without a single manual click; the classifier is a pure, unit-tested function shared by the email and the dashboard so the two can never disagree.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Odoo CRM</li>
+              <li class="tech-badge">JSON-RPC</li>
+              <li class="tech-badge">PostgreSQL</li>
+              <li class="tech-badge">n8n</li>
+              <li class="tech-badge">Audit Logging</li>
+            </ul>
+            <div class="project-links"><a href="https://github.com/hkkendi/work-app-copy" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a></div>
+          </article>
+
           <!-- Self-Service CRM Bulk Data Maintenance (added 2026-08) -->
           <article class="project-card-compact">
             <h4 class="project-title-sm">Self-Service CRM Bulk Data Maintenance</h4>
