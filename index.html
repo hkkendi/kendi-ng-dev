@@ -149,6 +149,8 @@
               <li class="skill-badge">Windows Task Scheduler</li>
               <li class="skill-badge">Microsoft Graph API</li>
               <li class="skill-badge">Outlook 365 Automation</li>
+              <li class="skill-badge">Background Job Queues</li>
+              <li class="skill-badge">Performance Profiling</li>
               <li class="skill-badge">BeautifulSoup</li>
             </ul>
           </div>
@@ -490,15 +492,17 @@
             <div class="project-links"><a href="https://github.com/hkkendi/work-app-copy/tree/main/local_web_app" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a></div>
           </article>
 
-          <!-- Company Name Matching -->
+          <!-- Company Name Matching (perf + async rework 2026-08) -->
           <article class="project-card-compact">
-            <h4 class="project-title-sm">Company Name Matching Algorithm</h4>
-            <p class="project-desc">Fuzzy company name matching tool using sequence matching and Unicode normalisation for CRM data deduplication. Handles bilingual names (English/Chinese) and cross-platform path handling.</p>
+            <h4 class="project-title-sm">Contact Validation &amp; Company Matching</h4>
+            <p class="project-desc">Fuzzy company-name matching — sequence matching plus Unicode normalisation, bilingual English/Chinese — behind the bulk contact-validation wizard that reconciles a marketing upload against the CRM. Profiling found the matcher rebuilding its entire reference set for every input row: caching the invariant work and skipping the quadratic comparison wherever a provable upper bound ruled the candidate out cut it <strong>~17&times;</strong>, taking a batch of 1,300 companies from about three hours to roughly six minutes. Output was diffed cell-by-cell against the previous implementation and came back identical, so the speed-up cost no accuracy. The step also moved out of the web request into a detached worker that outlives the browser, the login session and app restarts, then emails a link that restores the run exactly where it left off.</p>
             <ul class="project-tech">
               <li class="tech-badge">Python</li>
               <li class="tech-badge">difflib</li>
               <li class="tech-badge">Pandas</li>
               <li class="tech-badge">Unicode</li>
+              <li class="tech-badge">Streamlit</li>
+              <li class="tech-badge">Background Workers</li>
             </ul>
             <div class="project-links"><a href="https://github.com/hkkendi/work-app-copy" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a></div>
           </article>
