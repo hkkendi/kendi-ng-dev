@@ -68,7 +68,7 @@
           <h1>Kendi Ng</h1>
           <p class="hero-subtitle">Data Analyst | Python &amp; ETL | AI Integration | CRM Analytics</p>
           <p class="cv-location">Hong Kong</p>
-          <p class="hero-bio">Data Analyst with 15+ years of experience in digital advertising, marketing analytics, and CRM operations across Hong Kong. Specializes in building production-ready data pipelines, automated reporting systems, and AI-powered analytics tools using Python, Google Apps Script, Azure Graph API, and Claude AI. Experienced in end-to-end analytics delivery — gathering business requirements with stakeholders, submitting Jira specifications to dev teams, conducting UAT, and building ETL pipelines and dashboards that drive real management decisions. Background spans financial services, MPF, pharmaceutical, and digital advertising domains.</p>
+          <p class="hero-bio">Data Analyst with 15+ years of experience in digital advertising, marketing analytics, and CRM operations across Hong Kong. Specializes in building production-ready data pipelines, automated reporting systems, and AI-powered analytics tools using Python, Google Apps Script, Azure Graph API, and Claude AI. Handles the full analytics cycle: gathering business requirements with stakeholders, submitting Jira specifications to dev teams, conducting UAT, and building ETL pipelines and dashboards that drive real management decisions. Latest build: a PostgreSQL warehouse pulling seven API sources through 15 Python scripts into 20+ tables, covered by 336 automated tests. It retired 354 Excel workbooks and cut weekly report prep from 84 minutes to 9. Background spans financial services, MPF, pharmaceutical, and digital advertising domains.</p>
           <div class="hero-ctas">
             <a href="../index.html" class="btn btn-outline">← Back to Portfolio</a>
             <a href="https://www.linkedin.com/in/kendi-ng/" class="btn btn-outline" target="_blank" rel="noopener">LinkedIn</a>
@@ -83,7 +83,8 @@
       <div class="container">
         <h2 class="section-title">Highlights</h2>
         <ul class="cv-highlights">
-          <li><strong>Full-Stack Analytics App:</strong> Built end-to-end data product from scratch: LinkedIn Ads API + Search Console API + website leads → PostgreSQL → self-built Streamlit analytics app — replacing all manual Excel reporting across sales, marketing, and operations.</li>
+          <li><strong>Full-Stack Analytics Platform:</strong> Built a PostgreSQL warehouse from scratch that pulls seven API sources (GA4, LinkedIn Ads, Search Console, Moz and more) through 15 Python scripts into 20+ tables, feeding a self-built analytics app used by sales, marketing, and operations.</li>
+          <li><strong>Zero-Excel Reporting:</strong> Replaced manual Excel reporting entirely: 354 workbooks retired, about 512K rows of history backfilled into the warehouse, and Friday report prep cut from 84 minutes to 9. The production path is covered by 336 automated tests, now handed to the IT dev team for a FastAPI and React rewrite.</li>
           <li><strong>Production AI Integration:</strong> Deployed Claude AI API in production to auto-generate executive SEO summaries from live Search Console data — zero manual intervention, distributed monthly to senior management via Azure Graph API.</li>
           <li><strong>Cloud Infrastructure Migration:</strong> Migrated all automated reporting from local Outlook dependency to Microsoft Azure Graph API — improved reliability, removed desktop application constraint, enabled scalable programmatic distribution.</li>
           <li><strong>Independent CRM Tooling:</strong> Identified a CRM capability gap and self-built a Streamlit lead assignment app with weighted distribution logic — deployed to the sales team, eliminating manual assignment entirely without waiting for dev team capacity.</li>
@@ -120,6 +121,7 @@
               <li class="skill-badge">Google Ads</li>
               <li class="skill-badge">LinkedIn Ads</li>
               <li class="skill-badge">Meta/WhatsApp (in progress)</li>
+              <li class="skill-badge">LinkedIn MCP (in progress)</li>
               <li class="skill-badge">GA4</li>
               <li class="skill-badge">Search Console</li>
               <li class="skill-badge">Google Tag Manager</li>
@@ -147,15 +149,26 @@
 
         <div class="cv-job">
           <div class="cv-job-header">
-            <div><span class="cv-job-title">CRM Operational Analyst</span> <span class="cv-job-company">— Gain Miles Assurance Consultants Ltd, Hong Kong SAR</span></div>
-            <span class="cv-job-dates">10/2024 – Present</span>
+            <div><span class="cv-job-title">CRM &amp; Digital Marketing Manager</span> <span class="cv-job-company">— Gain Miles Assurance Consultants Ltd, Hong Kong SAR</span></div>
+            <span class="cv-job-dates">09/2026 – Present</span>
           </div>
           <ul class="cv-job-bullets">
-            <li><strong>PostgreSQL Analytics Backend:</strong> Designed and built a PostgreSQL database on Windows Server as the backend for a self-built Streamlit analytics app — centralizing GA4 API, LinkedIn Ads API, Search Console API, and website lead data from multiple sources into one queryable store for cross-source attribution and campaign analysis.</li>
+            <li><strong>Role Scope:</strong> Promoted to run digital marketing and CRM together. Hands-on work centres on the data platform and paid media; CRM system builds are handed to the IT dev team through written specs and PRDs, including the FastAPI and React rewrite of the reporting platform. Now setting up a LinkedIn MCP integration so AI assistants can work with LinkedIn Ads data directly.</li>
+          </ul>
+        </div>
+
+        <div class="cv-job">
+          <div class="cv-job-header">
+            <div><span class="cv-job-title">CRM Operational Analyst</span> <span class="cv-job-company">— Gain Miles Assurance Consultants Ltd, Hong Kong SAR</span></div>
+            <span class="cv-job-dates">10/2024 – 08/2026</span>
+          </div>
+          <ul class="cv-job-bullets">
+            <li><strong>PostgreSQL Analytics Backend:</strong> Designed and built a PostgreSQL warehouse on Windows Server as the backend for a self-built Streamlit analytics app — seven API sources (GA4, LinkedIn Ads, Search Console, Moz, Google Sheets, the Companies Registry, Odoo CRM) pulled through 15 Python scripts into 20+ tables, one queryable store for cross-source attribution and campaign analysis.</li>
+            <li><strong>Zero-Excel Migration:</strong> Retired 354 Excel workbooks, backfilled about 512K rows of report history, and cut Friday report prep from 84 minutes to 9. Wrote 336 automated tests covering the production reporting path.</li>
             <li><strong>ETL Pipeline Architecture:</strong> Architected end-to-end data pipelines: API sources (LinkedIn Ads, Search Console, website leads) → Python ingestion scripts → PostgreSQL → self-built Streamlit analytics app; scheduled via Windows Task Scheduler for fully automated runs.</li>
             <li><strong>AI &amp; API Integration:</strong> Built Claude AI API integration with Google Apps Script and Search Console API to auto-generate formatted SEO executive summaries with Brand and Focus keyword MoM/YoY analysis distributed monthly to senior management via Azure Graph API.</li>
             <li><strong>Azure Graph API Migration:</strong> Migrated all automated email report distribution from the Outlook desktop application to Microsoft Azure Graph API; improved reliability and removed the local application dependency.</li>
-            <li><strong>CRM Requirements &amp; UAT:</strong> Gathered user requirements for Odoo CRM enhancements and bug fixes; documented specifications in Jira and submitted to the dev team; conducted UAT cycles to validate CRM changes before go-live.</li>
+            <li><strong>CRM Requirements &amp; UAT:</strong> Gathered user requirements for Odoo CRM enhancements and bug fixes; documented specifications in Jira and submitted to the dev team; conducted UAT cycles to validate CRM changes before go-live. Supported the Odoo v15 to v17 migration and the reporting server move from Hong Kong to Singapore.</li>
             <li><strong>Self-Built CRM App:</strong> Identified a gap between business needs and dev team capacity; independently built a Streamlit lead assignment app with weighted distribution logic, deployed to the sales team.</li>
             <li><strong>Cross-Team App Development:</strong> Developed and deployed Python ETL pipelines and Streamlit dashboards across sales, marketing, and operations teams, replacing manual Excel workflows.</li>
             <li><strong>API-Led Attribution:</strong> Built direct API integrations connecting LinkedIn Ads and website leads to the PostgreSQL data warehouse; engineered Streamlit dashboards for cross-source campaign attribution analysis independent of the CRM system.</li>
