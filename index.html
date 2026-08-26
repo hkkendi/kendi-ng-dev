@@ -390,6 +390,21 @@
             <div class="project-links"><a href="https://github.com/hkkendi/work-app-copy" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a></div>
           </article>
 
+          <!-- In-house AEO / GEO visibility probe (added 2026-08) -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">In-House AI-Answer Visibility (AEO / GEO) Probe</h4>
+            <p class="project-desc">AI assistants had started referring leads to the site, and the question "what do they say about us?" had no answer short of a US$99&ndash;549/month SaaS subscription. Instead I built the probe in-house: a fixed panel of <strong>15 bilingual questions</strong> (English + Traditional Chinese, six categories including a brand check) is put to an answer engine via API each month; every answer is parsed for whether the company is <strong>named, cited, both, or absent</strong>, which competitors are named instead, which of our pages are used as sources (flagging stale paths and leaked template URLs), and whether the entity is misdescribed &mdash; the first run caught the engine confusing us with another firm. Results land in the warehouse and render as a dashboard tab next to SEO, deliberately separating <em>who refers visitors</em> (a GA4 fact) from <em>which engine we question</em> (the instrument), after that distinction was misread on day one. Cost per monthly run: cents.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Perplexity API</li>
+              <li class="tech-badge">PostgreSQL</li>
+              <li class="tech-badge">Streamlit</li>
+              <li class="tech-badge">GA4</li>
+              <li class="tech-badge">AEO / GEO</li>
+            </ul>
+            <div class="project-links"><a href="https://github.com/hkkendi/work-app-copy" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a></div>
+          </article>
+
           <!-- Self-Service CRM Bulk Data Maintenance (added 2026-08) -->
           <article class="project-card-compact">
             <h4 class="project-title-sm">Self-Service CRM Bulk Data Maintenance</h4>
