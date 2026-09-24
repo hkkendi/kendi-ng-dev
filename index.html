@@ -376,6 +376,21 @@
         <div class="projects-grid-compact">
 
           <!-- Rule-Routed CRM Archiving with Approval Gates (added 2026-08) -->
+          <!-- Top-customer coverage & monthly movement (added 2026-09) -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Key-Account Coverage &amp; Movement Analysis</h4>
+            <p class="project-desc">Management could see revenue numbers but not the service story behind them: a Pareto check showed <strong>~80% of trailing-12-month revenue sat with a few dozen accounts</strong>, and nobody could say who was actually looking after each one. I built a report that ranks customers on three switchable revenue measures (they pick materially different top lists — the overlap was 6 of 45), groups the top cohort <strong>by servicing rep</strong> with a pinned "no active owner" row that is never hidden inside a placeholder, and attaches per-account evidence: meeting cadence, review dates, contact health, pipeline, AUM trend, risk flags. The first run exposed that <strong>nearly half of top-account revenue had no active servicing owner</strong>; a month later that share was down to about a quarter. A second tab replays the whole analysis <strong>as of each month start</strong> — rebuilt from the warehouse's existing daily export copies, so month-over-month movement (accounts entering/leaving the top list, rep changes, flags gained and cleared) needs <em>no new snapshot job</em>; each month is reconstructed once (~7s after replacing a 92s per-row lookup with a name-map join) and cached.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">pandas</li>
+              <li class="tech-badge">Streamlit</li>
+              <li class="tech-badge">PostgreSQL</li>
+              <li class="tech-badge">Odoo CRM</li>
+              <li class="tech-badge">Snapshot Reconstruction</li>
+            </ul>
+            <div class="project-links"><a href="https://github.com/hkkendi/work-app-copy" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a></div>
+          </article>
+
           <article class="project-card-compact">
             <h4 class="project-title-sm">Rule-Routed CRM Archiving with Approval Gates</h4>
             <p class="project-desc">A weekly data-quality email listed every company the registry had dissolved — 250+ rows — and left the team to work out by hand which ones were safe to archive and who had to sign off on the rest. I turned the list into a decision: each company is classified by <strong>record type × who actually owns it in the CRM</strong> (a real salesperson in one of nine rep fields vs. a placeholder pool), and that classification routes it — no owner → archived in the CRM automatically via API; owned by the insurance line → routed to that line's approver; owned by the pension line → routed to theirs; anything outside the rules is surfaced as unclassified rather than guessed. The automatic path is deliberately cautious: it re-reads each record's status immediately before writing, uses the CRM's own reversible archive action, verifies every write by reading it back, and appends a row-level audit log — which the report itself then renders as "archived this week", so the email is both the request for approvals and the receipt for what was done. The first run cleared <strong>~90% of the backlog</strong> without a single manual click; the classifier is a pure, unit-tested function shared by the email and the dashboard so the two can never disagree.</p>
