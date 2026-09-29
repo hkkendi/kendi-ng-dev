@@ -375,6 +375,21 @@
         <h3 class="subsection-title">More Projects</h3>
         <div class="projects-grid-compact">
 
+          <!-- Business card photo -> CRM contact (added 2026-09) -->
+          <article class="project-card-compact">
+            <h4 class="project-title-sm">Business Card Photo → CRM Contact, with an Approval Step</h4>
+            <p class="project-desc">Cards collected at meetings and events were typed into the CRM by hand, one field at a time, and often attached to the wrong company or duplicated. I built a page where a phone photo becomes a CRM contact: an LLM reads the image into strict JSON — <strong>every card in the photo, one entry per person</strong> — the company is matched against the CRM by registration number, registered name, name stem and email domain, and the same person is checked across both contact tables before anything is written. No match → the company is looked up on the government company registry and created first, through the same reviewed create step the email-driven lead flows use. Nothing reaches the CRM until the user confirms on the page. The model call runs <strong>with no tools and no connectors</strong>, so text printed on a card can only ever be transcribed, never acted on; phone numbers are normalised to what the CRM's own validation accepts, and every write goes through the CRM API with an audit log entry. The first real photo — two cards from one company — produced the company and both contacts in one sitting.</p>
+            <ul class="project-tech">
+              <li class="tech-badge">Python</li>
+              <li class="tech-badge">Streamlit</li>
+              <li class="tech-badge">Claude (vision, structured output)</li>
+              <li class="tech-badge">Odoo CRM</li>
+              <li class="tech-badge">JSON-RPC</li>
+              <li class="tech-badge">Human-in-the-loop</li>
+            </ul>
+            <div class="project-links"><a href="https://github.com/hkkendi/work-app-copy" class="btn btn-sm btn-primary" target="_blank" rel="noopener">GitHub</a></div>
+          </article>
+
           <!-- Rule-Routed CRM Archiving with Approval Gates (added 2026-08) -->
           <!-- Top-customer coverage & monthly movement (added 2026-09) -->
           <article class="project-card-compact">
