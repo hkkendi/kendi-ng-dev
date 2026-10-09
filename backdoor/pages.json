@@ -1,0 +1,20 @@
+{
+  "_about": "Single source for kendi-ng.com/backdoor/. tools/check_site_index.py (run by .github/workflows/site-index-check.yml) fails if a page in this repo is missing here, or a listed path no longer exists.",
+  "pages": [
+    { "path": "/", "file": "index.html", "description": "Homepage: marketing analytics & digital strategist profile, skills, projects, career timeline, contact.", "linked": "Main nav" },
+    { "path": "/project-list.html", "file": "project-list.html", "description": "Full list of personal apps, automations and custom Claude Code skills, with what each one does.", "linked": "Main nav" },
+    { "path": "/cv-analytics/", "file": "cv-analytics/index.html", "description": "CV, Data Analyst version: Python & ETL, AI integration, CRM analytics.", "linked": "Homepage CTA" },
+    { "path": "/cv-dm/", "file": "cv-dm/index.html", "description": "CV, Digital Marketing version: SEO/SEM, paid ads, marketing analytics.", "linked": "Homepage CTA" },
+    { "path": "/claude-agents-model/", "file": "claude-agents-model/index.html", "description": "How each kind of agent task gets routed to a deliberately chosen AI model, matching cost and reliability to the task.", "linked": "Homepage + Project List" },
+    { "path": "/miles-rebate-calculator/", "file": "miles-rebate-calculator/index.html", "description": "Frequent-flyer miles rebate calculator: the real cash-back value of redeeming miles vs buying the ticket.", "linked": "Not linked" },
+    { "path": "/404.html", "file": "404.html", "description": "Custom \"page not found\" error page.", "linked": "Not linked (error page)" },
+    { "path": "/backdoor/", "file": "backdoor/index.html", "description": "This page.", "linked": "Not linked" }
+  ],
+  "hosts": [
+    { "host": "kendi-ng.com", "description": "This site (repo hkkendi/kendi-ng-dev), GitHub Pages behind Cloudflare. The pages above.", "access": "Public" },
+    { "host": "www.kendi-ng.com", "description": "Redirects (301) to kendi-ng.com.", "access": "Redirect" },
+    { "host": "log.kendi-ng.com", "description": "Personal work log: Cloudflare Worker work-log-personal (repo hkkendi/work-log-personal).", "access": "Login" },
+    { "host": "plan.kendi-ng.com", "description": "Redirects (302) to kendi.leary.hk, Kendi's private plan site (where the Claude Agents Skill catalogue moved).", "access": "Redirect, login" },
+    { "host": "saas.kendi-ng.com", "description": "Plumbing only, no page: Cloudflare-for-SaaS target that kendi.leary.hk points at.", "access": "Infrastructure" }
+  ]
+}

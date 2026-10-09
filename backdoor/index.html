@@ -87,59 +87,32 @@
       <div class="container">
         <div class="hero-content">
           <h1>Site Index</h1>
-          <p class="hero-subtitle">Every page currently live under kendi-ng.com, in one place.</p>
+          <p class="hero-subtitle">Every page and subdomain live under kendi-ng.com, in one place.</p>
           <p class="hero-bio">A flat directory of the site — including pages that aren't in the main navigation. Not indexed by search engines; this is a quick-access list for me, not a public landing page.</p>
         </div>
       </div>
     </section>
 
-    <!-- Page directory -->
+    <!-- Page directory: both tables are filled from pages.json (checked in CI by tools/check_site_index.py) -->
     <section class="projects">
       <div class="container">
         <h2 class="section-title">All Pages</h2>
         <div class="backdoor-table-wrap">
           <table class="backdoor-table">
-            <thead><tr><th>Page</th><th>Description</th><th>Nav</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><a href="../index.html">/</a></td>
-                <td>Homepage — marketing analytics &amp; digital strategist profile, skills, projects, career timeline, contact.</td>
-                <td><span class="status-badge status-live">Main nav</span></td>
-              </tr>
-              <tr>
-                <td><a href="../project-list.html">/project-list.html</a></td>
-                <td>Full list of personal apps, automations, and custom Claude Code skills, with what each one does.</td>
-                <td><span class="status-badge status-live">Main nav</span></td>
-              </tr>
-              <tr>
-                <td><a href="../cv-analytics/">/cv-analytics/</a></td>
-                <td>CV — Data Analyst. Python &amp; ETL, AI integration, CRM analytics.</td>
-                <td><span class="status-badge status-live">Homepage CTA</span></td>
-              </tr>
-              <tr>
-                <td><a href="../cv-dm/">/cv-dm/</a></td>
-                <td>CV — Digital Marketing. SEO/SEM, paid ads, marketing analytics.</td>
-                <td><span class="status-badge status-live">Homepage CTA</span></td>
-              </tr>
-              <tr>
-                <td><a href="../claude-agents-model/">/claude-agents-model/</a></td>
-                <td>How each kind of agent task gets routed to a deliberately chosen AI model, matching cost and reliability to the task.</td>
-                <td><span class="status-badge status-live">Homepage + Project List</span></td>
-              </tr>
-              <tr>
-                <td><a href="../404.html">/404.html</a></td>
-                <td>Custom "page not found" error page.</td>
-                <td><span class="status-badge status-unlinked">Not linked (error page)</span></td>
-              </tr>
-              <tr>
-                <td><a href="./">/backdoor/</a></td>
-                <td>This page.</td>
-                <td><span class="status-badge status-unlinked">Not linked</span></td>
-              </tr>
-            </tbody>
+            <thead><tr><th>Page</th><th>Description</th><th>Linked from</th></tr></thead>
+            <tbody id="pages-body"><tr><td colspan="3">Loading&hellip;</td></tr></tbody>
           </table>
         </div>
-        <p class="section-subtitle" style="margin-top: 1.25rem;">Kept in sync by hand — if a new page goes live and isn't listed here yet, that's on me.</p>
+
+        <h2 class="section-title" style="margin-top: 3rem;">Subdomains</h2>
+        <div class="backdoor-table-wrap">
+          <table class="backdoor-table">
+            <thead><tr><th>Host</th><th>What it is</th><th>Access</th></tr></thead>
+            <tbody id="hosts-body"><tr><td colspan="3">Loading&hellip;</td></tr></tbody>
+          </table>
+        </div>
+        <noscript><p class="section-subtitle">This list needs JavaScript. The raw list is at <a href="pages.json">pages.json</a>.</p></noscript>
+        <p class="section-subtitle" style="margin-top: 1.25rem;">Built from <a href="pages.json">pages.json</a>. A check on every change fails if a page is added or removed without updating it.</p>
       </div>
     </section>
 
@@ -162,5 +135,38 @@
   </footer>
 
   <script src="../assets/js/main.js"></script>
+  <script>
+    (function () {
+      function esc(t) {
+        return String(t).replace(/[&<>"']/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+      }
+      function badge(text, quiet) {
+        return '<span class="status-badge ' + (quiet ? 'status-unlinked' : 'status-live') + '">' + esc(text) + '</span>';
+      }
+      function fail(msg) {
+        ['pages-body', 'hosts-body'].forEach(function (id) {
+          document.getElementById(id).innerHTML = '<tr><td colspan="3">' + esc(msg) + '</td></tr>';
+        });
+      }
+      fetch('pages.json', { cache: 'no-cache' })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (data) {
+          document.getElementById('pages-body').innerHTML = data.pages.map(function (p) {
+            var href = '..' + p.path;
+            return '<tr><td><a href="' + esc(href) + '">' + esc(p.path) + '</a></td><td>' + esc(p.description) +
+              '</td><td>' + badge(p.linked, /^Not linked/.test(p.linked)) + '</td></tr>';
+          }).join('');
+          document.getElementById('hosts-body').innerHTML = data.hosts.map(function (h) {
+            var cell = h.access === 'Infrastructure' ? esc(h.host)
+              : '<a href="https://' + esc(h.host) + '/" rel="noopener">' + esc(h.host) + '</a>';
+            return '<tr><td>' + cell + '</td><td>' + esc(h.description) + '</td><td>' +
+              badge(h.access, h.access !== 'Public') + '</td></tr>';
+          }).join('');
+        })
+        .catch(function () { fail('Could not load pages.json.'); });
+    })();
+  </script>
 </body>
 </html>
